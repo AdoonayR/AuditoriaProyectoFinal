@@ -115,7 +115,8 @@
             const isExpiringSoon = expiration.getMonth() === currentDate.getMonth() && expiration.getFullYear() === currentDate.getFullYear();
             if (isExpiringSoon && expiration >= currentDate) {
                 const daysUntilExpiration = Math.floor((expiration - currentDate) / (1000 * 60 * 60 * 24));
-                result.textContent = `Químico próximo a vencer en ${daysUntilExpiration} días`;
+                commentsText += `Químico próximo a vencer en ${daysUntilExpiration} días.\n`;
+                result.textContent = 'Aceptado'; 
                 result.style.color = 'orange';
                 this.style.border = '2px solid orange';
                 sectionStatus.classList.add('expiring-soon');
