@@ -24,6 +24,12 @@ namespace AuditoriaQuimicos.Controllers
         [Route("api/quimicos")]
         public IActionResult SaveQuimicos([FromBody] List<Quimico> quimicos)
         {
+            foreach (var quimico in quimicos)
+            {
+                quimico.Comments = quimico.Comments ?? ""; 
+                quimico.Result = quimico.Result ?? ""; 
+            }
+
             _context.Quimicos.AddRange(quimicos);
             _context.SaveChanges();
 
