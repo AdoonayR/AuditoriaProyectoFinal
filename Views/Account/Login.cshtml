@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Auditoría de Almacén</title>
+    <link rel="stylesheet" href="~/css/login.css" />
+</head>
+<body>
+    <div class="login-container">
+        <img src="~/images/AmphenolLogo.png" alt="Logo" class="login-logo" />
+        <h2>Ingrese su número de empleado</h2>
+        <form asp-action="Login" method="post">
+            <div class="form-group">
+                <input type="text" class="form-control" id="employeeNumber" name="employeeNumber" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Ingresar</button>
+        </form>
+
+        @if (ViewData.ModelState.ErrorCount > 0)
+        {
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+</body>
+</html>

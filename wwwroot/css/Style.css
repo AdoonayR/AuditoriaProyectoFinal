@@ -17,20 +17,31 @@ header {
     width: 100%;
 }
 
-    .header-title h1 {
-        margin: 0;
-        color: #333;
-    }
+.header-right {
+    display: flex;
+    align-items: center;
+}
 
-    .header-title span {
-        display: inline-block;
-        padding: 5px 10px;
-        border: 2px solid #070707;
-        border-radius: 5px;
-        background-color: #f0f0f0;
-        font-size: 1rem;
-        color: #070707;
-    }
+.header-title h1 {
+    margin: 0;
+    color: #333;
+}
+
+.header-title span {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 2px solid #070707;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    font-size: 1rem;
+    color: #070707;
+}
+
+.header-logo {
+    width: 200px; /* Ajusta el tamaño según tus necesidades */
+    height: auto;
+    margin-left: 0px; /* Espacio entre la fecha y el logo */
+}
 
 .form-row {
     display: flex;

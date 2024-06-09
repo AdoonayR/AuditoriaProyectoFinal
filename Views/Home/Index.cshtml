@@ -15,6 +15,7 @@
         <div class="header-title">
             <h1>Auditoría a Almacén</h1>
             <span id="currentDate"></span>
+            <img src="~/images/AmphenolLogo.png" alt="Logo" class="header-logo" />
         </div>
         <div class="form-row">
             <label for="area">Área:</label>
@@ -24,12 +25,7 @@
                 <option value="Almacen Temperatura">Almacen Temperatura</option>
             </select>
             <label for="auditor">Auditor:</label>
-            <select id="auditor" name="auditor">
-                <option value="">Seleccione una opción</option>
-                <option value="Adonay Rodriguez">Adonay Rodriguez</option>
-                <option value="Berenice Velazquez">Berenice Velazquez</option>
-                <option value="Anayeli Lopez">Anayeli Lopez</option>
-            </select>
+            <input type="text" id="auditor" name="auditor" readonly>
             <label for="approvedBy">Aprobado por:</label>
             <input type="text" id="approvedBy" name="approvedBy">
         </div>

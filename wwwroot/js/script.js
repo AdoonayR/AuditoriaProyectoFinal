@@ -6,6 +6,15 @@
     const formattedDate = `${day}/${month}/${year}`; // Formatea la fecha en DD/MM/YYYY
     document.getElementById('currentDate').textContent = formattedDate; // Muestra la fecha actual en el elemento con id 'currentDate'
 
+    // Obtener el nombre del auditor desde la sesión
+    fetch('/api/getAuditorName')
+        .then(response => response.json())
+        .then(data => {
+            if (data.auditorName) {
+                document.getElementById('auditor').value = data.auditorName;
+            }
+        });
+
     // Maneja la funcionalidad de los acordeones
     const acc = document.querySelectorAll(".accordion h2");
     acc.forEach((h2) => {
@@ -168,6 +177,8 @@
             })
             .catch(error => {
                 console.error('Error:', error); // Muestra un error en la consola
+
+
             });
     });
 });
