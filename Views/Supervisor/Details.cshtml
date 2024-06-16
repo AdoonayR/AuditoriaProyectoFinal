@@ -1,0 +1,53 @@
+﻿@model IEnumerable<AuditoriaQuimicos.Models.Quimico>
+
+@{
+    ViewData["Title"] = "Detalles de Auditoría";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/details.css">
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"] - @Model.FirstOrDefault()?.AuditDate.ToString("dd MMMM yyyy")</h1>
+    </header>
+    <table class="audit-table">
+        <thead>
+            <tr>
+                <th>Número de Parte</th>
+                <th>Empaque</th>
+                <th>Caducidad</th>
+                <th>Lote</th>
+                <th>FIFO</th>
+                <th>Mezclado</th>
+                <th>Sello de QC</th>
+                <th>Limpieza</th>
+                <th>Comentarios</th>
+                <th>Resultado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="@(item.Result == "Aceptado" ? "accepted" : item.Result == "Rechazado" ? "rejected" : "expiring-soon")">
+                    <td data-label="Número de Parte">@item.PartNumber</td>
+                    <td data-label="Empaque">@item.Packaging</td>
+                    <td data-label="Caducidad">@item.Expiration.ToString("dd/MM/yyyy")</td>
+                    <td data-label="Lote">@item.Lot</td>
+                    <td data-label="FIFO">@item.Fifo</td>
+                    <td data-label="Mezclado">@item.Mixed</td>
+                    <td data-label="Sello de QC">@item.QcSeal</td>
+                    <td data-label="Limpieza">@item.Clean</td>
+                    <td data-label="Comentarios">@item.Comments</td>
+                    <td data-label="Resultado">@item.Result</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

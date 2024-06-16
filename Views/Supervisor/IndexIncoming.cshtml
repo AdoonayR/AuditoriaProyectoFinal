@@ -1,0 +1,41 @@
+﻿@model IEnumerable<IGrouping<DateTime, AuditoriaQuimicos.Models.Quimico>>
+
+@{
+    ViewData["Title"] = "Auditoría Mensual de Químicos - Incoming Supervisor";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/supervisor.css">
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+    </header>
+    <table class="audit-table">
+        <thead>
+            <tr>
+                <th>Fecha de Auditoría</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in Model)
+            {
+                <tr>
+                    <td class="date-cell">@group.Key.ToString("dd MMMM yyyy")</td>
+                    <td class="actions-cell">
+                        <a href="@Url.Action("DetailsIncoming", new { date = group.Key.ToString("yyyy-MM-dd") })" class="details-btn">Ver Detalles</a>
+                        <button class="approve-btn" data-date="@group.Key.ToString("yyyy-MM-dd")" data-role="Incoming">Aprobar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script src="~/js/supervisor.js"></script>
+</body>
+</html>

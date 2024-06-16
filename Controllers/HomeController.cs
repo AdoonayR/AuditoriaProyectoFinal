@@ -4,9 +4,12 @@ using AuditoriaQuimicos.Data;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace AuditoriaQuimicos.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,24 +21,7 @@ namespace AuditoriaQuimicos.Controllers
 
         public IActionResult Index()
         {
-            // Verificar si el auditor está autenticado
-            var auditorName = HttpContext.Session.GetString("AuditorName");
-            if (string.IsNullOrEmpty(auditorName))
-            {
-                // Si no está autenticado, redirigir al login
-                return RedirectToAction("Login", "Account");
-            }
-
-            // Si está autenticado, renderizar la vista
             return View();
-        }
-
-        [HttpGet]
-        [Route("api/getAuditorName")]
-        public IActionResult GetAuditorName()
-        {
-            var auditorName = HttpContext.Session.GetString("AuditorName");
-            return Ok(new { auditorName });
         }
 
         [HttpPost]
@@ -50,6 +36,7 @@ namespace AuditoriaQuimicos.Controllers
 
             foreach (var quimico in quimicos)
             {
+                quimico.AuditDate = DateTime.Now; // Establecer la fecha actual como fecha de auditoría
                 quimico.Auditor = auditor;
                 quimico.Comments = quimico.Comments ?? "";
                 quimico.Result = quimico.Result ?? "";

@@ -1,0 +1,95 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f9;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+.audit-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+    .audit-table th, .audit-table td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .audit-table th {
+        background-color: #292828;
+        color: white;
+        text-align: center;
+    }
+
+    .audit-table td {
+        text-align: center;
+    }
+
+    .audit-table .accepted {
+        background-color: #d4edda;
+    }
+
+    .audit-table .rejected {
+        background-color: #f8d7da;
+    }
+
+    .audit-table .expiring-soon {
+        background-color: #fff3cd;
+    }
+
+/* Estilos para pantallas pequeñas */
+@media (max-width: 768px) {
+    .audit-table th, .audit-table td {
+        padding: 5px;
+        font-size: 0.9rem;
+    }
+
+    .audit-table {
+        font-size: 0.9rem;
+    }
+
+        .audit-table th, .audit-table td {
+            white-space: nowrap;
+        }
+
+        .audit-table td {
+            word-wrap: break-word;
+        }
+}
+
+.details-btn, .approve-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 4px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.details-btn {
+    background-color: #333;
+}
+
+    .details-btn:hover, .approve-btn:hover {
+        opacity: 0.8;
+    }

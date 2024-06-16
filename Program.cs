@@ -51,6 +51,6 @@ app.UseSession();
 // Configurar las rutas para los controladores.
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();
