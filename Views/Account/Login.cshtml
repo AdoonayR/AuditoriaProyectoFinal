@@ -1,30 +1,36 @@
 ﻿@{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Login"; // Configura el título de la página
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Auditoría de Almacén</title>
-    <link rel="stylesheet" href="~/css/login.css" />
+    <meta charset="utf-8" /> <!-- Codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Configuración de la vista para dispositivos móviles -->
+    <title>@ViewData["Title"] - Auditoría de Almacén</title> <!-- Título de la página -->
+    <link rel="stylesheet" href="~/css/login.css" /> <!-- Enlace a la hoja de estilos CSS -->
 </head>
 <body>
     <div class="login-container">
-        <img src="~/images/AmphenolLogo.png" alt="Logo" class="login-logo" />
-        <h2>Ingrese su número de empleado</h2>
+        <!-- Contenedor principal del formulario de login -->
+        <img src="~/images/AmphenolLogo.png" alt="Logo" class="login-logo" /> <!-- Logo de la empresa -->
+        <h2>Ingrese su número de empleado</h2> <!-- Título del formulario -->
         <form asp-action="Login" method="post">
+            <!-- Formulario que envía los datos al método Login del controlador -->
             <div class="form-group">
-                <input type="password" class="form-control" id="employeeNumber" name="employeeNumber" required />
+                <!-- Grupo de formulario para el número de empleado -->
+                <input type="password" class="form-control" id="employeeNumber" name="employeeNumber" required /> <!-- Campo de entrada para el número de empleado -->
             </div>
-            <button type="submit" class="btn btn-primary">Ingresar</button>
+            <button type="submit" class="btn btn-primary">Ingresar</button> <!-- Botón de envío del formulario -->
         </form>
 
+        @* Mostrar errores de validación, si existen *@
         @if (ViewData.ModelState.ErrorCount > 0)
         {
             <div class="alert alert-danger">
+                <!-- Contenedor para mostrar los mensajes de error -->
                 <ul>
+                    @* Itera a través de los errores y los muestra en una lista *@
                     @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                     {
                         <li>@error.ErrorMessage</li>

@@ -22,6 +22,35 @@ namespace AuditoriaQuimicos.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AuditoriaQuimicos.Models.Aprobacion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApprovalType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApprovedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ApprovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("QuimicoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuimicoId");
+
+                    b.ToTable("Aprobaciones");
+                });
+
             modelBuilder.Entity("AuditoriaQuimicos.Models.Auditor", b =>
                 {
                     b.Property<int>("Id")
@@ -55,15 +84,11 @@ namespace AuditoriaQuimicos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApprovedByIncoming")
+                    b.Property<string>("Almacen")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ApprovedByWarehouse")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("AuditDate")
+                    b.Property<DateTime?>("AuditDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Auditor")
@@ -78,7 +103,7 @@ namespace AuditoriaQuimicos.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Expiration")
+                    b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Fifo")
@@ -112,6 +137,22 @@ namespace AuditoriaQuimicos.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Quimicos");
+                });
+
+            modelBuilder.Entity("AuditoriaQuimicos.Models.Aprobacion", b =>
+                {
+                    b.HasOne("AuditoriaQuimicos.Models.Quimico", "Quimico")
+                        .WithMany("Aprobaciones")
+                        .HasForeignKey("QuimicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Quimico");
+                });
+
+            modelBuilder.Entity("AuditoriaQuimicos.Models.Quimico", b =>
+                {
+                    b.Navigation("Aprobaciones");
                 });
 #pragma warning restore 612, 618
         }

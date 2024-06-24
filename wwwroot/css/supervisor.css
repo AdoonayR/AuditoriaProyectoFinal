@@ -1,95 +1,136 @@
 ﻿body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background-color: #f4f4f9;
 }
 
 header {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     margin-bottom: 20px;
 }
 
-h1 {
+.header-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-title h1 {
+    margin: 0;
     color: #333;
-    text-align: center;
+}
+
+.header-title span {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 2px solid #070707;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    font-size: 1rem;
+    color: #070707;
+}
+
+.header-logo {
+    width: 200px;
+    height: auto;
+    margin-left: 0px;
+}
+
+.form-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.form-row select, .form-row input[type="text"] {
+    flex: 1;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input, select {
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.approved-label {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
 }
 
 .audit-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-    .audit-table th, .audit-table td {
-        border: 1px solid #ccc;
-        padding: 10px;
-        text-align: left;
-    }
-
-    .audit-table th {
-        background-color: #292828;
-        color: white;
-        text-align: center;
-    }
-
-    .audit-table td {
-        text-align: center;
-    }
-
-    .audit-table .accepted {
-        background-color: #d4edda;
-    }
-
-    .audit-table .rejected {
-        background-color: #f8d7da;
-    }
-
-    .audit-table .expiring-soon {
-        background-color: #fff3cd;
-    }
-
-/* Estilos para pantallas pequeñas */
-@media (max-width: 768px) {
-    .audit-table th, .audit-table td {
-        padding: 5px;
-        font-size: 0.9rem;
-    }
-
-    .audit-table {
-        font-size: 0.9rem;
-    }
-
-        .audit-table th, .audit-table td {
-            white-space: nowrap;
-        }
-
-        .audit-table td {
-            word-wrap: break-word;
-        }
+.audit-table th, .audit-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
 }
 
-.details-btn, .approve-btn {
-    display: inline-block;
-    padding: 8px 16px;
-    margin: 4px;
-    border-radius: 4px;
-    text-decoration: none;
+.audit-table th {
+    background-color: #292828;
     color: white;
-    background-color: #007bff;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
+}
+
+.audit-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.audit-table tr:hover {
+    background-color: #ddd;
 }
 
 .details-btn {
+    padding: 10px 15px;
     background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-right: 10px;
 }
 
-    .details-btn:hover, .approve-btn:hover {
-        opacity: 0.8;
-    }
+.details-btn:hover {
+    background-color: #555;
+}
+
+.approve-btn {
+    padding: 10px 15px;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.approve-btn:hover {
+    background-color: #0033cc;
+}

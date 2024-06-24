@@ -5,7 +5,7 @@
 namespace AuditoriaQuimicos.Migrations
 {
     /// <inheritdoc />
-    public partial class AllowNullInApprovalColumns : Migration
+    public partial class AllowNullAlmacen : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -38,9 +38,9 @@ header {
 }
 
 .header-logo {
-    width: 200px; /* Ajusta el tamaño según tus necesidades */
+    width: 200px; 
     height: auto;
-    margin-left: 0px; /* Espacio entre la fecha y el logo */
+    margin-left: 0px; 
 }
 
 .form-row {
@@ -80,9 +80,9 @@ button {
     cursor: pointer;
     padding: 15px;
     text-align: left;
-    border: none; /* Eliminar borde */
+    border: none; 
     border-radius: 5px;
-    background-color: #292828; /* Color gris específico */
+    background-color: #292828; 
     margin: 10px 0;
     color: white;
 }
@@ -90,7 +90,7 @@ button {
 .panel {
     display: none;
     padding: 15px;
-    border: none; /* Eliminar borde */
+    border: none; 
     background-color: #fafafa;
 }
 
@@ -99,7 +99,7 @@ button {
 }
 
 input[type="date"] {
-    color: black; /* Color por defecto */
+    color: black; 
 }
 
     input[type="date"]::-webkit-calendar-picker-indicator {
@@ -134,8 +134,8 @@ button#submitAll {
 }
 
 .section-status {
-    padding: 0; /* Eliminar padding */
-    border: none; /* Eliminar borde */
+    padding: 0;
+    border: none; 
     margin-bottom: 10px;
     border-radius: 5px;
 }
@@ -152,7 +152,7 @@ button#submitAll {
         background-color: orange;
     }
 
-/* Estilo para pantallas pequeñas */
+
 @media (max-width: 600px) {
     .form-row {
         flex-direction: column;

@@ -28,6 +28,14 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true; // Marcar la cookie como esencial
 });
 
+// Configurar servicios de autorización
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("IncomingPolicy", policy => policy.RequireRole("IncomingSupervisor"));
+    options.AddPolicy("StoragePolicy", policy => policy.RequireRole("StorageSupervisor"));
+    options.AddPolicy("AuditorPolicy", policy => policy.RequireRole("Auditor"));
+});
+
 var app = builder.Build();
 
 // Configuración del pipeline de manejo de solicitudes HTTP.

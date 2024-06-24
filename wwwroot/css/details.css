@@ -1,92 +1,37 @@
-﻿body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-}
-
-header {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-h1 {
-    color: #333;
-    text-align: center;
-}
-
-.audit-table {
+﻿/* Estilos para la tabla de detalles */
+.table-details {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
 }
 
-    .audit-table th, .audit-table td {
-        border: 1px solid #ccc;
+    .table-details th {
+        background-color: #000; /* Encabezados en negro */
+        color: #fff; /* Texto de los encabezados en blanco */
         padding: 10px;
         text-align: left;
     }
 
-    .audit-table th {
-        background-color: #000;
-        color: white;
+    .table-details td {
+        padding: 10px;
+        border: 1px solid #ddd;
     }
 
-.accepted {
-    background-color: #d4edda; /* Verde claro */
-}
-
-.rejected {
-    background-color: #f8d7da; /* Rojo claro */
-}
-
-.expiring-soon {
-    background-color: #fff3cd; /* Amarillo claro */
-}
-
-/* Estilos para pantallas pequeñas */
-@media (max-width: 768px) {
-    .audit-table th, .audit-table td {
-        padding: 5px;
-        font-size: 0.9rem;
+    /* Colores de fila según el estado del químico */
+    .table-details tr.accepted {
+        background-color: #d4edda; /* Verde claro para aceptado */
     }
 
-    .audit-table {
-        font-size: 0.9rem;
+    .table-details tr.expiring-soon {
+        background-color: #fff3cd; /* Amarillo claro para próximo a vencer */
     }
 
-        .audit-table th {
-            white-space: nowrap;
-        }
+    .table-details tr.rejected {
+        background-color: #f8d7da; /* Rojo claro para rechazado */
+    }
 
-        .audit-table td {
-            word-wrap: break-word;
-        }
-
-        .audit-table, .audit-table thead, .audit-table tbody, .audit-table th, .audit-table td, .audit-table tr {
-            display: block;
-        }
-
-            .audit-table thead tr {
-                display: none;
-            }
-
-            .audit-table tr {
-                margin-bottom: 15px;
-            }
-
-            .audit-table td {
-                text-align: right;
-                padding-left: 50%;
-                position: relative;
-            }
-
-                .audit-table td::before {
-                    content: attr(data-label);
-                    position: absolute;
-                    left: 10px;
-                    width: 45%;
-                    padding-right: 10px;
-                    text-align: left;
-                    font-weight: bold;
-                }
+/* Estilos para dispositivos móviles */
+@media screen and (max-width: 600px) {
+    .audit-details th, .audit-details td {
+        padding: 8px;
+    }
 }

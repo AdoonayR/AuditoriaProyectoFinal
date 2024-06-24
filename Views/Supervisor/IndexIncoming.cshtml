@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IGrouping<DateTime, AuditoriaQuimicos.Models.Quimico>>
+﻿@model IEnumerable<IGrouping<DateTime?, AuditoriaQuimicos.Models.Quimico>>
 
 @{
     ViewData["Title"] = "Auditoría Mensual de Químicos - Incoming Supervisor";
@@ -20,17 +20,33 @@
         <thead>
             <tr>
                 <th>Fecha de Auditoría</th>
+                <th>Estado de Aprobación</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var group in Model)
             {
+                var isApprovedIncoming = group != null && group.Any() && group.All(q => q.Aprobaciones != null && q.Aprobaciones.Any(a => a.ApprovalType == "Incoming"));
+
                 <tr>
-                    <td class="date-cell">@group.Key.ToString("dd MMMM yyyy")</td>
-                    <td class="actions-cell">
-                        <a href="@Url.Action("DetailsIncoming", new { date = group.Key.ToString("yyyy-MM-dd") })" class="details-btn">Ver Detalles</a>
-                        <button class="approve-btn" data-date="@group.Key.ToString("yyyy-MM-dd")" data-role="Incoming">Aprobar</button>
+                    <td>@group.Key?.ToString("dd-MM-yyyy")</td>
+                    <td>
+                        @if (isApprovedIncoming)
+                        {
+                            <span class="approved-incoming">Aprobado por Incoming</span>
+                        }
+                        else
+                        {
+                            <span class="not-approved">No Aprobado</span>
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("DetailsIncoming", new { date = group.Key?.ToString("dd-MM-yyyy") })" class="details-btn">Ver Detalles</a>
+                        @if (!isApprovedIncoming)
+                        {
+                            <button class="approve-btn" data-date="@group.Key?.ToString("dd-MM-yyyy")" data-role="Incoming">Aprobar</button>
+                        }
                     </td>
                 </tr>
             }

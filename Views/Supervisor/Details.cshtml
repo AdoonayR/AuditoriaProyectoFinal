@@ -14,9 +14,9 @@
 </head>
 <body>
     <header>
-        <h1>@ViewData["Title"] - @Model.FirstOrDefault()?.AuditDate.ToString("dd MMMM yyyy")</h1>
+        <h1>Detalles de Auditoría - @(Model.FirstOrDefault()?.AuditDate?.ToString("MM dd yyyy") ?? "Sin Fecha")</h1>
     </header>
-    <table class="audit-table">
+    <table class="table-details">
         <thead>
             <tr>
                 <th>Número de Parte</th>
@@ -29,22 +29,24 @@
                 <th>Limpieza</th>
                 <th>Comentarios</th>
                 <th>Resultado</th>
+                <th>Almacén</th> 
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var quimico in Model)
             {
-                <tr class="@(item.Result == "Aceptado" ? "accepted" : item.Result == "Rechazado" ? "rejected" : "expiring-soon")">
-                    <td data-label="Número de Parte">@item.PartNumber</td>
-                    <td data-label="Empaque">@item.Packaging</td>
-                    <td data-label="Caducidad">@item.Expiration.ToString("dd/MM/yyyy")</td>
-                    <td data-label="Lote">@item.Lot</td>
-                    <td data-label="FIFO">@item.Fifo</td>
-                    <td data-label="Mezclado">@item.Mixed</td>
-                    <td data-label="Sello de QC">@item.QcSeal</td>
-                    <td data-label="Limpieza">@item.Clean</td>
-                    <td data-label="Comentarios">@item.Comments</td>
-                    <td data-label="Resultado">@item.Result</td>
+                <tr class="@(quimico.Result == "Aceptado" ? "accepted" : quimico.Result == "Próximo a vencer" ? "expiring-soon" : "rejected")">
+                    <td>@quimico.PartNumber</td>
+                    <td>@quimico.Packaging</td>
+                    <td>@quimico.Expiration?.ToString("dd/MM/yyyy")</td>
+                    <td>@quimico.Lot</td>
+                    <td>@quimico.Fifo</td>
+                    <td>@quimico.Mixed</td>
+                    <td>@quimico.QcSeal</td>
+                    <td>@quimico.Clean</td>
+                    <td>@quimico.Comments</td>
+                    <td>@quimico.Result</td>
+                    <td>@quimico.Almacen</td> 
                 </tr>
             }
         </tbody>
