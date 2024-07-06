@@ -18,7 +18,7 @@
 
     // Manejar la funcionalidad de los acordeones
     const acc = document.querySelectorAll(".accordion h2");
-    acc.forEach((h2) => {
+    acc.forEach((h2, index) => {
         h2.addEventListener("click", function () {
             this.classList.toggle("active");
             const panel = this.nextElementSibling;
@@ -54,7 +54,7 @@
     const submitAllButton = document.getElementById('submitAll');
     const forms = document.querySelectorAll('.auditForm');
 
-    forms.forEach(form => {
+    forms.forEach((form, index) => {
         form.addEventListener('submit', function (event) {
             event.preventDefault();
             const formData = new FormData(this);
@@ -145,6 +145,17 @@
             // Mostrar el botón de enviar todo si todos los formularios están completos
             if (Array.from(forms).every(f => f.querySelector('.result').textContent !== '')) {
                 submitAllButton.style.display = 'block';
+            }
+
+            // Cerrar el acordeón actual y abrir el siguiente
+            const panel = header.nextElementSibling;
+            if (panel) {
+                panel.style.display = "none";
+                header.classList.remove("active");
+            }
+            if (index + 1 < acc.length) {
+                acc[index + 1].classList.add("active");
+                acc[index + 1].nextElementSibling.style.display = "block";
             }
         });
     });
