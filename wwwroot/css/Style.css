@@ -8,6 +8,7 @@ header {
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
+    position: relative; /* Para posicionar el botón de regresar */
 }
 
 .header-title {
@@ -16,6 +17,27 @@ header {
     align-items: center;
     width: 100%;
 }
+
+.back-button {
+    position: absolute; /* Posicionar el botón de regresar de forma absoluta */
+    top: 5px; /* Ajustar la posición superior */
+    left: 1px; /* Ajustar la posición izquierda */
+    width: 30px; /* Hacer el botón más pequeño */
+    height: 30px; /* Hacer el botón más pequeño */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    border: 2px solid white;
+    border-radius: 50%;
+    text-decoration: none;
+    color: #f0f0f0;
+}
+
+    .back-button img {
+        width: 25px; /* Ajustar el tamaño del ícono */
+        height: auto;
+    }
 
 .header-right {
     display: flex;
@@ -38,9 +60,9 @@ header {
 }
 
 .header-logo {
-    width: 200px; 
+    width: 200px;
     height: auto;
-    margin-left: 0px; 
+    margin-left: 0px;
 }
 
 .form-row {
@@ -80,9 +102,9 @@ button {
     cursor: pointer;
     padding: 15px;
     text-align: left;
-    border: none; 
+    border: none;
     border-radius: 5px;
-    background-color: #292828; 
+    background-color: #292828;
     margin: 10px 0;
     color: white;
 }
@@ -90,7 +112,7 @@ button {
 .panel {
     display: none;
     padding: 15px;
-    border: none; 
+    border: none;
     background-color: #fafafa;
 }
 
@@ -99,7 +121,7 @@ button {
 }
 
 input[type="date"] {
-    color: black; 
+    color: black;
 }
 
     input[type="date"]::-webkit-calendar-picker-indicator {
@@ -135,7 +157,7 @@ button#submitAll {
 
 .section-status {
     padding: 0;
-    border: none; 
+    border: none;
     margin-bottom: 10px;
     border-radius: 5px;
 }
@@ -152,7 +174,6 @@ button#submitAll {
         background-color: orange;
     }
 
-
 @media (max-width: 600px) {
     .form-row {
         flex-direction: column;
@@ -165,5 +186,16 @@ button#submitAll {
 
         .header-title span {
             align-self: flex-end;
+        }
+
+    .back-button {
+        top: 10px; /* Ajustar la posición superior para pantallas pequeñas */
+        left: 5px; /* Ajustar la posición izquierda para pantallas pequeñas */
+        width: 25px; /* Reducir el tamaño del botón para pantallas pequeñas */
+        height: 25px; /* Reducir el tamaño del botón para pantallas pequeñas */
+    }
+
+        .back-button img {
+            width: 15px; /* Ajustar el tamaño del ícono para pantallas pequeñas */
         }
 }

@@ -14,6 +14,9 @@
 </head>
 <body>
     <header>
+        <a href="javascript:history.back()" class="back-button">
+            <img src="~/images/previous.png" alt="Regresar" /> <!-- Ícono de regresar -->
+        </a>
         <h1>Detalles de Auditoría - @(Model.FirstOrDefault()?.AuditDate?.ToString("MM dd yyyy") ?? "Sin Fecha")</h1>
     </header>
     <table class="table-details">
@@ -29,7 +32,7 @@
                 <th>Limpieza</th>
                 <th>Comentarios</th>
                 <th>Resultado</th>
-                <th>Almacén</th> 
+                <th>Almacén</th>
             </tr>
         </thead>
         <tbody>
@@ -46,7 +49,7 @@
                     <td>@quimico.Clean</td>
                     <td>@quimico.Comments</td>
                     <td>@quimico.Result</td>
-                    <td>@quimico.Almacen</td> 
+                    <td>@quimico.Almacen</td>
                 </tr>
             }
         </tbody>

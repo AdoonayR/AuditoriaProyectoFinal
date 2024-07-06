@@ -8,23 +8,27 @@ header {
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
+    position: relative; /* Para posicionar el botón de regresar */
 }
+
+    header h1 {
+        margin: 0;
+        color: #333;
+        text-align: center; /* Asegurarse de que el título esté centrado */
+        width: 100%; /* Para garantizar que el título ocupe todo el ancho */
+    }
 
 .header-title {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     width: 100%;
+    position: relative;
 }
 
 .header-right {
     display: flex;
     align-items: center;
-}
-
-.header-title h1 {
-    margin: 0;
-    color: #333;
 }
 
 .header-title span {
@@ -50,9 +54,9 @@ header {
     margin-top: 10px;
 }
 
-.form-row select, .form-row input[type="text"] {
-    flex: 1;
-}
+    .form-row select, .form-row input[type="text"] {
+        flex: 1;
+    }
 
 label {
     display: block;
@@ -72,9 +76,9 @@ button {
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #45a049;
-}
+    button:hover {
+        background-color: #45a049;
+    }
 
 .approved-label {
     display: inline-block;
@@ -86,28 +90,28 @@ button:hover {
 }
 
 .audit-table {
-    width: 100%;
+    width: 80%; /* Reducir un poco el ancho para centrar mejor */
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin: 0 auto 20px auto; /* Centrar la tabla y añadir margen inferior */
 }
 
-.audit-table th, .audit-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
+    .audit-table th, .audit-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
 
-.audit-table th {
-    background-color: #292828;
-    color: white;
-}
+    .audit-table th {
+        background-color: #292828;
+        color: white;
+    }
 
-.audit-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
+    .audit-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
 
-.audit-table tr:hover {
-    background-color: #ddd;
-}
+    .audit-table tr:hover {
+        background-color: #ddd;
+    }
 
 .details-btn {
     padding: 10px 15px;
@@ -119,9 +123,9 @@ button:hover {
     margin-right: 10px;
 }
 
-.details-btn:hover {
-    background-color: #555;
-}
+    .details-btn:hover {
+        background-color: #555;
+    }
 
 .approve-btn {
     padding: 10px 15px;
@@ -131,6 +135,55 @@ button:hover {
     border-radius: 5px;
 }
 
-.approve-btn:hover {
-    background-color: #0033cc;
+    .approve-btn:hover {
+        background-color: #0033cc;
+    }
+
+.back-button {
+    position: absolute; /* Posicionar el botón de regresar de forma absoluta */
+    top: 10px; /* Ajustar la posición superior */
+    left: 10px; /* Ajustar la posición izquierda */
+    width: 30px; /* Ajustar el tamaño del botón */
+    height: 30px; /* Ajustar el tamaño del botón */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    border: 2px solid white;
+    border-radius: 50%;
+    text-decoration: none;
+    color: white;
+}
+
+    .back-button img {
+        width: 20px; /* Ajustar el tamaño del ícono */
+        height: auto;
+    }
+
+/* Estilos para dispositivos móviles */
+@media screen and (max-width: 600px) {
+    .form-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .header-title {
+        flex-direction: column;
+    }
+
+        .header-title span {
+            align-self: flex-end;
+        }
+
+    .back-button {
+        position: absolute; /* Posicionar el botón de regresar de forma absoluta */
+        top: 5px; /* Ajustar la posición superior */
+        left: 5px; /* Ajustar la posición izquierda */
+        width: 25px; /* Ajustar el tamaño del botón */
+        height: 25px; /* Ajustar el tamaño del botón */
+    }
+
+        .back-button img {
+            width: 15px; /* Ajustar el tamaño del ícono */
+        }
 }

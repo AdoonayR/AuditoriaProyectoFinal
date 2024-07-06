@@ -1,42 +1,47 @@
-﻿body {
-    background-color: #e0f7fa; /* Fondo celeste */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+﻿html, body {
+    background: #fff;
+    height: 100%;
     margin: 0;
-    font-family: Arial, sans-serif;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
 .login-container {
-    background-color: #ffffff; /* Fondo del recuadro blanco */
-    padding: 100px 50px;
+    background-color: #ffffff;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+    z-index: 1000;
+    position: relative;
+    max-width: 400px;
+    width: 90%; /* Ajuste el ancho al 90% para dispositivos más pequeños */
+    box-sizing: border-box;
 }
 
-    .login-container h2 {
-        margin-bottom: 20px;
-        color: #333333;
-    }
-
 .login-logo {
-    width: 250px; /* Ajusta el tamaño de la imagen según tus necesidades */
+    width: 100%;
+    max-width: 250px;
     margin-bottom: 20px;
 }
 
 .login-container .form-group {
     margin-bottom: 15px;
     text-align: left;
+    width: 100%;
 }
 
-
     .login-container .form-group input {
-        width: 100%;
+        width: calc(100% - 20px);
         padding: 8px;
         border: 1px solid #cccccc;
         border-radius: 5px;
+        display: block;
+        margin: 0 auto;
     }
 
 .login-container button {
@@ -48,11 +53,13 @@
     color: white;
     font-size: 16px;
     cursor: pointer;
+    animation: breathe 4s ease-in-out infinite;
 }
 
     .login-container button:hover {
         background-color: #0056b3;
     }
+
 .error-message {
     color: red;
     font-weight: bold;
@@ -67,4 +74,246 @@
 input.error {
     border-color: red;
     background-color: #f8d7da;
+}
+
+.animated-marquee {
+    background: #1697e0;
+    margin: 0 auto;
+    min-height: 340px;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+}
+
+@-webkit-keyframes slide {
+    0% {
+        -webkit-transform: rotate(-22deg) skewX(-22.5deg) translate3d(-100%,0,0);
+        opacity: 0;
+    }
+
+    5% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .8;
+    }
+
+    85% {
+        opacity: 1;
+    }
+
+    100% {
+        -webkit-transform: rotate(-22deg) skewX(-22.5deg) translate3d(25%,0,0);
+        opacity: 0;
+    }
+}
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+        background-color: #007bff;
+    }
+
+    50% {
+        transform: scale(1.05);
+        background-color: #0056b3;
+    }
+}
+
+.animated-marquee-container {
+    position: absolute;
+    top: -75%;
+    width: 200%;
+    -webkit-animation: slide 18s linear infinite;
+}
+
+.animated-marquee-foreground {
+    margin-top: 3em;
+    -webkit-animation-duration: 42s;
+    width: 300%;
+    z-index: 200;
+}
+
+.animated-marquee-middleground {
+    margin-top: 6em;
+    -webkit-animation-duration: 60s;
+    z-index: 100;
+}
+
+.animated-marquee-background {
+    margin-top: 3em;
+    -webkit-animation-duration: 100s;
+    z-index: 0;
+}
+
+.animated-marquee-card {
+    background: #fff;
+    float: left;
+    margin-top: -2%;
+    margin-right: 2%;
+    -webkit-transition: opacity 2s ease-out;
+    height: 100px;
+    position: relative;
+    width: 8%;
+}
+
+.animated-marquee-foreground .animated-marquee-card {
+    height: 200px;
+    margin-right: 9%;
+    opacity: .6;
+    width: 320px;
+}
+
+.animated-marquee-middleground .animated-marquee-card {
+    margin-right: 2%;
+    opacity: .3;
+}
+
+.animated-marquee-background .animated-marquee-card {
+    height: 50px;
+    margin-right: 1%;
+    margin-top: 1%;
+    opacity: .2;
+    width: 4%;
+}
+
+.animated-marquee-card:hover {
+    opacity: .8 !important;
+}
+
+.animated-marquee-card:nth-child(3n+3) {
+    left: 30%;
+    top: 20%;
+}
+
+.animated-marquee-card:nth-child(8n+1) {
+    right: 20%;
+}
+
+.animated-marquee-card:nth-child(4n+3) {
+    top: 18%;
+}
+
+.animated-marquee-card:nth-child(3n+5) {
+    bottom: 10%;
+}
+
+.animated-marquee-card:nth-child(3n+1) {
+    visibility: hidden;
+}
+
+@media only screen and (max-width: 400px) {
+    .animated-marquee {
+        height: 340px;
+    }
+
+    .animated-marquee-container {
+        -webkit-animation: slide 14s linear infinite;
+    }
+
+    .animated-marquee-foreground {
+        margin-top: 3em;
+        -webkit-animation-duration: 22s;
+    }
+
+    .animated-marquee-middleground {
+        margin-top: 6em;
+        -webkit-animation-duration: 40s;
+    }
+
+    .animated-marquee-background {
+        margin-top: 3em;
+        -webkit-animation-duration: 75s;
+    }
+
+    .animated-marquee-foreground .animated-marquee-card {
+        height: 140px;
+        margin-right: 12px;
+        width: 220px;
+    }
+
+    .animated-marquee-middleground .animated-marquee-card {
+        height: 50px;
+        margin-right: 2%;
+    }
+
+    .animated-marquee-background .animated-marquee-card {
+        height: 30px;
+        width: 4%;
+    }
+}
+
+@media only screen and (max-width: 767px) and (min-width: 401px) {
+    .animated-marquee-container {
+        top: -30%;
+        width: 200%;
+    }
+
+    .animated-marquee-foreground .animated-marquee-card {
+        height: 150px;
+        margin-right: 10px;
+        width: 240px;
+    }
+
+    .animated-marquee-middleground .animated-marquee-card {
+        height: 50px;
+        margin-right: 2%;
+    }
+
+    .animated-marquee-background .animated-marquee-card {
+        height: 30px;
+        width: 4%;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .animated-marquee-container {
+        top: -75%;
+    }
+
+    .animated-marquee-foreground .animated-marquee-card {
+        height: 180px;
+        margin-right: 6%;
+        width: 280px;
+    }
+
+    .animated-marquee-middleground .animated-marquee-card {
+        margin-right: 1%;
+        height: 120px;
+        width: 170px;
+    }
+
+    .animated-marquee-background .animated-marquee-card {
+        height: 42px;
+        margin: 1px;
+        width: 2.5%;
+    }
+
+    .animated-marquee-card:nth-child(2n+2) {
+        left: 1%;
+        top: 1%;
+    }
+
+    .animated-marquee-card:nth-child(5n+3) {
+        right: 1%;
+        top: 1%;
+    }
+
+    .animated-marquee-card:nth-child(2n+6) {
+        top: 1%;
+    }
+
+    .animated-marquee-card:nth-child(6n+3) {
+        bottom: 1%;
+        right: 1%;
+    }
+
+    .animated-marquee-card:nth-child(3n+2) {
+        visibility: hidden;
+    }
 }

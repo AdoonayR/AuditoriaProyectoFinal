@@ -1,7 +1,27 @@
-﻿/* Estilos para la tabla de detalles */
+﻿body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative; /* Para posicionar el botón de regresar */
+}
+
+    header h1 {
+        margin: 0;
+        color: #333;
+        text-align: center; /* Asegurarse de que el título esté centrado */
+        width: 100%; /* Para garantizar que el título ocupe todo el ancho */
+    }
+
 .table-details {
-    width: 100%;
+    width: 80%; /* Ajustar el ancho para centrar mejor */
     border-collapse: collapse;
+    margin: 0 auto; /* Centrar la tabla */
 }
 
     .table-details th {
@@ -31,7 +51,39 @@
 
 /* Estilos para dispositivos móviles */
 @media screen and (max-width: 600px) {
-    .audit-details th, .audit-details td {
+    .table-details th, .table-details td {
         padding: 8px;
     }
+
+    .back-button {
+        top: 5px; /* Ajustar la posición superior para pantallas pequeñas */
+        left: 5px; /* Ajustar la posición izquierda para pantallas pequeñas */
+        width: 25px; /* Reducir el tamaño del botón para pantallas pequeñas */
+        height: 25px; /* Reducir el tamaño del botón para pantallas pequeñas */
+    }
+
+        .back-button img {
+            width: 15px; /* Ajustar el tamaño del ícono para pantallas pequeñas */
+        }
 }
+
+.back-button {
+    position: absolute; /* Posicionar el botón de regresar de forma absoluta */
+    top: 5px; /* Ajustar la posición superior */
+    left: 1px; /* Ajustar la posición izquierda */
+    width: 30px; /* Hacer el botón más pequeño */
+    height: 30px; /* Hacer el botón más pequeño */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    border: 2px solid white;
+    border-radius: 50%;
+    text-decoration: none;
+    color: #f0f0f0;
+}
+
+    .back-button img {
+        width: 25px; /* Ajustar el tamaño del ícono */
+        height: auto;
+    }
