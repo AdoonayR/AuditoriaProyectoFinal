@@ -1,13 +1,15 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
-    // Establecer la fecha actual en el formato DD/MM/YYYY
     const currentDate = new Date();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
     const year = currentDate.getFullYear();
-    const formattedDate = `${day}/${month}/${year}`;
+    const formattedDate = `${month}/${day}/${year}`;
     document.getElementById('currentDate').textContent = formattedDate;
 
-    // Obtener el nombre del auditor desde la sesión
+    flatpickr(".flatpickr", {
+        dateFormat: "m/d/Y" // Formato de visualización MM/DD/YYYY
+    });
+
     fetch('/api/api/getAuditorName')
         .then(response => response.json())
         .then(data => {
@@ -16,7 +18,16 @@
             }
         });
 
-    // Manejar la funcionalidad de los acordeones
+    fetch('/Home/Prioridades')
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                document.getElementById('btnShowProximos').style.display = 'block';
+            } else {
+                document.getElementById('btnShowProximos').style.display = 'none';
+            }
+        });
+
     const acc = document.querySelectorAll(".accordion h2");
     acc.forEach((h2, index) => {
         h2.addEventListener("click", function () {
@@ -26,33 +37,13 @@
         });
     });
 
-    // Agregar eventos para los inputs de tipo "date"
-    document.querySelectorAll('input[type="date"]').forEach(dateInput => {
-        dateInput.addEventListener('change', function () {
-            const selectedDate = new Date(this.value);
-            const currentDate = new Date();
-            if (selectedDate < currentDate) {
-                this.classList.add('expired');
-                this.classList.remove('expiring-soon');
-            } else if (selectedDate.getMonth() === currentDate.getMonth() && selectedDate.getFullYear() === currentDate.getFullYear()) {
-                this.classList.add('expiring-soon');
-                this.classList.remove('expired');
-            } else {
-                this.classList.remove('expired', 'expiring-soon');
-            }
-        });
+    document.getElementById('btnShowProximos').addEventListener('click', function () {
+        const container = document.getElementById('quimicosProximosContainer');
+        container.style.display = container.style.display === 'none' ? 'block' : 'none';
     });
 
-    // Convertir el texto de los inputs a mayúsculas
-    document.querySelectorAll('input[type="text"]').forEach(textInput => {
-        textInput.addEventListener('input', function () {
-            this.value = this.value.toUpperCase();
-        });
-    });
-
-    // Obtener el botón de enviar todo y los formularios de auditoría
     const submitAllButton = document.getElementById('submitAll');
-    const forms = document.querySelectorAll('.auditForm');
+    const forms = document.querySelectorAll('.audit-form');
 
     forms.forEach((form, index) => {
         form.addEventListener('submit', function (event) {
@@ -61,29 +52,28 @@
             const sectionStatus = this.closest('.section-status');
             const header = sectionStatus.querySelector('h2');
             const packaging = formData.get('packaging' + this.id.replace('auditForm', ''));
-            const expiration = new Date(formData.get('expiration' + this.id.replace('auditForm', '')));
+            const expiration = formData.get('expiration' + this.id.replace('auditForm', ''));
             const fifo = formData.get('fifo' + this.id.replace('auditForm', ''));
             const mixed = formData.get('mixed' + this.id.replace('auditForm', ''));
             const qcSeal = formData.get('qcSeal' + this.id.replace('auditForm', ''));
             const clean = formData.get('clean' + this.id.replace('auditForm', ''));
             const partNumber = formData.get('partNumber' + this.id.replace('auditForm', ''));
             const almacen = document.getElementById('area').value;
-            const comments = this.querySelector('.comments');
-            const commentsTextarea = comments.querySelector('textarea');
+            const commentsTextarea = this.querySelector('.comments textarea');
 
             let isValid = true;
             let commentsText = '';
             const currentDate = new Date();
+            const expirationDate = new Date(expiration);
 
-            // Validar los campos del formulario y agregar comentarios si es necesario
             if (packaging !== 'OK') {
                 isValid = false;
                 commentsText += 'Empaque en mal estado.\n';
             }
-            if (expiration < currentDate) {
+            if (expirationDate < currentDate) {
                 isValid = false;
-                const daysExpired = Math.floor((currentDate - expiration) / (1000 * 60 * 60 * 24));
-                commentsText += `Químico caducado desde hace: ${daysExpired} días.\n`;
+                const daysExpired = Math.floor((currentDate - expirationDate) / (1000 * 60 * 60 * 24));
+                commentsText += `Químico caducado hace: ${daysExpired} días.\n`;
             }
             if (fifo !== 'Sí') {
                 isValid = false;
@@ -102,17 +92,32 @@
                 commentsText += 'Limpieza del químico en mal estado.\n';
             }
 
-            // Establecer el resultado del químico y actualizar la interfaz
             const result = this.querySelector('.result');
+            const isExpiringSoon = expirationDate.getMonth() === currentDate.getMonth() && expirationDate >= currentDate;
+            if (isExpiringSoon) {
+                const daysUntilExpiration = Math.floor((expirationDate - currentDate) / (1000 * 60 * 60 * 24));
+                commentsText += `Químico próximo a vencer en ${daysUntilExpiration} días.\n`;
+            }
+
             if (isValid) {
-                result.textContent = 'Aceptado';
-                result.style.color = 'green';
-                this.style.border = '2px solid green';
-                sectionStatus.classList.add('accepted');
-                sectionStatus.classList.remove('rejected', 'expiring-soon');
-                header.classList.add('accepted');
-                header.classList.remove('rejected', 'expiring-soon');
-                comments.style.display = 'none';
+                if (isExpiringSoon) {
+                    result.textContent = 'Próximo a vencer';
+                    result.style.color = 'orange';
+                    this.style.border = '2px solid orange';
+                    sectionStatus.classList.add('expiring-soon');
+                    sectionStatus.classList.remove('accepted', 'rejected');
+                    header.classList.add('expiring-soon');
+                    header.classList.remove('accepted', 'rejected');
+                } else {
+                    result.textContent = 'Aceptado';
+                    result.style.color = 'green';
+                    this.style.border = '2px solid green';
+                    sectionStatus.classList.add('accepted');
+                    sectionStatus.classList.remove('rejected', 'expiring-soon');
+                    header.classList.add('accepted');
+                    header.classList.remove('rejected', 'expiring-soon');
+                }
+                if (commentsTextarea) commentsTextarea.style.display = 'none';
             } else {
                 result.textContent = 'Rechazado';
                 result.style.color = 'red';
@@ -121,33 +126,26 @@
                 sectionStatus.classList.remove('accepted', 'expiring-soon');
                 header.classList.add('rejected');
                 header.classList.remove('accepted', 'expiring-soon');
-                comments.style.display = 'block';
+                if (commentsTextarea) {
+                    commentsTextarea.style.display = 'block';
+                    commentsTextarea.value = commentsText;
+                }
+            }
+
+            header.querySelector('.chemical-title').textContent = partNumber;
+            header.querySelector('.chemical-comment').innerHTML = commentsText ? commentsText.replace(/\n/g, '<br>') : '';
+            header.querySelector('.chemical-comment').style.display = commentsText ? 'block' : 'none';
+            header.querySelector('.chemical-comment').style.marginLeft = '20px';
+
+            // Guardar comentario en la base de datos
+            if (commentsTextarea) {
                 commentsTextarea.value = commentsText;
             }
 
-            // Verificar si el químico está próximo a vencer
-            const isExpiringSoon = expiration.getMonth() === currentDate.getMonth() && expiration.getFullYear() === currentDate.getFullYear();
-            if (isExpiringSoon && expiration >= currentDate) {
-                const daysUntilExpiration = Math.floor((expiration - currentDate) / (1000 * 60 * 60 * 24));
-                commentsText += `Químico próximo a vencer en ${daysUntilExpiration} días.\n`;
-                result.textContent = 'Próximo a vencer';
-                result.style.color = 'orange';
-                this.style.border = '2px solid orange';
-                sectionStatus.classList.add('expiring-soon');
-                sectionStatus.classList.remove('accepted', 'rejected');
-                header.classList.add('expiring-soon');
-                header.classList.remove('accepted', 'rejected');
-            }
-
-            header.textContent = partNumber;
-            commentsTextarea.value = commentsText;
-
-            // Mostrar el botón de enviar todo si todos los formularios están completos
             if (Array.from(forms).every(f => f.querySelector('.result').textContent !== '')) {
                 submitAllButton.style.display = 'block';
             }
 
-            // Cerrar el acordeón actual y abrir el siguiente
             const panel = header.nextElementSibling;
             if (panel) {
                 panel.style.display = "none";
@@ -160,7 +158,6 @@
         });
     });
 
-    // Manejar el evento de clic en el botón de enviar todo
     submitAllButton.addEventListener('click', function () {
         const almacen = document.getElementById('area').value;
         if (!almacen) {
@@ -170,22 +167,21 @@
 
         const quimicos = Array.from(forms).map(form => {
             const formData = new FormData(form);
+            const commentsTextarea = form.querySelector('.comments textarea');
             return {
                 partNumber: formData.get('partNumber' + form.id.replace('auditForm', '')),
                 packaging: formData.get('packaging' + form.id.replace('auditForm', '')),
-                expiration: formData.get('expiration' + form.id.replace('auditForm', '')),
+                expirationString: formData.get('expiration' + form.id.replace('auditForm', '')), // Enviar la fecha en formato string
                 lot: formData.get('lot' + form.id.replace('auditForm', '')),
                 fifo: formData.get('fifo' + form.id.replace('auditForm', '')),
                 mixed: formData.get('mixed' + form.id.replace('auditForm', '')),
                 qcSeal: formData.get('qcSeal' + form.id.replace('auditForm', '')),
                 clean: formData.get('clean' + form.id.replace('auditForm', '')),
-                comments: form.querySelector('.comments textarea').value,
+                comments: commentsTextarea ? commentsTextarea.value : '',
                 result: form.querySelector('.result').textContent,
                 almacen: almacen
             };
         });
-
-        console.log(JSON.stringify(quimicos));
 
         fetch('/api/quimicos', {
             method: 'POST',
@@ -196,7 +192,11 @@
         })
             .then(response => response.json())
             .then(data => {
-                alert('Químicos guardados exitosamente');
+                if (data.message === 'Químicos guardados exitosamente') {
+                    alert('Químicos guardados exitosamente');
+                    // Recargar la página
+                    location.reload();
+                }
             })
             .catch(error => {
                 console.error('Error:', error);

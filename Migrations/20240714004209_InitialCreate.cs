@@ -34,8 +34,8 @@ namespace AuditoriaQuimicos.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PartNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Packaging = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Lot = table.Column<int>(type: "int", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Lot = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Fifo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Mixed = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QcSeal = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -43,7 +43,7 @@ namespace AuditoriaQuimicos.Migrations
                     Comments = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Result = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Auditor = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AuditDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AuditDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Almacen = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -59,7 +59,7 @@ namespace AuditoriaQuimicos.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QuimicoId = table.Column<int>(type: "int", nullable: false),
                     ApprovedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApprovedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ApprovedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ApprovalType = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>

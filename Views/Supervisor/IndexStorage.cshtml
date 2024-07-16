@@ -34,7 +34,7 @@
                 var isApprovedStorage = group != null && group.Any() && group.All(q => q.Aprobaciones != null && q.Aprobaciones.Any(a => a.ApprovalType == "Storage"));
 
                 <tr>
-                    <td>@group.Key?.ToString("dd-MM-yyyy")</td>
+                    <td>@group.Key?.ToString("MM-dd-yyyy")</td>
                     <td>
                         @if (isApprovedIncoming && isApprovedStorage)
                         {
@@ -50,10 +50,13 @@
                         }
                     </td>
                     <td>
-                        <a href="@Url.Action("DetailsStorage", new { date = group.Key?.ToString("dd-MM-yyyy") })" class="details-btn">Ver Detalles</a>
+                        @{
+                            var auditDate = group.Key?.ToString("dd-MM-yyyy");
+                        }
+                        <a href="@Url.Action("DetailsStorage", new { date = auditDate })" class="details-btn">Ver Detalles</a>
                         @if (isApprovedIncoming && !isApprovedStorage)
                         {
-                            <button class="approve-btn" data-date="@group.Key?.ToString("dd-MM-yyyy")" data-role="Storage">Aprobar</button>
+                            <button class="approve-btn" data-date="@auditDate" data-role="Storage">Aprobar</button>
                         }
                     </td>
                 </tr>

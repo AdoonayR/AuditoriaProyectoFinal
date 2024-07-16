@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Auditoría Mensual de Químicos - Incoming Supervisor";
+    
 }
 
 <!DOCTYPE html>
@@ -15,7 +16,7 @@
 <body>
     <header>
         <a href="javascript:history.back()" class="back-button">
-            <img src="~/images/previous.png" alt="Regresar" /> <!-- Ícono de regresar -->
+            <img src="~/images/previous.png" alt="Regresar" />
         </a>
         <h1>@ViewData["Title"]</h1>
     </header>
@@ -33,7 +34,7 @@
                 var isApprovedIncoming = group != null && group.Any() && group.All(q => q.Aprobaciones != null && q.Aprobaciones.Any(a => a.ApprovalType == "Incoming"));
 
                 <tr>
-                    <td>@group.Key?.ToString("dd-MM-yyyy")</td>
+                    <td>@group.Key?.ToString("MM-dd-yyyy")</td>
                     <td>
                         @if (isApprovedIncoming)
                         {
@@ -56,5 +57,6 @@
         </tbody>
     </table>
     <script src="~/js/supervisor.js"></script>
+    <script src="~/js/animacion.js"></script>
 </body>
 </html>

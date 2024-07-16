@@ -1,78 +1,62 @@
-﻿@{
-    ViewData["Title"] = "Auditoría Mensual de Químicos"; // Establece el título de la página
+﻿@model IEnumerable<AuditoriaQuimicos.Models.Quimico>
+
+@{
+    ViewData["Title"] = "Auditoría Mensual de Químicos";
 }
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"> <!-- Establece la codificación de caracteres a UTF-8 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configuración de la vista para dispositivos móviles -->
-    <title>@ViewData["Title"]</title> <!-- Título de la página -->
-    <link rel="stylesheet" href="~/css/style.css"> <!-- Enlace a la hoja de estilos CSS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="~/css/style.css">
 </head>
 <body>
     <header>
         <div class="header-title">
             <a href="javascript:history.back()" class="back-button">
-                <img src="~/images/previous.png" alt="Regresar" /> <!-- Ícono de regresar -->
+                <img src="~/images/previous.png" alt="Regresar" />
             </a>
-            <h1>Auditoría a Almacén</h1> <!-- Título principal -->
-            <span id="currentDate"></span> <!-- Lugar para mostrar la fecha actual -->
-            <img src="~/images/AmphenolLogo.png" alt="Logo" class="header-logo" /> <!-- Logo de la empresa -->
+            <h1>Auditoría a Almacén</h1>
+            <img src="~/images/AmphenolLogo.png" alt="Logo" class="header-logo" />
         </div>
+        <span id="currentDate" class="current-date"></span>
         <div class="form-row">
             <label for="area">Área:</label>
             <select id="area" name="area" required>
-                <!-- Campo de selección para el área -->
                 <option value="">Seleccione una opción</option>
                 <option value="Almacen Telaire">Almacen Telaire</option>
                 <option value="Almacen Temperatura">Almacen Temperatura</option>
             </select>
             <label for="auditor">Auditor:</label>
-            <input type="text" id="auditor" name="auditor" readonly> <!-- Campo de texto para mostrar el nombre del auditor, de solo lectura -->
+            <input type="text" id="auditor" name="auditor" readonly>
         </div>
     </header>
+
+    <button id="btnShowProximos" class="pulse-button" onclick="window.location.href='@Url.Action("IndexPrioridades", "Prioridades")'">Prioridades para Auditar</button>
 
     <div class="accordion">
         <!-- Químico 1 -->
         <div class="section-status">
-            <h2>Químico 1</h2> <!-- Título del primer químico -->
+            <h2 class="chemical-header">
+                <span class="chemical-title">Químico 1</span>
+                <span class="chemical-comment" id="comment1" style="display: none;"></span>
+            </h2>
             <div class="panel">
-                <form id="auditForm1" class="auditForm">
+                <form id="auditForm1" class="audit-form">
                     <div class="form-group">
                         <label for="partNumber1">Número de Parte</label>
-                        <input type="text" id="partNumber1" name="partNumber1" required> <!-- Campo de texto para el número de parte -->
-                    </div>
-                    <div class="form-group">
-                        <label for="packaging1">Empaque</label>
-                        <select id="packaging1" name="packaging1" required>
-                            <!-- Campo de selección para el estado del empaque -->
-                            <option value="">Seleccione una opción</option>
-                            <option value="OK">OK</option>
-                            <option value="Rechazado">Rechazado</option>
-                        </select>
+                        <input type="text" id="partNumber1" name="partNumber1" required>
                     </div>
                     <div class="form-group">
                         <label for="expiration1">Caducidad (MM/DD/YYYY)</label>
-                        <input type="date" id="expiration1" name="expiration1" required> <!-- Campo de fecha para la caducidad -->
-                    </div>
-                    <div class="form-group">
-                        <label for="lot1">Lote</label>
-                        <input type="text" id="lot1" name="lot1" required> <!-- Campo de texto para el lote -->
+                        <input type="text" id="expiration1" name="expiration1" required class="flatpickr">
                     </div>
                     <div class="form-group">
                         <label for="fifo1">FIFO seguido</label>
                         <select id="fifo1" name="fifo1" required>
-                            <!-- Campo de selección para FIFO -->
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="mixed1">Mezclado</label>
-                        <select id="mixed1" name="mixed1" required>
-                            <!-- Campo de selección para mezclado -->
                             <option value="">Seleccione una opción</option>
                             <option value="Sí">Sí</option>
                             <option value="No">No</option>
@@ -81,7 +65,26 @@
                     <div class="form-group">
                         <label for="qcSeal1">Sello de QC</label>
                         <select id="qcSeal1" name="qcSeal1" required>
-                            <!-- Campo de selección para sello de QC -->
+                            <option value="">Seleccione una opción</option>
+                            <option value="Sí">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="packaging1">Empaque</label>
+                        <select id="packaging1" name="packaging1" required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="OK">OK</option>
+                            <option value="Rechazado">Rechazado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="lot1">Lote</label>
+                        <input type="text" id="lot1" name="lot1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mixed1">Mezclado</label>
+                        <select id="mixed1" name="mixed1" required>
                             <option value="">Seleccione una opción</option>
                             <option value="Sí">Sí</option>
                             <option value="No">No</option>
@@ -90,61 +93,36 @@
                     <div class="form-group">
                         <label for="clean1">Limpieza</label>
                         <select id="clean1" name="clean1" required>
-                            <!-- Campo de selección para limpieza -->
                             <option value="">Seleccione una opción</option>
                             <option value="Limpio">Limpio</option>
                             <option value="Sucio">Sucio</option>
                         </select>
                     </div>
-                    <div class="form-group comments" style="display:none;">
-                        <label for="comments1">Comentarios</label>
-                        <textarea id="comments1" name="comments1" rows="3" readonly></textarea> <!-- Campo de texto para comentarios, solo lectura -->
-                    </div>
-                    <button type="submit">Enviar</button> <!-- Botón de envío del formulario -->
-                    <p class="result"></p> <!-- Lugar para mostrar el resultado -->
+                    <button type="submit">Enviar</button>
+                    <p class="result"></p>
                 </form>
             </div>
         </div>
 
         <!-- Químico 2 -->
         <div class="section-status">
-            <h2>Químico 2</h2> <!-- Título del segundo químico -->
+            <h2 class="chemical-header">
+                <span class="chemical-title">Químico 2</span>
+                <span class="chemical-comment" id="comment2" style="display: none;"></span>
+            </h2>
             <div class="panel">
-                <form id="auditForm2" class="auditForm">
+                <form id="auditForm2" class="audit-form">
                     <div class="form-group">
                         <label for="partNumber2">Número de Parte</label>
-                        <input type="text" id="partNumber2" name="partNumber2" required> <!-- Campo de texto para el número de parte -->
-                    </div>
-                    <div class="form-group">
-                        <label for="packaging2">Empaque</label>
-                        <select id="packaging2" name="packaging2" required>
-                            <!-- Campo de selección para el estado del empaque -->
-                            <option value="">Seleccione una opción</option>
-                            <option value="OK">OK</option>
-                            <option value="Rechazado">Rechazado</option>
-                        </select>
+                        <input type="text" id="partNumber2" name="partNumber2" required>
                     </div>
                     <div class="form-group">
                         <label for="expiration2">Caducidad (MM/DD/YYYY)</label>
-                        <input type="date" id="expiration2" name="expiration2" required> <!-- Campo de fecha para la caducidad -->
-                    </div>
-                    <div class="form-group">
-                        <label for="lot2">Lote</label>
-                        <input type="text" id="lot2" name="lot2" required> <!-- Campo de texto para el lote -->
+                        <input type="text" id="expiration2" name="expiration2" required class="flatpickr">
                     </div>
                     <div class="form-group">
                         <label for="fifo2">FIFO seguido</label>
                         <select id="fifo2" name="fifo2" required>
-                            <!-- Campo de selección para FIFO -->
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="mixed2">Mezclado</label>
-                        <select id="mixed2" name="mixed2" required>
-                            <!-- Campo de selección para mezclado -->
                             <option value="">Seleccione una opción</option>
                             <option value="Sí">Sí</option>
                             <option value="No">No</option>
@@ -153,7 +131,26 @@
                     <div class="form-group">
                         <label for="qcSeal2">Sello de QC</label>
                         <select id="qcSeal2" name="qcSeal2" required>
-                            <!-- Campo de selección para sello de QC -->
+                            <option value="">Seleccione una opción</option>
+                            <option value="Sí">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="packaging2">Empaque</label>
+                        <select id="packaging2" name="packaging2" required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="OK">OK</option>
+                            <option value="Rechazado">Rechazado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="lot2">Lote</label>
+                        <input type="text" id="lot2" name="lot2" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mixed2">Mezclado</label>
+                        <select id="mixed2" name="mixed2" required>
                             <option value="">Seleccione una opción</option>
                             <option value="Sí">Sí</option>
                             <option value="No">No</option>
@@ -162,61 +159,36 @@
                     <div class="form-group">
                         <label for="clean2">Limpieza</label>
                         <select id="clean2" name="clean2" required>
-                            <!-- Campo de selección para limpieza -->
                             <option value="">Seleccione una opción</option>
                             <option value="Limpio">Limpio</option>
                             <option value="Sucio">Sucio</option>
                         </select>
                     </div>
-                    <div class="form-group comments" style="display:none;">
-                        <label for="comments2">Comentarios</label>
-                        <textarea id="comments2" name="comments2" rows="3" readonly></textarea> <!-- Campo de texto para comentarios, solo lectura -->
-                    </div>
-                    <button type="submit">Enviar</button> <!-- Botón de envío del formulario -->
-                    <p class="result"></p> <!-- Lugar para mostrar el resultado -->
+                    <button type="submit">Enviar</button>
+                    <p class="result"></p>
                 </form>
             </div>
         </div>
 
         <!-- Químico 3 -->
         <div class="section-status">
-            <h2>Químico 3</h2> <!-- Título del tercer químico -->
+            <h2 class="chemical-header">
+                <span class="chemical-title">Químico 3</span>
+                <span class="chemical-comment" id="comment3" style="display: none;"></span>
+            </h2>
             <div class="panel">
-                <form id="auditForm3" class="auditForm">
+                <form id="auditForm3" class="audit-form">
                     <div class="form-group">
                         <label for="partNumber3">Número de Parte</label>
-                        <input type="text" id="partNumber3" name="partNumber3" required> <!-- Campo de texto para el número de parte -->
-                    </div>
-                    <div class="form-group">
-                        <label for="packaging3">Empaque</label>
-                        <select id="packaging3" name="packaging3" required>
-                            <!-- Campo de selección para el estado del empaque -->
-                            <option value="">Seleccione una opción</option>
-                            <option value="OK">OK</option>
-                            <option value="Rechazado">Rechazado</option>
-                        </select>
+                        <input type="text" id="partNumber3" name="partNumber3" required>
                     </div>
                     <div class="form-group">
                         <label for="expiration3">Caducidad (MM/DD/YYYY)</label>
-                        <input type="date" id="expiration3" name="expiration3" required> <!-- Campo de fecha para la caducidad -->
-                    </div>
-                    <div class="form-group">
-                        <label for="lot3">Lote</label>
-                        <input type="text" id="lot3" name="lot3" required> <!-- Campo de texto para el lote -->
+                        <input type="text" id="expiration3" name="expiration3" required class="flatpickr">
                     </div>
                     <div class="form-group">
                         <label for="fifo3">FIFO seguido</label>
                         <select id="fifo3" name="fifo3" required>
-                            <!-- Campo de selección para FIFO -->
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="mixed3">Mezclado</label>
-                        <select id="mixed3" name="mixed3" required>
-                            <!-- Campo de selección para mezclado -->
                             <option value="">Seleccione una opción</option>
                             <option value="Sí">Sí</option>
                             <option value="No">No</option>
@@ -225,7 +197,26 @@
                     <div class="form-group">
                         <label for="qcSeal3">Sello de QC</label>
                         <select id="qcSeal3" name="qcSeal3" required>
-                            <!-- Campo de selección para sello de QC -->
+                            <option value="">Seleccione una opción</option>
+                            <option value="Sí">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="packaging3">Empaque</label>
+                        <select id="packaging3" name="packaging3" required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="OK">OK</option>
+                            <option value="Rechazado">Rechazado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="lot3">Lote</label>
+                        <input type="text" id="lot3" name="lot3" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mixed3">Mezclado</label>
+                        <select id="mixed3" name="mixed3" required>
                             <option value="">Seleccione una opción</option>
                             <option value="Sí">Sí</option>
                             <option value="No">No</option>
@@ -234,24 +225,20 @@
                     <div class="form-group">
                         <label for="clean3">Limpieza</label>
                         <select id="clean3" name="clean3" required>
-                            <!-- Campo de selección para limpieza -->
                             <option value="">Seleccione una opción</option>
                             <option value="Limpio">Limpio</option>
                             <option value="Sucio">Sucio</option>
                         </select>
                     </div>
-                    <div class="form-group comments" style="display:none;">
-                        <label for="comments3">Comentarios</label>
-                        <textarea id="comments3" name="comments3" rows="3" readonly></textarea> <!-- Campo de texto para comentarios, solo lectura -->
-                    </div>
-                    <button type="submit">Enviar</button> <!-- Botón de envío del formulario -->
-                    <p class="result"></p> <!-- Lugar para mostrar el resultado -->
+                    <button type="submit">Enviar</button>
+                    <p class="result"></p>
                 </form>
             </div>
         </div>
     </div>
     <button id="submitAll" style="display:none;">Enviar Todos</button> <!-- Botón para enviar todos los formularios, inicialmente oculto -->
 
-    <script src="~/js/script.js"></script> <!-- Enlace al archivo JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="~/js/script.js"></script>
 </body>
 </html>

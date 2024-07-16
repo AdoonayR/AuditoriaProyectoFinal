@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuditoriaQuimicos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240622074308_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240714011954_AddEvidenciaColumnToQuimicos")]
+    partial class AddEvidenciaColumnToQuimicos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,7 +41,7 @@ namespace AuditoriaQuimicos.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ApprovedDate")
+                    b.Property<DateTime?>("ApprovedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("QuimicoId")
@@ -91,7 +91,7 @@ namespace AuditoriaQuimicos.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("AuditDate")
+                    b.Property<DateTime?>("AuditDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Auditor")
@@ -106,15 +106,20 @@ namespace AuditoriaQuimicos.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Expiration")
+                    b.Property<string>("Evidencia")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Fifo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Lot")
-                        .HasColumnType("int");
+                    b.Property<string>("Lot")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Mixed")
                         .IsRequired()
@@ -138,7 +143,7 @@ namespace AuditoriaQuimicos.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Quimicos");
+                    b.ToTable("Quimicos", (string)null);
                 });
 
             modelBuilder.Entity("AuditoriaQuimicos.Models.Aprobacion", b =>

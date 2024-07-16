@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuditoriaQuimicos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240623064405_AllowNullAlmacen")]
-    partial class AllowNullAlmacen
+    [Migration("20240714004209_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,7 +41,7 @@ namespace AuditoriaQuimicos.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ApprovedDate")
+                    b.Property<DateTime?>("ApprovedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("QuimicoId")

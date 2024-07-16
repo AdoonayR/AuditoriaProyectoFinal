@@ -51,9 +51,14 @@ header {
 
 /* Estilos para dispositivos móviles */
 @media screen and (max-width: 600px) {
-    .table-details th, .table-details td {
-        padding: 8px;
+    .table-details {
+        width: 100%; /* Ajustar el ancho al 100% para pantallas pequeñas */
+        font-size: 12px; /* Reducir el tamaño de fuente */
     }
+
+        .table-details th, .table-details td {
+            padding: 8px;
+        }
 
     .back-button {
         top: 5px; /* Ajustar la posición superior para pantallas pequeñas */
@@ -69,21 +74,21 @@ header {
 
 .back-button {
     position: absolute; /* Posicionar el botón de regresar de forma absoluta */
-    top: 5px; /* Ajustar la posición superior */
-    left: 1px; /* Ajustar la posición izquierda */
-    width: 30px; /* Hacer el botón más pequeño */
-    height: 30px; /* Hacer el botón más pequeño */
+    top: 10px; /* Ajustar la posición superior */
+    left: 10px; /* Ajustar la posición izquierda */
+    width: 40px; /* Tamaño promedio para el botón */
+    height: 40px; /* Tamaño promedio para el botón */
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f0f0f0;
-    border: 2px solid white;
-    border-radius: 50%;
     text-decoration: none;
-    color: #f0f0f0;
+    color: #333; /* Color del ícono */
+    background: none; /* Sin fondo */
+    border: none; /* Sin borde */
+    cursor: pointer;
 }
 
     .back-button img {
-        width: 25px; /* Ajustar el tamaño del ícono */
+        width: 100%; /* Ajustar el tamaño del ícono */
         height: auto;
     }

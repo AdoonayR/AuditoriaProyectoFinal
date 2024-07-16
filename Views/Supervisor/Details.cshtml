@@ -41,7 +41,7 @@
                 <tr class="@(quimico.Result == "Aceptado" ? "accepted" : quimico.Result == "Próximo a vencer" ? "expiring-soon" : "rejected")">
                     <td>@quimico.PartNumber</td>
                     <td>@quimico.Packaging</td>
-                    <td>@quimico.Expiration?.ToString("dd/MM/yyyy")</td>
+                    <td>@quimico.Expiration?.ToString("MM-dd-yyyy")</td>
                     <td>@quimico.Lot</td>
                     <td>@quimico.Fifo</td>
                     <td>@quimico.Mixed</td>

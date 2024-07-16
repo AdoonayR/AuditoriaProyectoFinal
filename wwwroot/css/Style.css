@@ -1,6 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
+    background-color: #f9f9f9;
 }
 
 header {
@@ -13,56 +14,59 @@ header {
 
 .header-title {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     width: 100%;
+    position: relative;
 }
 
 .back-button {
     position: absolute; /* Posicionar el botón de regresar de forma absoluta */
     top: 5px; /* Ajustar la posición superior */
-    left: 1px; /* Ajustar la posición izquierda */
+    left: 5px; /* Ajustar la posición izquierda */
     width: 30px; /* Hacer el botón más pequeño */
     height: 30px; /* Hacer el botón más pequeño */
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f0f0f0;
-    border: 2px solid white;
-    border-radius: 50%;
+    background-color: transparent;
+    border: none;
     text-decoration: none;
     color: #f0f0f0;
 }
 
     .back-button img {
-        width: 25px; /* Ajustar el tamaño del ícono */
+        width: 40px; /* Ajustar el tamaño del ícono */
         height: auto;
     }
-
-.header-right {
-    display: flex;
-    align-items: center;
-}
 
 .header-title h1 {
     margin: 0;
     color: #333;
-}
-
-.header-title span {
-    display: inline-block;
-    padding: 5px 10px;
-    border: 2px solid #070707;
-    border-radius: 5px;
-    background-color: #f0f0f0;
-    font-size: 1rem;
-    color: #070707;
+    text-align: center; /* Centrar el título */
+    width: 100%; /* Para garantizar que el título ocupe todo el ancho */
 }
 
 .header-logo {
-    width: 200px;
+    position: absolute; /* Posicionar el logo de forma absoluta */
+    top: 5px; /* Ajustar la posición superior */
+    right: 5px; /* Ajustar la posición derecha */
+    width: 200px; /* Ajustar el tamaño del logo */
     height: auto;
-    margin-left: 0px;
+}
+
+.current-date {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-left: 10px;
+    position: absolute; /* Posicionar la fecha de forma absoluta */
+    top: 60px; /* Ajustar la posición superior para colocarla debajo del logo */
+    right: 1px; /* Alinear a la derecha */
 }
 
 .form-row {
@@ -74,17 +78,10 @@ header {
 
     .form-row select, .form-row input[type="text"] {
         flex: 1;
+        max-width: 300px; /* Limitar el tamaño de los campos */
+        padding: 8px;
+        box-sizing: border-box;
     }
-
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-input, select {
-    padding: 8px;
-    box-sizing: border-box;
-}
 
 button {
     padding: 10px 15px;
@@ -98,6 +95,22 @@ button {
         background-color: #45a049;
     }
 
+    button#btnShowProximos {
+        padding: 10px 20px;
+        background-color: #ff0000;
+        color: white;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+        display: block;
+        margin: 20px auto;
+        animation: pulseMainIcon 2s infinite;
+    }
+
+        button#btnShowProximos:hover {
+            background-color: #ff6666;
+        }
+
 .accordion h2 {
     cursor: pointer;
     padding: 15px;
@@ -107,6 +120,18 @@ button {
     background-color: #292828;
     margin: 10px 0;
     color: white;
+    display: flex;
+    justify-content: space-between;
+}
+
+.chemical-title {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.chemical-comment {
+    flex: 1;
+    text-align: right;
 }
 
 .panel {
@@ -124,16 +149,13 @@ input[type="date"] {
     color: black;
 }
 
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        filter: invert(1);
-    }
+input[type="text"].flatpickr {
+    color: black;
+}
 
-    input[type="date"].expired {
-        color: red;
-    }
-
-    input[type="date"].expiring-soon {
-        color: orange;
+    input[type="text"].flatpickr:focus {
+        outline: none;
+        border: 2px solid #4CAF50;
     }
 
 button#submitAll {
@@ -168,34 +190,178 @@ button#submitAll {
 
     .section-status.rejected h2 {
         background-color: red;
+        animation: pulseRejected 2s infinite;
     }
 
     .section-status.expiring-soon h2 {
         background-color: orange;
+        animation: pulseExpiring 2s infinite;
     }
 
-@media (max-width: 600px) {
-    .form-row {
-        flex-direction: column;
-        align-items: stretch;
+@media (max-width: 1024px) { /* Ajustar para pantallas de tabletas */
+    .header-logo {
+        width: 100px; /* Reducir el tamaño del logo */
+        height: auto;
     }
 
+    .current-date {
+        font-size: 0.9rem; /* Reducir el tamaño de la fuente */
+        padding: 5px 10px; /* Reducir el relleno */
+    }
+
+    .back-button {
+        width: 20px; /* Reducir el tamaño del botón */
+        height: 20px; /* Reducir el tamaño del botón */
+    }
+
+        .back-button img {
+            width: 20px; /* Ajustar el tamaño del ícono */
+            height: auto;
+        }
+}
+
+@media (max-width: 600px) { /* Ajustar para pantallas aún más pequeñas */
     .header-title {
         flex-direction: column;
+        align-items: center;
     }
 
-        .header-title span {
-            align-self: flex-end;
-        }
+    .header-logo {
+        width: 80px; /* Reducir aún más el tamaño del logo */
+        height: auto;
+    }
+
+    .current-date {
+        font-size: 0.8rem; /* Reducir más el tamaño de la fuente */
+        padding: 5px; /* Reducir más el relleno */
+    }
 
     .back-button {
         top: 10px; /* Ajustar la posición superior para pantallas pequeñas */
         left: 5px; /* Ajustar la posición izquierda para pantallas pequeñas */
-        width: 25px; /* Reducir el tamaño del botón para pantallas pequeñas */
-        height: 25px; /* Reducir el tamaño del botón para pantallas pequeñas */
+        width: 15px; /* Reducir más el tamaño del botón */
+        height: 15px; /* Reducir más el tamaño del botón */
     }
 
         .back-button img {
-            width: 15px; /* Ajustar el tamaño del ícono para pantallas pequeñas */
+            width: 15px; /* Ajustar más el tamaño del ícono */
+            height: auto;
         }
 }
+
+/* Estilos para la tabla de químicos próximos a vencer */
+.quimicos-proximos-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+    .quimicos-proximos-table th, .quimicos-proximos-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .quimicos-proximos-table th {
+        background-color: #f2f2f2;
+    }
+
+    .quimicos-proximos-table .rechazado {
+        background-color: #f8d7da;
+        animation: pulseRejected 2s infinite;
+    }
+
+    .quimicos-proximos-table .proximo-a-vencer {
+        background-color: #fff3cd;
+        animation: pulseExpiring 2s infinite;
+    }
+
+@keyframes pulseMainIcon {
+    0% {
+        box-shadow: 0 0 5px #ff0000;
+    }
+
+    50% {
+        box-shadow: 0 0 20px #ff9900;
+    }
+
+    100% {
+        box-shadow: 0 0 5px #ff0000;
+    }
+}
+
+@keyframes pulseRejected {
+    0% {
+        box-shadow: 0 0 5px #ff0000;
+    }
+
+    50% {
+        box-shadow: 0 0 10px #ff6666;
+    }
+
+    100% {
+        box-shadow: 0 0 5px #ff0000;
+    }
+}
+
+@keyframes pulseExpiring {
+    0% {
+        box-shadow: 0 0 5px #ffcc00;
+    }
+
+    50% {
+        box-shadow: 0 0 10px #ffeb3b;
+    }
+
+    100% {
+        box-shadow: 0 0 5px #ffcc00;
+    }
+}
+
+.audit-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 800px; /* Ancho máximo del formulario */
+    margin: 0 auto; /* Centrar el formulario */
+}
+
+    .audit-form .form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centrar los elementos dentro del grupo */
+    }
+
+        .audit-form .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .audit-form .form-group input,
+        .audit-form .form-group select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%; /* Hacer que los campos ocupen todo el ancho disponible */
+        }
+
+            .audit-form .form-group input:focus,
+            .audit-form .form-group select:focus {
+                outline: none;
+                border-color: #007bff;
+            }
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    grid-column: span 2; /* Hacer que el botón ocupe dos columnas */
+    justify-self: center; /* Centrar el botón */
+}
+
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }

@@ -38,7 +38,7 @@ namespace AuditoriaQuimicos.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ApprovedDate")
+                    b.Property<DateTime?>("ApprovedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("QuimicoId")
@@ -136,7 +136,7 @@ namespace AuditoriaQuimicos.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Quimicos");
+                    b.ToTable("Quimicos", (string)null);
                 });
 
             modelBuilder.Entity("AuditoriaQuimicos.Models.Aprobacion", b =>
