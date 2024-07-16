@@ -1,4 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
+    // Obtiene la fecha actual y la formatea en MM/DD/YYYY
     const currentDate = new Date();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
@@ -6,10 +7,12 @@
     const formattedDate = `${month}/${day}/${year}`;
     document.getElementById('currentDate').textContent = formattedDate;
 
+    // Inicializa el calendario Flatpickr con el formato MM/DD/YYYY
     flatpickr(".flatpickr", {
         dateFormat: "m/d/Y" // Formato de visualización MM/DD/YYYY
     });
 
+    // Obtiene el nombre del auditor y lo coloca en el campo correspondiente
     fetch('/api/api/getAuditorName')
         .then(response => response.json())
         .then(data => {
@@ -18,6 +21,7 @@
             }
         });
 
+    // Verifica si hay prioridades y ajusta la visibilidad del botón de mostrar prioridades
     fetch('/Home/Prioridades')
         .then(response => response.json())
         .then(data => {
@@ -28,6 +32,7 @@
             }
         });
 
+    // Configura el comportamiento del acordeón para mostrar y ocultar paneles
     const acc = document.querySelectorAll(".accordion h2");
     acc.forEach((h2, index) => {
         h2.addEventListener("click", function () {
@@ -37,6 +42,7 @@
         });
     });
 
+    // Configura el botón de mostrar prioridades para mostrar y ocultar la sección correspondiente
     document.getElementById('btnShowProximos').addEventListener('click', function () {
         const container = document.getElementById('quimicosProximosContainer');
         container.style.display = container.style.display === 'none' ? 'block' : 'none';
@@ -45,9 +51,10 @@
     const submitAllButton = document.getElementById('submitAll');
     const forms = document.querySelectorAll('.audit-form');
 
+    // Configura el comportamiento de envío para cada formulario de auditoría
     forms.forEach((form, index) => {
         form.addEventListener('submit', function (event) {
-            event.preventDefault();
+            event.preventDefault(); // Previene el envío del formulario
             const formData = new FormData(this);
             const sectionStatus = this.closest('.section-status');
             const header = sectionStatus.querySelector('h2');
@@ -66,6 +73,7 @@
             const currentDate = new Date();
             const expirationDate = new Date(expiration);
 
+            // Verifica y agrega comentarios según los problemas encontrados
             if (packaging !== 'OK') {
                 isValid = false;
                 commentsText += 'Empaque en mal estado.\n';
@@ -99,6 +107,7 @@
                 commentsText += `Químico próximo a vencer en ${daysUntilExpiration} días.\n`;
             }
 
+            // Actualiza el estado y el estilo del formulario según los resultados de la auditoría
             if (isValid) {
                 if (isExpiringSoon) {
                     result.textContent = 'Próximo a vencer';
@@ -142,10 +151,12 @@
                 commentsTextarea.value = commentsText;
             }
 
+            // Verifica si todos los formularios han sido completados para mostrar el botón de enviar todos
             if (Array.from(forms).every(f => f.querySelector('.result').textContent !== '')) {
                 submitAllButton.style.display = 'block';
             }
 
+            // Oculta el panel actual y muestra el siguiente
             const panel = header.nextElementSibling;
             if (panel) {
                 panel.style.display = "none";
@@ -158,6 +169,7 @@
         });
     });
 
+    // Configura el botón de enviar todos para guardar todos los formularios en la base de datos
     submitAllButton.addEventListener('click', function () {
         const almacen = document.getElementById('area').value;
         if (!almacen) {
