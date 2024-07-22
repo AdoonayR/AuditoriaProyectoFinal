@@ -20,12 +20,12 @@ header {
     position: relative;
 }
 
-header .back-button {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 40px;
-    height: 40px;
+.back-button {
+    position: absolute; /* Posicionar el botón de regresar de forma absoluta */
+    top: 10px; /* Ajustar la posición superior */
+    left: 10px; /* Ajustar la posición izquierda */
+    width: 40px; /* Tamaño promedio para el botón */
+    height: 40px; /* Tamaño promedio para el botón */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -36,7 +36,7 @@ header .back-button {
     cursor: pointer;
 }
 
-    header .back-button img {
+    .back-button img {
         width: 100%; /* Ajustar el tamaño del ícono */
         height: auto;
     }
@@ -213,7 +213,7 @@ button#submitAll {
     }
 
     .back-button {
-        width: 35px; /* Ajustar el tamaño del botón */
+        width: 55px; /* Ajustar el tamaño del botón */
         height: 35px; /* Ajustar el tamaño del botón */
     }
 
