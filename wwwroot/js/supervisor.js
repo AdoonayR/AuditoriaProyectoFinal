@@ -5,10 +5,10 @@
             // Obtener la fecha y el rol del botón presionado
             const date = this.getAttribute("data-date");
             const role = this.getAttribute("data-role");
-            
+
             // Determinar la URL de aprobación según el rol
             const url = role === "Incoming" ? "/Supervisor/ApproveIncoming" : "/Supervisor/ApproveStorage";
-            
+
             // Realizar la solicitud de aprobación al servidor
             fetch(url, {
                 method: "POST",

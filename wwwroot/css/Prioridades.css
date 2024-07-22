@@ -75,7 +75,7 @@ header {
     }
 
     .quimicos-proximos-table tr.rejected {
-        background-color: #ffcccc;
+        background-color: #ffcccc; /* Rojo claro para rechazado */
     }
 
     .quimicos-proximos-table tr.expiring-soon {

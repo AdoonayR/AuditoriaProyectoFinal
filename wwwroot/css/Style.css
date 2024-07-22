@@ -20,23 +20,24 @@ header {
     position: relative;
 }
 
-.back-button {
-    position: absolute; /* Posicionar el botón de regresar de forma absoluta */
-    top: 5px; /* Ajustar la posición superior */
-    left: 5px; /* Ajustar la posición izquierda */
-    width: 30px; /* Hacer el botón más pequeño */
-    height: 30px; /* Hacer el botón más pequeño */
+header .back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: transparent;
-    border: none;
     text-decoration: none;
-    color: #f0f0f0;
+    color: #333; /* Color del ícono */
+    background: none; /* Sin fondo */
+    border: none; /* Sin borde */
+    cursor: pointer;
 }
 
-    .back-button img {
-        width: 40px; /* Ajustar el tamaño del ícono */
+    header .back-button img {
+        width: 100%; /* Ajustar el tamaño del ícono */
         height: auto;
     }
 
@@ -44,7 +45,9 @@ header {
     margin: 0;
     color: #333;
     text-align: center; /* Centrar el título */
-    width: 100%; /* Para garantizar que el título ocupe todo el ancho */
+    width: 100%; /* Garantizar que el título ocupe todo el ancho */
+    position: relative;
+    left: 1%; /* Ajustar ligeramente a la derecha */
 }
 
 .header-logo {
@@ -200,22 +203,22 @@ button#submitAll {
 
 @media (max-width: 1024px) { /* Ajustar para pantallas de tabletas */
     .header-logo {
-        width: 100px; /* Reducir el tamaño del logo */
+        width: 130px; /* Reducir el tamaño del logo */
         height: auto;
     }
 
     .current-date {
-        font-size: 0.9rem; /* Reducir el tamaño de la fuente */
-        padding: 5px 10px; /* Reducir el relleno */
+        font-size: 1rem; /* Reducir el tamaño de la fuente */
+        padding: 8px 15px; /* Reducir el relleno */
     }
 
     .back-button {
-        width: 20px; /* Reducir el tamaño del botón */
-        height: 20px; /* Reducir el tamaño del botón */
+        width: 35px; /* Ajustar el tamaño del botón */
+        height: 35px; /* Ajustar el tamaño del botón */
     }
 
         .back-button img {
-            width: 20px; /* Ajustar el tamaño del ícono */
+            width: 35px; /* Ajustar el tamaño del ícono */
             height: auto;
         }
 }
@@ -227,24 +230,24 @@ button#submitAll {
     }
 
     .header-logo {
-        width: 80px; /* Reducir aún más el tamaño del logo */
+        width: 120px; /* Reducir aún más el tamaño del logo */
         height: auto;
     }
 
     .current-date {
-        font-size: 0.8rem; /* Reducir más el tamaño de la fuente */
+        font-size: 0.9rem; /* Reducir más el tamaño de la fuente */
         padding: 5px; /* Reducir más el relleno */
     }
 
     .back-button {
-        top: 10px; /* Ajustar la posición superior para pantallas pequeñas */
+        top: 5px; /* Ajustar la posición superior para pantallas pequeñas */
         left: 5px; /* Ajustar la posición izquierda para pantallas pequeñas */
-        width: 15px; /* Reducir más el tamaño del botón */
-        height: 15px; /* Reducir más el tamaño del botón */
+        width: 30px; /* Reducir el tamaño del botón para pantallas pequeñas */
+        height: 30px; /* Reducir el tamaño del botón para pantallas pequeñas */
     }
 
         .back-button img {
-            width: 15px; /* Ajustar más el tamaño del ícono */
+            width: 30px; /* Ajustar el tamaño del ícono para pantallas pequeñas */
             height: auto;
         }
 }
