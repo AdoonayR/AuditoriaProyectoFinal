@@ -1,8 +1,7 @@
-﻿@model IEnumerable<IGrouping<DateTime?, AuditoriaQuimicos.Models.Quimico>>
+﻿@model IEnumerable<dynamic>
 
 @{
     ViewData["Title"] = "Auditoría Mensual de Químicos - Incoming Supervisor";
-    
 }
 
 <!DOCTYPE html>
@@ -24,17 +23,20 @@
         <thead>
             <tr>
                 <th>Fecha de Auditoría</th>
-                <th>Estado de Aprobación</th>
+                <th>Estado de Aprobación Incoming</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var group in Model)
             {
-                var isApprovedIncoming = group != null && group.Any() && group.All(q => q.Aprobaciones != null && q.Aprobaciones.Any(a => a.ApprovalType == "Incoming"));
+                // Verificamos si el estado es "Aprobado" o "Pendiente"
+                var isApprovedIncoming = group.Estado == "Aprobado";
 
                 <tr>
-                    <td>@group.Key?.ToString("MM-dd-yyyy")</td>
+                    <!-- Mostramos la fecha en formato MM-dd-yyyy -->
+                    <td>@DateTime.Parse(group.AuditDate.ToString()).ToString("MM-dd-yyyy")</td>
+
                     <td>
                         @if (isApprovedIncoming)
                         {
@@ -46,17 +48,27 @@
                         }
                     </td>
                     <td>
-                        <a href="@Url.Action("DetailsIncoming", new { date = group.Key?.ToString("dd-MM-yyyy") })" class="details-btn">Ver Detalles</a>
+                        <!-- Botón para ver detalles -->
+                        <a href="@Url.Action("DetailsIncoming", new { date = DateTime.Parse(group.AuditDate.ToString()).ToString("MM-dd-yyyy") })" class="details-btn">Ver Detalles</a>
+
+                        <!-- Botón de aprobar si no está aprobado -->
                         @if (!isApprovedIncoming)
                         {
-                            <button class="approve-btn" data-date="@group.Key?.ToString("dd-MM-yyyy")" data-role="Incoming">Aprobar</button>
+                            <!-- Mandamos la fecha en formato yyyy-MM-dd al backend -->
+                            <button class="approve-btn" data-date="@DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd")" data-role="Incoming">Aprobar</button>
+                        }
+                        else
+                        {
+                            <button class="approve-btn" disabled>Aprobado</button>
                         }
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <!-- Importar Axios desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="~/js/supervisor.js"></script>
-    <script src="~/js/animacion.js"></script>
 </body>
 </html>

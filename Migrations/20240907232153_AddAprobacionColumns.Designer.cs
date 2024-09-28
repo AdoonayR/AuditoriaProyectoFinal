@@ -4,6 +4,7 @@ using AuditoriaQuimicos.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuditoriaQuimicos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240907232153_AddAprobacionColumns")]
+    partial class AddAprobacionColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace AuditoriaQuimicos.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Aprobacion", b =>
+            modelBuilder.Entity("AuditoriaQuimicos.Models.Aprobacion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,18 +33,15 @@ namespace AuditoriaQuimicos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApprovedByIncoming")
+                    b.Property<string>("ApprovalType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ApprovedByStorage")
+                    b.Property<string>("ApprovedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("ApprovedDateIncoming")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ApprovedDateStorage")
+                    b.Property<DateTime?>("ApprovedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("QuimicoId")
@@ -142,7 +142,7 @@ namespace AuditoriaQuimicos.Migrations
                     b.ToTable("Quimicos", (string)null);
                 });
 
-            modelBuilder.Entity("Aprobacion", b =>
+            modelBuilder.Entity("AuditoriaQuimicos.Models.Aprobacion", b =>
                 {
                     b.HasOne("AuditoriaQuimicos.Models.Quimico", "Quimico")
                         .WithMany("Aprobaciones")

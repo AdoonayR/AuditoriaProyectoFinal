@@ -29,6 +29,12 @@ namespace AuditoriaQuimicos.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string employeeNumber)
         {
+            if (string.IsNullOrEmpty(employeeNumber))
+            {
+                ModelState.AddModelError("", "El número de empleado es obligatorio.");
+                return View();
+            }
+
             // Buscar el auditor en la base de datos usando el número de empleado
             var auditor = _context.Auditors.SingleOrDefault(a => a.EmployeeNumber == employeeNumber);
             if (auditor != null)
@@ -74,7 +80,7 @@ namespace AuditoriaQuimicos.Controllers
             }
 
             // Si el número de empleado es incorrecto, agregar un mensaje de error al modelo
-            ModelState.AddModelError(string.Empty, "Número de empleado incorrecto");
+            ModelState.AddModelError("", "Número de empleado incorrecto.");
             return View();
         }
 

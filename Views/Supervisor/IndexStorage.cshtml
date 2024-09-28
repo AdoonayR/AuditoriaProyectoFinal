@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IGrouping<DateTime?, AuditoriaQuimicos.Models.Quimico>>
+﻿@model IEnumerable<dynamic>
 
 @{
     ViewData["Title"] = "Auditoría Mensual de Químicos - Storage Supervisor";
@@ -15,7 +15,7 @@
 <body>
     <header>
         <a href="@Url.Action("Login", "Account")" class="back-button">
-            <img src="~/images/previous.png" alt="Regresar" /> <!-- Ícono de regresar -->
+            <img src="~/images/previous.png" alt="Regresar" />
         </a>
         <h1>@ViewData["Title"]</h1>
     </header>
@@ -23,46 +23,66 @@
         <thead>
             <tr>
                 <th>Fecha de Auditoría</th>
-                <th>Estado de Aprobación</th>
+                <th>Estado de Aprobación Storage</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var group in Model)
             {
-                var isApprovedIncoming = group != null && group.Any() && group.All(q => q.Aprobaciones != null && q.Aprobaciones.Any(a => a.ApprovalType == "Incoming"));
-                var isApprovedStorage = group != null && group.Any() && group.All(q => q.Aprobaciones != null && q.Aprobaciones.Any(a => a.ApprovalType == "Storage"));
+                var isApprovedIncoming = group.Estado == "Aprobado"; // Verificación para Incoming
+
+                // Convertir explícitamente group.Quimicos a un IEnumerable o List
+                var quimicosList = (IEnumerable<dynamic>)group.Quimicos;
+
+                // Verificar aprobaciones de Storage
+                var isApprovedStorage = quimicosList.All(q =>
+                {
+                    var aprobacionesList = (IEnumerable<dynamic>)q.Aprobaciones; // Convertir Aprobaciones a IEnumerable
+                    return aprobacionesList.Any(a => a.ApprovedByStorage != null);
+                });
 
                 <tr>
-                    <td>@group.Key?.ToString("MM-dd-yyyy")</td>
+                    <td>@group.AuditDate.ToString("MM-dd-yyyy")</td>
                     <td>
-                        @if (isApprovedIncoming && isApprovedStorage)
+                        @if (isApprovedStorage)
                         {
-                            <span class="approved">Aprobado</span>
+                            <span class="approved-storage">Aprobado por Storage</span>
                         }
                         else if (isApprovedIncoming)
                         {
-                            <span class="approved-incoming">Aprobado por Incoming</span>
+                            <span class="pending-storage">Pendiente de Aprobación por Storage</span>
                         }
                         else
                         {
-                            <span class="not-approved">No Aprobado</span>
+                            <span class="not-approved">No Aprobado por Incoming</span>
                         }
                     </td>
                     <td>
-                        @{
-                            var auditDate = group.Key?.ToString("dd-MM-yyyy");
-                        }
-                        <a href="@Url.Action("DetailsStorage", new { date = auditDate })" class="details-btn">Ver Detalles</a>
+                        <!-- Botón para ver detalles -->
+                        <a href="@Url.Action("DetailsStorage", new { date = group.AuditDate.ToString("MM-dd-yyyy") })" class="details-btn">Ver Detalles</a>
+
+                        <!-- Mostrar "Aprobar" solo si ya ha sido aprobado por Incoming -->
                         @if (isApprovedIncoming && !isApprovedStorage)
                         {
-                            <button class="approve-btn" data-date="@auditDate" data-role="Storage">Aprobar</button>
+                            <button class="approve-btn" data-date="@group.AuditDate.ToString("yyyy-MM-dd")" data-role="Storage">Aprobar</button>
+                        }
+                        else if (!isApprovedIncoming)
+                        {
+                            <button class="approve-btn" disabled>Pendiente</button>
+                        }
+                        else
+                        {
+                            <button class="approve-btn" disabled>Aprobado</button>
                         }
                     </td>
                 </tr>
             }
+
         </tbody>
     </table>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="~/js/supervisor.js"></script>
 </body>
 </html>

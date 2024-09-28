@@ -11,6 +11,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/details.css">
+
+    <!-- Incluye jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Incluye los archivos de DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
     <header>
@@ -19,7 +26,7 @@
         </a>
         <h1>Detalles de Auditoría - @(Model.FirstOrDefault()?.AuditDate?.ToString("MM dd yyyy") ?? "Sin Fecha")</h1>
     </header>
-    <table class="table-details">
+    <table class="table-details display">
         <thead>
             <tr>
                 <th>Número de Parte</th>
@@ -54,5 +61,20 @@
             }
         </tbody>
     </table>
+
+    <!-- Inicializa DataTables -->
+    <script>
+        $(document).ready(function () {
+            $('.table-details').DataTable({
+                "paging": true,
+                "searching": true,
+                "info": true,
+                "ordering": true,
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/Spanish.json"  // Traducción al español
+                }
+            });
+        });
+    </script>
 </body>
 </html>
