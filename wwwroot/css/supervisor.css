@@ -1,6 +1,8 @@
 ﻿body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif; /* Fuente moderna */
     margin: 20px;
+    background-color: #f4f4f9; /* Fondo claro */
+    color: #333;
 }
 
 header {
@@ -8,20 +10,24 @@ header {
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
-    position: relative; /* Para posicionar el botón de regresar */
+    position: relative;
 }
 
     header h1 {
         margin: 0;
-        color: #333;
-        text-align: center; /* Asegurarse de que el título esté centrado */
-        width: 100%; /* Para garantizar que el título ocupe todo el ancho */
+        color: #292828;
+        text-align: center;
+        width: 100%;
+        font-size: 2.5rem; /* Aumentar el tamaño del título */
+        letter-spacing: 2px; /* Espaciado entre letras */
+        font-weight: 600; /* Negrita */
     }
 
     header h2 {
         margin: 10px 0;
-        color: #333;
+        color: #666;
         text-align: center;
+        font-size: 1.5rem;
     }
 
 .header-title {
@@ -32,23 +38,24 @@ header {
     position: relative;
 }
 
-.header-right {
-    display: flex;
-    align-items: center;
-}
+    .header-title span {
+        padding: 10px 20px; /* Ampliar padding */
+        border: 2px solid #333;
+        border-radius: 10px;
+        background-color: #fff; /* Fondo blanco */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        font-size: 1.2rem;
+        color: #333;
+        transition: all 0.3s ease; /* Efecto suave */
+    }
 
-.header-title span {
-    display: inline-block;
-    padding: 5px 10px;
-    border: 2px solid #070707;
-    border-radius: 5px;
-    background-color: #f0f0f0;
-    font-size: 1rem;
-    color: #070707;
-}
+        .header-title span:hover {
+            transform: translateY(-5px); /* Desplazamiento al hacer hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más intensa */
+        }
 
 .header-logo {
-    width: 200px;
+    width: 150px;
     height: auto;
     margin-left: 0px;
 }
@@ -56,113 +63,136 @@ header {
 .form-row {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 15px;
+    margin-top: 20px;
 }
 
     .form-row select, .form-row input[type="text"] {
         flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
     }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-input, select {
-    padding: 8px;
-    box-sizing: border-box;
-}
+        .form-row select:hover, .form-row input[type="text"]:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
 
 button {
-    padding: 10px 15px;
+    padding: 12px 20px;
     background-color: #4CAF50;
     color: white;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
     button:hover {
         background-color: #45a049;
+        transform: translateY(-3px); /* Efecto suave */
     }
 
 .approved-label {
-    display: inline-block;
     padding: 10px 15px;
     background-color: green;
     color: white;
-    border: none;
     border-radius: 5px;
 }
 
 .audit-table {
-    width: 80%; /* Reducir un poco el ancho para centrar mejor */
+    width: 90%;
     border-collapse: collapse;
-    margin: 0 auto 20px auto; /* Centrar la tabla y añadir margen inferior */
+    margin: 20px auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
 }
 
     .audit-table th, .audit-table td {
         border: 1px solid #ddd;
-        padding: 8px;
+        padding: 10px;
+        text-align: center;
+        font-size: 1rem;
+        vertical-align: middle; /* Asegura que todo esté centrado verticalmente */
+        white-space: nowrap; /* Evita que el texto o los botones se desborden en varias líneas */
     }
 
     .audit-table th {
         background-color: #292828;
         color: white;
+        font-weight: bold;
+        letter-spacing: 1px;
     }
 
     .audit-table tr:nth-child(even) {
-        background-color: #f2f2f2;
+        background-color: #f9f9f9;
     }
 
     .audit-table tr:hover {
-        background-color: #ddd;
+        background-color: #e0e0e0;
     }
 
-.details-btn {
+    /* Asegura que las columnas de los botones siempre ocupen el mismo ancho */
+    .audit-table td.action-cell {
+        width: 150px; /* Ajusta el ancho según el espacio que necesites */
+    }
+
+.action-cell {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Espacio entre botones */
+}
+
+/* Botones de detalles y aprobación */
+.details-btn, .approve-btn {
     padding: 10px 15px;
-    background-color: #333;
     color: white;
-    border: none;
     border-radius: 5px;
     text-decoration: none;
-    margin-right: 10px;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+    width: 100px; /* Asegura que los botones tengan un ancho fijo */
+}
+
+.details-btn {
+    background-color: #333;
 }
 
     .details-btn:hover {
         background-color: #555;
+        transform: translateY(-3px);
     }
 
 .approve-btn {
-    padding: 10px 15px;
-    background-color: blue;
-    color: white;
-    border: none;
-    border-radius: 5px;
+    background-color: #007BFF;
 }
 
     .approve-btn:hover {
-        background-color: #0033cc;
+        background-color: #0056b3;
+        transform: translateY(-3px);
     }
 
 .back-button {
-    position: absolute; /* Posicionar el botón de regresar de forma absoluta */
-    top: 10px; /* Ajustar la posición superior */
-    left: 10px; /* Ajustar la posición izquierda */
-    width: 40px; /* Tamaño promedio para el botón */
-    height: 40px; /* Tamaño promedio para el botón */
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    color: #333; /* Color del ícono */
-    background: none; /* Sin fondo */
-    border: none; /* Sin borde */
+    color: #333;
+    background: none;
+    border: none;
     cursor: pointer;
 }
 
     .back-button img {
-        width: 100%; /* Ajustar el tamaño del ícono */
+        width: 100%;
         height: auto;
     }
 
@@ -170,25 +200,31 @@ button {
 @media screen and (max-width: 600px) {
     .form-row {
         flex-direction: column;
-        align-items: stretch;
+        gap: 15px;
     }
 
     .header-title {
         flex-direction: column;
     }
 
-        .header-title span {
-            align-self: flex-end;
-        }
-
     .back-button {
-        top: 5px; /* Ajustar la posición superior para pantallas pequeñas */
-        left: 5px; /* Ajustar la posición izquierda para pantallas pequeñas */
-        width: 25px; /* Reducir el tamaño del botón para pantallas pequeñas */
-        height: 25px; /* Reducir el tamaño del botón para pantallas pequeñas */
+        top: 5px;
+        left: 5px;
+        width: 25px;
+        height: 25px;
     }
 
         .back-button img {
-            width: 15px; /* Ajustar el tamaño del ícono para pantallas pequeñas */
+            width: 15px;
         }
+
+    /* Los botones ocuparán el 100% del ancho en pantallas pequeñas */
+    .details-btn, .approve-btn {
+        width: 100%;
+    }
+
+    .action-cell {
+        flex-direction: column;
+        gap: 5px; /* Menos espacio en pantallas más pequeñas */
+    }
 }

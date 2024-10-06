@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AuditoriaQuimicos.Controllers
 {
-    [Authorize] // Requiere que el usuario esté autenticado para acceder a los métodos del controlador
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,10 +25,13 @@ namespace AuditoriaQuimicos.Controllers
 
         public IActionResult Index()
         {
-            var quimicos = _context.Quimicos.ToList(); // Obtiene todos los químicos de la base de datos
-            var quimicosProximos = quimicos.Where(q => q.Expiration.HasValue && q.Expiration.Value.Month == DateTime.Now.AddMonths(-1).Month && q.Expiration.Value.Year == DateTime.Now.AddMonths(-1).Year).ToList();
-            ViewData["QuimicosProximos"] = quimicosProximos; // Almacena los químicos próximos a vencer en ViewData
-            return View(quimicos); // Retorna la vista con la lista de químicos
+            var quimicos = _context.Quimicos.ToList();
+            var quimicosProximos = quimicos
+                .Where(q => q.Expiration.HasValue && q.Expiration.Value.Month == DateTime.Now.AddMonths(-1).Month && q.Expiration.Value.Year == DateTime.Now.AddMonths(-1).Year)
+                .ToList();
+
+            ViewData["QuimicosProximos"] = quimicosProximos;
+            return View(quimicos);
         }
 
         public IActionResult Prioridades()
@@ -37,7 +40,7 @@ namespace AuditoriaQuimicos.Controllers
                 .Where(q => q.Expiration.HasValue && q.Expiration.Value.Month == DateTime.Now.AddMonths(-1).Month && q.Expiration.Value.Year == DateTime.Now.AddMonths(-1).Year)
                 .ToList();
 
-            return View(quimicosProximos); // Retorna la vista con la lista de químicos próximos a vencer
+            return View(quimicosProximos);
         }
 
         [HttpPost]
@@ -48,7 +51,6 @@ namespace AuditoriaQuimicos.Controllers
             {
                 _logger.LogInformation("Iniciando el proceso de guardado de químicos.");
 
-                // Obtiene el nombre del auditor desde la sesión
                 var auditor = HttpContext.Session.GetString("AuditorName");
                 if (string.IsNullOrEmpty(auditor))
                 {
@@ -64,14 +66,13 @@ namespace AuditoriaQuimicos.Controllers
 
                 foreach (var quimico in quimicos)
                 {
-                    quimico.AuditDate = DateTime.Now; // Establece la fecha de auditoría a la fecha y hora actual
-                    quimico.Auditor = auditor; // Establece el auditor actual
-                    quimico.Comments = quimico.Comments ?? ""; // Asegura que los comentarios no sean nulos
+                    quimico.AuditDate = DateTime.Now;
+                    quimico.Auditor = auditor;
+                    quimico.Comments = quimico.Comments ?? "";
 
-                    // Convertir la fecha de MM/DD/YYYY a un DateTime para guardar correctamente
                     if (DateTime.TryParseExact(quimico.ExpirationString, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime expirationDate))
                     {
-                        quimico.Expiration = expirationDate; // Establece la fecha de expiración convertida
+                        quimico.Expiration = expirationDate;
                     }
                     else
                     {
@@ -79,9 +80,9 @@ namespace AuditoriaQuimicos.Controllers
                         return BadRequest(new { message = "Formato de fecha de caducidad inválido" });
                     }
 
-                    // Verifica si el químico está próximo a vencer, caducado o tiene otros problemas
-                    bool isExpiringSoon = (quimico.Expiration.Value.Month == DateTime.Now.Month) && (quimico.Expiration.Value.Year == DateTime.Now.Year);
+                    // Verifica si el químico está caducado, próximo a vencer o tiene otros problemas
                     bool isExpired = quimico.Expiration < DateTime.Now;
+                    bool isExpiringSoon = !isExpired && quimico.Expiration.Value.Month == DateTime.Now.Month && quimico.Expiration.Value.Year == DateTime.Now.Year;
                     bool hasIssues = quimico.Packaging != "OK" || quimico.Fifo != "Sí" || quimico.Mixed != "No" || quimico.QcSeal != "Sí" || quimico.Clean != "Limpio";
 
                     // Agrega comentarios específicos según los problemas encontrados
@@ -115,7 +116,7 @@ namespace AuditoriaQuimicos.Controllers
                     }
 
                     // Establece el resultado según los problemas encontrados
-                    if (hasIssues)
+                    if (isExpired || hasIssues)
                     {
                         quimico.Result = "Rechazado";
                     }
@@ -130,9 +131,9 @@ namespace AuditoriaQuimicos.Controllers
                 }
 
                 _logger.LogInformation("Agregando químicos al contexto.");
-                _context.Quimicos.AddRange(quimicos); // Agrega los químicos al contexto
+                _context.Quimicos.AddRange(quimicos);
                 _logger.LogInformation("Guardando cambios en la base de datos.");
-                var changes = _context.SaveChanges(); // Guarda los cambios en la base de datos
+                var changes = _context.SaveChanges();
                 _logger.LogInformation($"Se han guardado {changes} cambios en la base de datos.");
 
                 if (changes > 0)

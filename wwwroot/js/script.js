@@ -42,12 +42,6 @@
         });
     });
 
-    // Configura el botón de mostrar prioridades para mostrar y ocultar la sección correspondiente
-    document.getElementById('btnShowProximos').addEventListener('click', function () {
-        const container = document.getElementById('quimicosProximosContainer');
-        container.style.display = container.style.display === 'none' ? 'block' : 'none';
-    });
-
     const submitAllButton = document.getElementById('submitAll');
     const forms = document.querySelectorAll('.audit-form');
 
@@ -72,6 +66,7 @@
             let commentsText = '';
             const currentDate = new Date();
             const expirationDate = new Date(expiration);
+            let resultValue = ''; // Variable para almacenar el resultado a enviar a la base de datos
 
             // Verifica y agrega comentarios según los problemas encontrados
             if (packaging !== 'OK') {
@@ -79,9 +74,21 @@
                 commentsText += 'Empaque en mal estado.\n';
             }
             if (expirationDate < currentDate) {
+                // El químico está caducado, debe ser "Rechazado"
                 isValid = false;
                 const daysExpired = Math.floor((currentDate - expirationDate) / (1000 * 60 * 60 * 24));
                 commentsText += `Químico caducado hace: ${daysExpired} días.\n`;
+                resultValue = 'Rechazado';  // Se asegura que el valor en la base de datos será "Rechazado"
+            } else {
+                const isExpiringSoon = expirationDate.getMonth() === currentDate.getMonth() && expirationDate >= currentDate;
+                if (isExpiringSoon) {
+                    // El químico está próximo a vencer
+                    const daysUntilExpiration = Math.floor((expirationDate - currentDate) / (1000 * 60 * 60 * 24));
+                    commentsText += `Químico próximo a vencer en ${daysUntilExpiration} días.\n`;
+                    resultValue = 'Próximo a vencer';  // Se asegura que el valor en la base de datos será "Próximo a vencer"
+                } else {
+                    resultValue = 'Aceptado';  // Se asegura que el valor en la base de datos será "Aceptado"
+                }
             }
             if (fifo !== 'Sí') {
                 isValid = false;
@@ -101,15 +108,10 @@
             }
 
             const result = this.querySelector('.result');
-            const isExpiringSoon = expirationDate.getMonth() === currentDate.getMonth() && expirationDate >= currentDate;
-            if (isExpiringSoon) {
-                const daysUntilExpiration = Math.floor((expirationDate - currentDate) / (1000 * 60 * 60 * 24));
-                commentsText += `Químico próximo a vencer en ${daysUntilExpiration} días.\n`;
-            }
 
             // Actualiza el estado y el estilo del formulario según los resultados de la auditoría
             if (isValid) {
-                if (isExpiringSoon) {
+                if (resultValue === 'Próximo a vencer') {
                     result.textContent = 'Próximo a vencer';
                     result.style.color = 'orange';
                     this.style.border = '2px solid orange';
@@ -166,6 +168,32 @@
                 acc[index + 1].classList.add("active");
                 acc[index + 1].nextElementSibling.style.display = "block";
             }
+
+            // Guardar el valor resultante en la base de datos al enviar el formulario
+            const formDetails = {
+                partNumber: formData.get('partNumber' + this.id.replace('auditForm', '')),
+                expirationString: formData.get('expiration' + this.id.replace('auditForm', '')), // Enviar la fecha en formato string
+                result: resultValue,  // Se envía el valor correcto ("Rechazado", "Próximo a vencer", "Aceptado")
+            };
+
+            // Enviar a la base de datos
+            fetch('/api/quimicos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formDetails)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'Químicos guardados exitosamente') {
+                        alert('Químicos guardados exitosamente');
+                        location.reload(); // Recargar la página
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al guardar los químicos:', error);
+                });
         });
     });
 
@@ -206,7 +234,6 @@
             .then(data => {
                 if (data.message === 'Químicos guardados exitosamente') {
                     alert('Químicos guardados exitosamente');
-                    // Recargar la página
                     location.reload();
                 }
             })

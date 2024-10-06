@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<dynamic>
 
 @{
-    ViewData["Title"] = "Auditoría Mensual de Químicos - Storage Supervisor";
+    ViewData["Title"] = "Aprobacion de auditoria mensual - Almacen";
 }
 
 <!DOCTYPE html>
@@ -23,7 +23,7 @@
         <thead>
             <tr>
                 <th>Fecha de Auditoría</th>
-                <th>Estado de Aprobación Storage</th>
+                <th>Estado de Aprobación Almacen</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -47,20 +47,20 @@
                     <td>
                         @if (isApprovedStorage)
                         {
-                            <span class="approved-storage">Aprobado por Storage</span>
+                            <span class="approved-storage">Aprobado</span>
                         }
                         else if (isApprovedIncoming)
                         {
-                            <span class="pending-storage">Pendiente de Aprobación por Storage</span>
+                            <span class="pending-storage">Pendiente de Aprobación</span>
                         }
                         else
                         {
-                            <span class="not-approved">No Aprobado por Incoming</span>
+                            <span class="not-approved">Aprobacion pendiente por Incoming</span>
                         }
                     </td>
                     <td>
                         <!-- Botón para ver detalles -->
-                        <a href="@Url.Action("DetailsStorage", new { date = group.AuditDate.ToString("MM-dd-yyyy") })" class="details-btn">Ver Detalles</a>
+                        <a href="@Url.Action("Details", "Details", new { date = DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd") })" class="details-btn">Ver Detalles</a>
 
                         <!-- Mostrar "Aprobar" solo si ya ha sido aprobado por Incoming -->
                         @if (isApprovedIncoming && !isApprovedStorage)
