@@ -1,4 +1,5 @@
 using AuditoriaQuimicos.Data;
+using AuditoriaQuimicos.Services; // Importar el namespace de EmailService
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -10,6 +11,9 @@ builder.Services.AddControllersWithViews();
 // Configurar DbContext con SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Registrar EmailService
+builder.Services.AddScoped<IEmailService, EmailService>();  // Agregar el servicio de correo electrónico
 
 // Configurar servicios de autenticación
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -48,6 +52,15 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// Deshabilitar la caché para evitar que las páginas protegidas se carguen desde el historial del navegador
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+    context.Response.Headers["Pragma"] = "no-cache";
+    context.Response.Headers["Expires"] = "-1";
+    await next();
+});
 
 app.UseRouting();
 

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Login"; // Configura el título de la página
+    ViewData["Title"] = "Login"; 
 }
 
 <!DOCTYPE html>
@@ -7,8 +7,8 @@
 <head>
     <meta charset="utf-8" /> <!-- Codificación de caracteres -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Configuración de la vista para dispositivos móviles -->
-    <title>@ViewData["Title"] - Auditoría de Almacén</title> <!-- Título de la página -->
-    <link rel="stylesheet" href="~/css/login.css" /> <!-- Enlace a la hoja de estilos CSS -->
+    <title>@ViewData["Title"] - Auditoría de Almacén</title> 
+    <link rel="stylesheet" href="~/css/login.css" /> 
 </head>
 <body>
     <div class="animated-marquee">
@@ -448,5 +448,7 @@
             $('body').append(animatedMarquee);
         });
     </script>
+    <script src="~/js/sesionkiller.js"></script>
+
 </body>
 </html>
