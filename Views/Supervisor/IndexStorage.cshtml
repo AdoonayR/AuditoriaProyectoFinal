@@ -30,55 +30,59 @@
         <tbody>
             @foreach (var group in Model)
             {
-                var isApprovedIncoming = group.Estado == "Aprobado"; // Verificación para Incoming
-
-                // Convertir explícitamente group.Quimicos a un IEnumerable o List
+                
                 var quimicosList = (IEnumerable<dynamic>)group.Quimicos;
+
+                // Verificar aprobaciones de Incoming
+                var isApprovedIncoming = quimicosList.All(q =>
+                {
+                    var aprobacionesList = (IEnumerable<dynamic>)q.Aprobaciones; 
+                    return aprobacionesList.Any(a => a.ApprovedByIncoming != null);
+                });
 
                 // Verificar aprobaciones de Storage
                 var isApprovedStorage = quimicosList.All(q =>
                 {
-                    var aprobacionesList = (IEnumerable<dynamic>)q.Aprobaciones; // Convertir Aprobaciones a IEnumerable
+                    var aprobacionesList = (IEnumerable<dynamic>)q.Aprobaciones; 
                     return aprobacionesList.Any(a => a.ApprovedByStorage != null);
                 });
 
-                <tr>
-                    <td>@group.AuditDate.ToString("MM-dd-yyyy")</td>
-                    <td>
+                    <tr>
+                        <td>@group.AuditDate.ToString("MM-dd-yyyy")</td>
+                        <td>
                         @if (isApprovedStorage)
                         {
-                            <span class="approved-storage">Aprobado</span>
+                                    <span class="approved-storage">Aprobado</span>
                         }
                         else if (isApprovedIncoming)
                         {
-                            <span class="pending-storage">Pendiente de Aprobación</span>
+                                    <span class="pending-storage">Pendiente de Aprobación</span>
                         }
                         else
                         {
-                            <span class="not-approved">Aprobacion pendiente por Incoming</span>
+                                    <span class="not-approved">Aprobacion pendiente por Incoming</span>
                         }
-                    </td>
-                    <td>
-                        <!-- Botón para ver detalles -->
-                        <a href="@Url.Action("Details", "Details", new { date = DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd") })" class="details-btn">Ver Detalles</a>
+                        </td>
+                        <td>
+                            <!-- Botón para ver detalles -->
+                            <a href="@Url.Action("Details", "Details", new { date = DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd") })" class="details-btn">Ver Detalles</a>
 
-                        <!-- Mostrar "Aprobar" solo si ya ha sido aprobado por Incoming -->
+                            <!-- Mostrar "Aprobar" solo si ya ha sido aprobado por Incoming -->
                         @if (isApprovedIncoming && !isApprovedStorage)
                         {
-                            <button class="approve-btn" data-date="@group.AuditDate.ToString("yyyy-MM-dd")" data-role="Storage">Aprobar</button>
+                                    <button class="approve-btn" data-date="@group.AuditDate.ToString("yyyy-MM-dd")" data-role="Storage">Aprobar</button>
                         }
                         else if (!isApprovedIncoming)
                         {
-                            <button class="approve-btn" disabled>Pendiente</button>
+                                    <button class="approve-btn" disabled>Pendiente</button>
                         }
                         else
                         {
-                            <button class="approve-btn" disabled>Aprobado</button>
+                                    <button class="approve-btn" disabled>Aprobado</button>
                         }
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
             }
-
         </tbody>
     </table>
 

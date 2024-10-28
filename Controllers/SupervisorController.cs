@@ -57,6 +57,7 @@ namespace AuditoriaQuimicos.Controllers
             return View(quimicosAgrupados);
         }
 
+
         // Método para aprobar químicos de Incoming o Storage
         [HttpPost]
         [Authorize(Roles = "IncomingSupervisor, StorageSupervisor")]
@@ -87,7 +88,14 @@ namespace AuditoriaQuimicos.Controllers
                 var aprobacion = quimico.Aprobaciones.FirstOrDefault(a => a.QuimicoId == quimico.Id);
                 if (aprobacion == null)
                 {
-                    aprobacion = new Aprobacion { QuimicoId = quimico.Id };
+                    aprobacion = new Aprobacion
+                    {
+                        QuimicoId = quimico.Id,
+                        ApprovedByIncoming = null,
+                        ApprovedByStorage = null,
+                        ApprovedDateIncoming = null,
+                        ApprovedDateStorage = null
+                    };
                     _context.Aprobaciones.Add(aprobacion);
                 }
 
@@ -99,6 +107,12 @@ namespace AuditoriaQuimicos.Controllers
                 }
                 else if (role == "Storage")
                 {
+                    // Verificar si Incoming ya ha aprobado
+                    if (aprobacion.ApprovedByIncoming == null)
+                    {
+                        return BadRequest("La aprobación por Incoming es requerida antes de aprobar en Storage.");
+                    }
+
                     aprobacion.ApprovedByStorage = User.Identity.Name;
                     aprobacion.ApprovedDateStorage = DateTime.Now;
                 }
@@ -107,5 +121,6 @@ namespace AuditoriaQuimicos.Controllers
             _context.SaveChanges();
             return Json(new { message = $"Químicos aprobados exitosamente por {role}" });
         }
+
     }
 }

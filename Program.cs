@@ -1,39 +1,39 @@
 using AuditoriaQuimicos.Data;
-using AuditoriaQuimicos.Services; // Importar el namespace de EmailService
+using AuditoriaQuimicos.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Agregar servicios al contenedor.
+// Configuración de controladores y vistas
 builder.Services.AddControllersWithViews();
 
-// Configurar DbContext con SQL Server
+// Configuración de DbContext con SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Registrar EmailService
-builder.Services.AddScoped<IEmailService, EmailService>();  // Agregar el servicio de correo electrónico
+// Registro de EmailService
+builder.Services.AddScoped<IEmailService, EmailService>();
 
-// Configurar servicios de autenticación
+// Configuración de autenticación y cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
         options.LogoutPath = "/Account/Logout";
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Duración de la sesión
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     });
 
-// Configurar servicios de sesión
+// Configuración de sesión
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Tiempo de expiración de la sesión
-    options.Cookie.HttpOnly = true; // Asegurar que la cookie de sesión no sea accesible por el lado del cliente
-    options.Cookie.IsEssential = true; // Marcar la cookie como esencial
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
-// Configurar servicios de autorización
+// Configuración de políticas de autorización
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("IncomingPolicy", policy => policy.RequireRole("IncomingSupervisor"));
@@ -43,7 +43,7 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
-// Configuración del pipeline de manejo de solicitudes HTTP.
+// Configuración de manejo de errores y seguridad
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -53,7 +53,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-// Deshabilitar la caché para evitar que las páginas protegidas se carguen desde el historial del navegador
+// Deshabilitar caché para páginas protegidas
 app.Use(async (context, next) =>
 {
     context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
@@ -63,14 +63,11 @@ app.Use(async (context, next) =>
 });
 
 app.UseRouting();
-
-app.UseAuthentication(); // Middleware de autenticación
+app.UseAuthentication();
 app.UseAuthorization();
-
-// Configurar middleware de sesión
 app.UseSession();
 
-// Configurar las rutas para los controladores.
+// Configuración de las rutas para los controladores
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");

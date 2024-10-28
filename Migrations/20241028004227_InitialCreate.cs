@@ -58,9 +58,10 @@ namespace AuditoriaQuimicos.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QuimicoId = table.Column<int>(type: "int", nullable: false),
-                    ApprovedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApprovedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ApprovalType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ApprovedByIncoming = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApprovedByStorage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApprovedDateIncoming = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ApprovedDateStorage = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {

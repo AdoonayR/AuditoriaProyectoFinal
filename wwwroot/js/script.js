@@ -21,17 +21,6 @@
             }
         });
 
-    // Verifica si hay prioridades y ajusta la visibilidad del botón de mostrar prioridades
-    fetch('/Home/Prioridades')
-        .then(response => response.json())
-        .then(data => {
-            if (data.length > 0) {
-                document.getElementById('btnShowProximos').style.display = 'block';
-            } else {
-                document.getElementById('btnShowProximos').style.display = 'none';
-            }
-        });
-
     // Configura el comportamiento del acordeón para mostrar y ocultar paneles
     const acc = document.querySelectorAll(".accordion h2");
     acc.forEach((h2, index) => {

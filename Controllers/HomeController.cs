@@ -66,23 +66,34 @@ namespace AuditoriaQuimicos.Controllers
                     }
                     quimico.Expiration = expirationDate;
 
-                    // Verifica si el químico está caducado o próximo a vencer
-                    bool isExpired = quimico.Expiration < DateTime.Now;
-                    bool isExpiringSoon = !isExpired && quimico.Expiration.Value.Month == DateTime.Now.Month;
-                    bool hasIssues = quimico.Packaging != "OK" || quimico.Fifo != "Sí" || quimico.Mixed != "No" || quimico.QcSeal != "Sí" || quimico.Clean != "Limpio";
+                    // Genera comentarios en función del estado de cada propiedad
+                    string commentsText = "";
 
-                    if (isExpired || hasIssues)
+                    if (quimico.Packaging != "OK") commentsText += "Empaque en mal estado.\n";
+                    if (quimico.Expiration < DateTime.Now)
                     {
+                        var daysExpired = (DateTime.Now - quimico.Expiration.Value).Days;
+                        commentsText += $"Químico caducado hace: {daysExpired} días.\n";
                         quimico.Result = "Rechazado";
                     }
-                    else if (isExpiringSoon)
+                    else if (quimico.Expiration.Value.Month == DateTime.Now.Month && quimico.Expiration > DateTime.Now)
                     {
+                        var daysToExpire = (quimico.Expiration.Value - DateTime.Now).Days;
+                        commentsText += $"Químico próximo a vencer en {daysToExpire} días.\n";
                         quimico.Result = "Próximo a vencer";
                     }
                     else
                     {
                         quimico.Result = "Aceptado";
                     }
+
+                    if (quimico.Fifo != "Sí") commentsText += "No se está cumpliendo FIFO.\n";
+                    if (quimico.Mixed != "No") commentsText += "Químicos mezclados.\n";
+                    if (quimico.QcSeal != "Sí") commentsText += "No cuenta con sello de calidad.\n";
+                    if (quimico.Clean != "Limpio") commentsText += "Limpieza del químico en mal estado.\n";
+
+                    // Asigna los comentarios generados al campo Comments
+                    quimico.Comments = commentsText;
                 }
 
                 _context.Quimicos.AddRange(quimicos);

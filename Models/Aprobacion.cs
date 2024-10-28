@@ -10,8 +10,8 @@ public class Aprobacion
     public Quimico Quimico { get; set; }
 
     // Columnas para las aprobaciones por diferentes supervisores
-    public string ApprovedByIncoming { get; set; }
-    public string ApprovedByStorage { get; set; }
+    public string? ApprovedByIncoming { get; set; } 
+    public string? ApprovedByStorage { get; set; } 
 
     // Fechas de aprobación
     public DateTime? ApprovedDateIncoming { get; set; }
