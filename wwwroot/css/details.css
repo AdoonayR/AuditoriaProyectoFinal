@@ -8,25 +8,25 @@ header {
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
-    position: relative; /* Para posicionar el botón de regresar */
+    position: relative;
 }
 
     header h1 {
         margin: 0;
         color: #333;
-        text-align: center; /* Asegurarse de que el título esté centrado */
-        width: 100%; /* Para garantizar que el título ocupe todo el ancho */
+        text-align: center;
+        width: 100%;
     }
 
 .table-details {
-    width: 80%; /* Ajustar el ancho para centrar mejor */
+    width: 80%;
     border-collapse: collapse;
-    margin: 0 auto; /* Centrar la tabla */
+    margin: 0 auto;
 }
 
     .table-details th {
-        background-color: #000; /* Encabezados en negro */
-        color: #fff; /* Texto de los encabezados en blanco */
+        background-color: #000;
+        color: #fff;
         padding: 10px;
         text-align: left;
     }
@@ -36,24 +36,22 @@ header {
         border: 1px solid #ddd;
     }
 
-    /* Colores de fila según el estado del químico */
     .table-details tr.accepted {
-        background-color: #d4edda; /* Verde claro para aceptado */
+        background-color: #d4edda;
     }
 
     .table-details tr.expiring-soon {
-        background-color: #fff3cd; /* Amarillo claro para próximo a vencer */
+        background-color: #fff3cd;
     }
 
     .table-details tr.rejected {
-        background-color: #f8d7da; /* Rojo claro para rechazado */
+        background-color: #f8d7da;
     }
 
-/* Estilos para dispositivos móviles */
 @media screen and (max-width: 600px) {
     .table-details {
-        width: 100%; /* Ajustar el ancho al 100% para pantallas pequeñas */
-        font-size: 12px; /* Reducir el tamaño de fuente */
+        width: 100%;
+        font-size: 12px;
     }
 
         .table-details th, .table-details td {
@@ -61,34 +59,34 @@ header {
         }
 
     .back-button {
-        top: 5px; /* Ajustar la posición superior para pantallas pequeñas */
-        left: 5px; /* Ajustar la posición izquierda para pantallas pequeñas */
-        width: 25px; /* Reducir el tamaño del botón para pantallas pequeñas */
-        height: 25px; /* Reducir el tamaño del botón para pantallas pequeñas */
+        top: 5px;
+        left: 5px;
+        width: 25px;
+        height: 25px;
     }
 
         .back-button img {
-            width: 15px; /* Ajustar el tamaño del ícono para pantallas pequeñas */
+            width: 15px;
         }
 }
 
 .back-button {
-    position: absolute; /* Posicionar el botón de regresar de forma absoluta */
-    top: 10px; /* Ajustar la posición superior */
-    left: 10px; /* Ajustar la posición izquierda */
-    width: 40px; /* Tamaño promedio para el botón */
-    height: 40px; /* Tamaño promedio para el botón */
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    color: #333; /* Color del ícono */
-    background: none; /* Sin fondo */
-    border: none; /* Sin borde */
+    color: #333;
+    background: none;
+    border: none;
     cursor: pointer;
 }
 
     .back-button img {
-        width: 100%; /* Ajustar el tamaño del ícono */
+        width: 100%;
         height: auto;
     }

@@ -20,6 +20,32 @@ header {
     position: relative;
 }
 
+.logout-button {
+    background-color: transparent;
+    border: none;
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: absolute;
+    left: 10px;
+    top: 10px; 
+    padding: 0; 
+}
+
+.logout-icon {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    vertical-align: middle; 
+}
+
+.logout-button:hover {
+    background-color: transparent;
+}
+
 .back-button {
     position: absolute;
     top: 10px;
@@ -47,7 +73,6 @@ header {
     text-align: center;
     width: 100%;
     position: relative;
-    left: 1%;
 }
 
 .header-logo {
@@ -130,7 +155,7 @@ button {
 
 .form-group {
     margin-bottom: 15px;
-    width: 100%; /* Asegura que los recuadros ocupen todo el ancho */
+    width: 100%;
 }
 
 input[type="date"] {
@@ -239,11 +264,11 @@ button#submitAll {
 
 .audit-form {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual tamaño */
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
     max-width: 800px;
     margin: 0 auto;
-    align-items: center; /* Asegura que todos los elementos se alineen verticalmente */
+    align-items: center;
 }
 
     .audit-form .form-group {
@@ -265,7 +290,7 @@ button#submitAll {
             border: 1px solid #ccc;
             border-radius: 5px;
             width: 100%;
-            box-sizing: border-box; /* Asegura que el padding no afecte el tamaño del campo */
+            box-sizing: border-box;
         }
 
             .audit-form .form-group input:focus,
@@ -289,7 +314,6 @@ button[type="submit"] {
         background-color: #45a049;
     }
 
-/* Animaciones */
 @keyframes pulseRejected {
     0% {
         box-shadow: 0 0 5px #ff0000;

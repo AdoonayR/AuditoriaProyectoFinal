@@ -1,113 +1,65 @@
-﻿body {
-    font-family: 'Poppins', Arial, sans-serif; /* Fuente moderna */
+﻿/* Estilos generales */
+body {
+    font-family: 'Poppins', Arial, sans-serif;
     margin: 20px;
-    background-color: #f4f4f9; /* Fondo claro */
+    background-color: #f4f4f9;
     color: #333;
 }
 
-header {
+.main-header {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 20px;
-    position: relative;
+    width: 100%;
 }
-
-    header h1 {
-        margin: 0;
-        color: #292828;
-        text-align: center;
-        width: 100%;
-        font-size: 2.5rem; /* Aumentar el tamaño del título */
-        letter-spacing: 2px; /* Espaciado entre letras */
-        font-weight: 600; /* Negrita */
-    }
-
-    header h2 {
-        margin: 10px 0;
-        color: #666;
-        text-align: center;
-        font-size: 1.5rem;
-    }
 
 .header-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    position: relative;
+    text-align: center;
+    flex-grow: 1;
 }
 
-    .header-title span {
-        padding: 10px 20px; /* Ampliar padding */
-        border: 2px solid #333;
-        border-radius: 10px;
-        background-color: #fff; /* Fondo blanco */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
-        font-size: 1.2rem;
-        color: #333;
-        transition: all 0.3s ease; /* Efecto suave */
-    }
-
-        .header-title span:hover {
-            transform: translateY(-5px); /* Desplazamiento al hacer hover */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más intensa */
-        }
-
-.header-logo {
-    width: 150px;
-    height: auto;
-    margin-left: 0px;
+header h1 {
+    margin: 0;
+    color: #292828;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    font-weight: 600;
 }
 
-.form-row {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
+
+.sub-title {
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #444;
+    margin-top: 5px;
+    text-align: center;
 }
 
-    .form-row select, .form-row input[type="text"] {
-        flex: 1;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: box-shadow 0.3s ease;
-    }
-
-        .form-row select:hover, .form-row input[type="text"]:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-button {
-    padding: 12px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border-radius: 8px;
+.logout-button {
+    background-color: transparent;
     border: none;
+    color: #333;
+    font-size: 16px;
     cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    margin-left: 10px;
 }
 
-    button:hover {
-        background-color: #45a049;
-        transform: translateY(-3px); /* Efecto suave */
-    }
-
-.approved-label {
-    padding: 10px 15px;
-    background-color: green;
-    color: white;
-    border-radius: 5px;
+.logout-icon {
+    width: 40px;
+    height: 40px;
 }
+
 
 .audit-table {
     width: 90%;
     border-collapse: collapse;
     margin: 20px auto;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
     .audit-table th, .audit-table td {
@@ -115,8 +67,8 @@ button {
         padding: 10px;
         text-align: center;
         font-size: 1rem;
-        vertical-align: middle; /* Asegura que todo esté centrado verticalmente */
-        white-space: nowrap; /* Evita que el texto o los botones se desborden en varias líneas */
+        vertical-align: middle;
+        white-space: nowrap;
     }
 
     .audit-table th {
@@ -134,27 +86,21 @@ button {
         background-color: #e0e0e0;
     }
 
-    /* Asegura que las columnas de los botones siempre ocupen el mismo ancho */
-    .audit-table td.action-cell {
-        width: 150px; /* Ajusta el ancho según el espacio que necesites */
-    }
 
-.action-cell {
-    display: flex;
-    justify-content: center;
-    gap: 10px; /* Espacio entre botones */
-}
-
-/* Botones de detalles y aprobación */
 .details-btn, .approve-btn {
-    padding: 10px 15px;
+    padding: 8px 12px;
     color: white;
     border-radius: 5px;
     text-decoration: none;
     text-align: center;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    display: inline-block;
-    width: 100px; /* Asegura que los botones tengan un ancho fijo */
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
 }
 
 .details-btn {
@@ -167,64 +113,42 @@ button {
     }
 
 .approve-btn {
-    background-color: #007BFF;
+    background: linear-gradient(135deg, #007BFF, #0056b3);
 }
 
     .approve-btn:hover {
-        background-color: #0056b3;
+        background: linear-gradient(135deg, #0056b3, #003d99);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         transform: translateY(-3px);
     }
 
-.back-button {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: #333;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-    .back-button img {
-        width: 100%;
-        height: auto;
-    }
-
-/* Estilos para dispositivos móviles */
-@media screen and (max-width: 600px) {
-    .form-row {
+/* Estilos responsivos */
+@media (max-width: 600px) {
+    .main-header {
         flex-direction: column;
-        gap: 15px;
+        align-items: center;
     }
 
-    .header-title {
-        flex-direction: column;
+    .logout-button {
+        margin-bottom: 10px;
     }
 
-    .back-button {
-        top: 5px;
-        left: 5px;
+    .logout-icon {
         width: 25px;
         height: 25px;
     }
 
-        .back-button img {
-            width: 15px;
-        }
+    .audit-table th, .audit-table td {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
 
-    /* Los botones ocuparán el 100% del ancho en pantallas pequeñas */
     .details-btn, .approve-btn {
         width: 100%;
     }
 
     .action-cell {
         flex-direction: column;
-        gap: 5px; /* Menos espacio en pantallas más pequeñas */
+        gap: 5px;
     }
 }

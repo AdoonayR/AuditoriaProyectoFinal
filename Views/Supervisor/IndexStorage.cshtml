@@ -1,9 +1,5 @@
 ﻿@model IEnumerable<dynamic>
 
-@{
-    ViewData["Title"] = "Aprobacion de auditoria mensual - Almacen";
-}
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,78 +9,79 @@
     <link rel="stylesheet" href="~/css/supervisor.css">
 </head>
 <body>
-    <header>
-        <a href="@Url.Action("Login", "Account")" class="back-button">
-            <img src="~/images/previous.png" alt="Regresar" />
-        </a>
-        <h1>@ViewData["Title"]</h1>
+    <header class="main-header">
+        <button id="logoutButton" class="logout-button">
+            <img src="~/images/log-out.png" alt="Cerrar Sesión" class="logout-icon" />
+        </button>
+        <div class="header-title">
+          <div class="title-wrapper">
+                <h1 class="header-title">Auditoría Mensual de Químicos - Aprobación Almacen</h1>
+        </div>
     </header>
-    <table class="audit-table">
-        <thead>
-            <tr>
-                <th>Fecha de Auditoría</th>
-                <th>Estado de Aprobación Almacen</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var group in Model)
-            {
-                
-                var quimicosList = (IEnumerable<dynamic>)group.Quimicos;
 
-                // Verificar aprobaciones de Incoming
-                var isApprovedIncoming = quimicosList.All(q =>
+    <main>
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th>Fecha de Auditoría</th>
+                    <th>Estado de Aprobación Almacen</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var group in Model)
                 {
-                    var aprobacionesList = (IEnumerable<dynamic>)q.Aprobaciones; 
-                    return aprobacionesList.Any(a => a.ApprovedByIncoming != null);
-                });
+                    var quimicosList = (IEnumerable<dynamic>)group.Quimicos;
 
-                // Verificar aprobaciones de Storage
-                var isApprovedStorage = quimicosList.All(q =>
-                {
-                    var aprobacionesList = (IEnumerable<dynamic>)q.Aprobaciones; 
-                    return aprobacionesList.Any(a => a.ApprovedByStorage != null);
-                });
+                    var isApprovedIncoming = quimicosList.All(q =>
+                    {
+                        var aprobacionesList = (IEnumerable<dynamic>)q.Aprobaciones;
+                        return aprobacionesList.Any(a => a.ApprovedByIncoming != null);
+                    });
 
-                    <tr>
-                        <td>@group.AuditDate.ToString("MM-dd-yyyy")</td>
-                        <td>
-                        @if (isApprovedStorage)
-                        {
-                                    <span class="approved-storage">Aprobado</span>
-                        }
-                        else if (isApprovedIncoming)
-                        {
-                                    <span class="pending-storage">Pendiente de Aprobación</span>
-                        }
-                        else
-                        {
-                                    <span class="not-approved">Aprobacion pendiente por Incoming</span>
-                        }
-                        </td>
-                        <td>
-                            <!-- Botón para ver detalles -->
-                            <a href="@Url.Action("Details", "Details", new { date = DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd") })" class="details-btn">Ver Detalles</a>
+                    var isApprovedStorage = quimicosList.All(q =>
+                    {
+                        var aprobacionesList = (IEnumerable<dynamic>)q.Aprobaciones;
+                        return aprobacionesList.Any(a => a.ApprovedByStorage != null);
+                    });
 
-                            <!-- Mostrar "Aprobar" solo si ya ha sido aprobado por Incoming -->
-                        @if (isApprovedIncoming && !isApprovedStorage)
-                        {
-                                    <button class="approve-btn" data-date="@group.AuditDate.ToString("yyyy-MM-dd")" data-role="Storage">Aprobar</button>
-                        }
-                        else if (!isApprovedIncoming)
-                        {
-                                    <button class="approve-btn" disabled>Pendiente</button>
-                        }
-                        else
-                        {
-                                    <button class="approve-btn" disabled>Aprobado</button>
-                        }
-                        </td>
-                    </tr>
-            }
-        </tbody>
-    </table>
+                        <tr>
+                            <td>@group.AuditDate.ToString("MM-dd-yyyy")</td>
+                            <td>
+                            @if (isApprovedStorage)
+                            {
+                                        <span class="approved-storage">Aprobado</span>
+                            }
+                            else if (isApprovedIncoming)
+                            {
+                                        <span class="pending-storage">Pendiente de Aprobación</span>
+                            }
+                            else
+                            {
+                                        <span class="not-approved">Aprobación pendiente por Incoming</span>
+                            }
+                            </td>
+                            <td class="action-cell">
+                                <a href="@Url.Action("Details", "Details", new { date = DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd") })" class="details-btn">Ver Detalles</a>
+
+                            @if (isApprovedIncoming && !isApprovedStorage)
+                            {
+                                        <button class="approve-btn" data-date="@group.AuditDate.ToString("yyyy-MM-dd")" data-role="Storage">Aprobar</button>
+                            }
+                            else if (!isApprovedIncoming)
+                            {
+                                        <button class="approve-btn" disabled>Pendiente</button>
+                            }
+                            else
+                            {
+                                        <button class="approve-btn" disabled>Aprobado</button>
+                            }
+                            </td>
+                        </tr>
+                }
+            </tbody>
+        </table>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="~/js/supervisor.js"></script>

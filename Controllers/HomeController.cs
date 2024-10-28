@@ -17,7 +17,7 @@ namespace AuditoriaQuimicos.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<HomeController> _logger;
-        private readonly IEmailService _emailService; // Inyección del servicio de correo
+        private readonly IEmailService _emailService;
 
         public HomeController(ApplicationDbContext context, ILogger<HomeController> logger, IEmailService emailService)
         {
@@ -68,18 +68,54 @@ namespace AuditoriaQuimicos.Controllers
 
                     // Genera comentarios en función del estado de cada propiedad
                     string commentsText = "";
+                    bool hasRejectableFeature = false;
 
-                    if (quimico.Packaging != "OK") commentsText += "Empaque en mal estado.\n";
+                    if (quimico.Packaging != "OK")
+                    {
+                        hasRejectableFeature = true;
+                        commentsText += "Empaque en mal estado.\n";
+                    }
+                    if (quimico.Fifo != "Sí")
+                    {
+                        hasRejectableFeature = true;
+                        commentsText += "No se está cumpliendo FIFO.\n";
+                    }
+                    if (quimico.Mixed != "No")
+                    {
+                        hasRejectableFeature = true;
+                        commentsText += "Químicos mezclados.\n";
+                    }
+                    if (quimico.QcSeal != "Sí")
+                    {
+                        hasRejectableFeature = true;
+                        commentsText += "No cuenta con sello de calidad.\n";
+                    }
+                    if (quimico.Clean != "Limpio")
+                    {
+                        hasRejectableFeature = true;
+                        commentsText += "Limpieza del químico en mal estado.\n";
+                    }
+
+                    // Verificación de caducidad y proximidad de vencimiento
                     if (quimico.Expiration < DateTime.Now)
                     {
+                        hasRejectableFeature = true;
                         var daysExpired = (DateTime.Now - quimico.Expiration.Value).Days;
                         commentsText += $"Químico caducado hace: {daysExpired} días.\n";
-                        quimico.Result = "Rechazado";
                     }
                     else if (quimico.Expiration.Value.Month == DateTime.Now.Month && quimico.Expiration > DateTime.Now)
                     {
                         var daysToExpire = (quimico.Expiration.Value - DateTime.Now).Days;
                         commentsText += $"Químico próximo a vencer en {daysToExpire} días.\n";
+                    }
+
+                    // Asignación de estado final basado en las propiedades
+                    if (hasRejectableFeature)
+                    {
+                        quimico.Result = "Rechazado";
+                    }
+                    else if (quimico.Expiration.Value.Month == DateTime.Now.Month && quimico.Expiration > DateTime.Now)
+                    {
                         quimico.Result = "Próximo a vencer";
                     }
                     else
@@ -87,12 +123,6 @@ namespace AuditoriaQuimicos.Controllers
                         quimico.Result = "Aceptado";
                     }
 
-                    if (quimico.Fifo != "Sí") commentsText += "No se está cumpliendo FIFO.\n";
-                    if (quimico.Mixed != "No") commentsText += "Químicos mezclados.\n";
-                    if (quimico.QcSeal != "Sí") commentsText += "No cuenta con sello de calidad.\n";
-                    if (quimico.Clean != "Limpio") commentsText += "Limpieza del químico en mal estado.\n";
-
-                    // Asigna los comentarios generados al campo Comments
                     quimico.Comments = commentsText;
                 }
 

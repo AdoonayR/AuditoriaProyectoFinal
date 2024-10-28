@@ -16,11 +16,11 @@
 <body>
     <header>
         <div class="header-title">
-            <a href="@Url.Action("Login", "Account")" class="back-button">
-                <img src="~/images/previous.png" alt="Regresar" />
-            </a>
-            <h1>Auditoría a Almacén</h1>
-            <img src="~/images/AmphenolLogo.png" alt="Logo" class="header-logo" />
+           <button id="logoutButton" class="logout-button">
+            <img src="~/images/log-out.png" alt="Cerrar Sesión" class="logout-icon"/> 
+        </button>
+        <h1>Auditoría a Almacén</h1>
+        <img src="~/images/AmphenolLogo.png" alt="Logo" class="header-logo" />
         </div>
         <span id="currentDate" class="current-date"></span>
         <div class="form-row">

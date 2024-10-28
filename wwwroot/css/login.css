@@ -19,7 +19,7 @@
     z-index: 1000;
     position: relative;
     max-width: 400px;
-    width: 90%; /* Ajuste el ancho al 90% para dispositivos más pequeños */
+    width: 90%;
     box-sizing: border-box;
 }
 
