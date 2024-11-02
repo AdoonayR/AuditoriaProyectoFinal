@@ -23,6 +23,50 @@
     box-sizing: border-box;
 }
 
+
+.input-container {
+    position: relative;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.input-toast {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    color: #d9534f;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-align: center;
+    animation: fadeToastInOut 3s ease forwards;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+@keyframes fadeToastInOut {
+    0% {
+        opacity: 0;
+    }
+
+    10%, 90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+
 .login-logo {
     width: 100%;
     max-width: 250px;

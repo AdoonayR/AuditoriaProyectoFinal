@@ -80,7 +80,7 @@ namespace AuditoriaQuimicos.Controllers
             }
 
             // Si el número de empleado es incorrecto, agregar un mensaje de error al modelo
-            ModelState.AddModelError("", "Número de empleado incorrecto.");
+            ModelState.AddModelError("", "Número de empleado no encontrado.");
             return View();
         }
 

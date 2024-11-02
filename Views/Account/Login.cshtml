@@ -411,34 +411,25 @@
     </div>
 
     <div class="login-container">
-        <!-- Contenedor principal del formulario de login -->
-        <img src="~/images/AmphenolLogo.png" alt="Logo" class="login-logo" /> <!-- Logo de la empresa -->
-        <h2>Ingrese su número de empleado</h2> <!-- Título del formulario -->
+        <img src="~/images/AmphenolLogo.png" alt="Logo" class="login-logo" />
+        <h2>Ingrese su número de empleado</h2>
         <form asp-action="Login" method="post">
-            <!-- Formulario que envía los datos al método Login del controlador -->
-            <div class="form-group">
-                <!-- Grupo de formulario para el número de empleado -->
-                <input type="password" class="form-control" id="employeeNumber" name="employeeNumber" required /> <!-- Campo de entrada para el número de empleado -->
+            <div class="input-container">
+                <input type="password" class="form-control" id="employeeNumber" name="employeeNumber" required />
+                @if (ViewData.ModelState.ErrorCount > 0)
+                {
+                    <span class="input-toast">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            @error.ErrorMessage
+                        }
+                    </span>
+                }
             </div>
-            <button type="submit" class="btn btn-primary">Ingresar</button> <!-- Botón de envío del formulario -->
+            <button type="submit" class="btn btn-primary">Ingresar</button>
         </form>
-
-        @* Mostrar errores de validación, si existen *@
-        @if (ViewData.ModelState.ErrorCount > 0)
-        {
-            <div class="alert alert-danger">
-                <!-- Contenedor para mostrar los mensajes de error -->
-                <ul>
-                    @* Itera a través de los errores y los muestra en una lista *@
-                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                    {
-                        <li>@error.ErrorMessage</li>
-                    }
-                </ul>
-            </div>
-        }
     </div>
- 
+
     
     <script>
         var animatedMarquee = $('.animated-marquee');

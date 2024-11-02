@@ -1,20 +1,18 @@
-﻿/* Fondo principal que cubre toda la página */
-.area {
+﻿.area {
     background: transparent;
     width: 100%;
-    height: 100vh; /* Cubre toda la ventana */
-    position: fixed; /* Fijo para todo el fondo */
+    height: 100vh;
+    position: fixed;
     top: 0;
     left: 0;
     overflow: hidden;
-    pointer-events: none; /* Evita interferir con el contenido */
-    z-index: -10; /* Detrás del contenido principal */
+    pointer-events: none;
+    z-index: -10;
 }
 
-/* Fondo específico dentro de cada panel */
 .panel {
-    position: relative; /* Asegura que el fondo de círculos se expanda con el panel */
-    overflow: hidden; /* Asegura que los círculos no sobresalgan del panel */
+    position: relative;
+    overflow: hidden;
 }
 
     .panel .area {
@@ -22,9 +20,9 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%; /* Cubre todo el panel del acordeón */
-        pointer-events: none; /* Evita interferir con la interacción */
-        z-index: -1; /* Detrás del contenido del panel */
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
     }
 
 .circles {
@@ -41,12 +39,11 @@
         list-style: none;
         width: 20px;
         height: 20px;
-        background: rgba(0, 123, 255, 0.5); /* Celeste #007bff con opacidad */
+        background: rgba(0, 123, 255, 0.5);
         animation: animate 25s linear infinite;
         bottom: -150px;
     }
 
-        /* Configuración de cada círculo */
         .circles li:nth-child(1) {
             left: 25%;
             width: 80px;

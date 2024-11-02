@@ -95,15 +95,17 @@ namespace AuditoriaQuimicos.Controllers
                         commentsText += "Limpieza del químico en mal estado.\n";
                     }
 
+                    // Cálculo de días para caducidad y próximos a vencer
                     if (quimico.Expiration < DateTime.Now)
                     {
                         hasRejectableFeature = true;
-                        var daysExpired = (DateTime.Now - quimico.Expiration.Value).Days;
+                        var daysExpired = (int)Math.Ceiling((DateTime.Now - quimico.Expiration.Value).TotalDays);
                         commentsText += $"Químico caducado hace: {daysExpired} días.\n";
+                        quimico.Result = "Rechazado";
                     }
                     else
                     {
-                        var daysToExpire = (quimico.Expiration.Value - DateTime.Now).Days;
+                        var daysToExpire = (int)Math.Ceiling((quimico.Expiration.Value - DateTime.Now).TotalDays);
 
                         if (daysToExpire <= 30)
                         {
@@ -127,6 +129,7 @@ namespace AuditoriaQuimicos.Controllers
                 _context.Quimicos.AddRange(quimicos);
                 _context.SaveChanges();
 
+                // Envía correo al supervisor de Incoming cuando la auditoría es completada
                 _emailService.SendEmailToIncomingSupervisor();
 
                 return Ok(new { message = "Químicos guardados exitosamente" });
@@ -138,6 +141,7 @@ namespace AuditoriaQuimicos.Controllers
             }
         }
 
+        // Método para que el supervisor de Incoming apruebe y se envíe correo al supervisor de Storage
         [HttpPost]
         public IActionResult ApproveIncoming(int quimicoId)
         {
@@ -157,11 +161,13 @@ namespace AuditoriaQuimicos.Controllers
                     return NotFound();
                 }
 
+                // Aprobar por el supervisor de Incoming
                 aprobacion.ApprovedByIncoming = User.Identity.Name;
                 aprobacion.ApprovedDateIncoming = DateTime.Now;
 
                 _context.SaveChanges();
 
+                // Enviar notificación al supervisor de Storage
                 _emailService.SendEmailToStorageSupervisor();
 
                 _logger.LogInformation("Auditoría aprobada por Incoming, correo enviado a Storage.");

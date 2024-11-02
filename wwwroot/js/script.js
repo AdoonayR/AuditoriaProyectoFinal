@@ -1,4 +1,6 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
+﻿// Evento que espera a que el documento esté cargado completamente
+document.addEventListener('DOMContentLoaded', function () {
+    // Obtiene la fecha actual y la formatea en mm/dd/yyyy
     const currentDate = new Date();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
@@ -6,10 +8,12 @@
     const formattedDate = `${month}/${day}/${year}`;
     document.getElementById('currentDate').textContent = formattedDate;
 
+    // Configuración de Flatpickr para formatear los campos de fecha
     flatpickr(".flatpickr", {
         dateFormat: "m/d/Y"
     });
 
+    // Llamada a la API para obtener el nombre del auditor y asignarlo al input de auditor
     fetch('/api/api/getAuditorName')
         .then(response => response.json())
         .then(data => {
@@ -18,6 +22,7 @@
             }
         });
 
+    // Configuración de cada acordeón del formulario para expandirse/colapsarse al hacer clic
     const acc = document.querySelectorAll(".accordion h2");
     acc.forEach((h2, index) => {
         h2.addEventListener("click", function () {
@@ -27,15 +32,17 @@
         });
     });
 
+    // Configuración de los formularios y el botón para enviar todos
     const submitAllButton = document.getElementById('submitAll');
     const forms = document.querySelectorAll('.audit-form');
 
+    // Procesa cada formulario al hacer submit
     forms.forEach((form, index) => {
         form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            const sectionStatus = this.closest('.section-status');
-            const header = sectionStatus.querySelector('h2');
+            event.preventDefault(); // Evita el envío por defecto
+            const formData = new FormData(this); // Extrae datos del formulario
+            const sectionStatus = this.closest('.section-status'); // Contenedor de estado de la sección
+            const header = sectionStatus.querySelector('h2'); // Encabezado del formulario para los cambios de estado
             const partNumber = formData.get('partNumber' + this.id.replace('auditForm', ''));
             const lot = formData.get('lot' + this.id.replace('auditForm', ''));
             const packaging = formData.get('packaging' + this.id.replace('auditForm', ''));
@@ -47,30 +54,32 @@
             const almacen = document.getElementById('area').value;
             const commentsTextarea = this.querySelector('.comments textarea');
 
-            let isValid = true;
-            let commentsText = '';
+            let isValid = true; // Para definir si el químico cumple con las condiciones
+            let commentsText = ''; // Texto para los comentarios de errores
             const currentDate = new Date();
             const expirationDate = new Date(expiration);
             let resultValue = '';
 
-            // Validar fecha de vencimiento
+            // Cálculo de días hasta el vencimiento ajustado para casos especiales
+            const msInOneDay = 1000 * 60 * 60 * 24;
+            const daysUntilExpiration = Math.ceil((expirationDate - currentDate) / msInOneDay);
+
+            // Validación de la fecha de vencimiento y otros campos
             if (expirationDate < currentDate) {
                 isValid = false;
-                const daysExpired = Math.floor((currentDate - expirationDate) / (1000 * 60 * 60 * 24));
+                const daysExpired = Math.floor((currentDate - expirationDate) / msInOneDay);
                 commentsText += `Químico caducado hace: ${daysExpired} días.\n`;
                 resultValue = 'Rechazado';
             } else {
-                const daysUntilExpiration = Math.floor((expirationDate - currentDate) / (1000 * 60 * 60 * 24));
                 if (daysUntilExpiration > 30) {
-                    // Si faltan más de 30 días, clasificar como "Aceptado"
                     resultValue = 'Aceptado';
                 } else {
-                    // Si faltan 30 días o menos, clasificar como "Próximo a vencer"
                     commentsText += `Químico próximo a vencer en ${daysUntilExpiration} días.\n`;
                     resultValue = 'Próximo a vencer';
                 }
             }
 
+            // Validación de cada campo
             if (packaging !== 'OK') {
                 isValid = false;
                 commentsText += 'Empaque en mal estado.\n';
@@ -92,8 +101,8 @@
                 commentsText += 'Limpieza del químico en mal estado.\n';
             }
 
+            // Mostrar el resultado visual en el formulario
             const result = this.querySelector('.result');
-
             if (isValid) {
                 if (resultValue === 'Próximo a vencer') {
                     result.textContent = 'Próximo a vencer';
@@ -127,16 +136,16 @@
                 }
             }
 
-            // Contenedor para nombre y lote del químico
+            // Creación del contenedor de información en el encabezado
             let titleContainer = header.querySelector('.info-container');
             if (!titleContainer) {
                 titleContainer = document.createElement('div');
                 titleContainer.classList.add('info-container');
-                header.innerHTML = ''; // Limpiar el contenido del encabezado
+                header.innerHTML = '';
                 header.appendChild(titleContainer);
             }
 
-            // Nombre del químico
+            // Actualización de campos de nombre y lote de químico
             let partNumberElement = titleContainer.querySelector('.chemical-title');
             if (!partNumberElement) {
                 partNumberElement = document.createElement('span');
@@ -146,7 +155,6 @@
             }
             partNumberElement.textContent = partNumber;
 
-            // Lote del químico
             let lotElement = titleContainer.querySelector('.chemical-lot');
             if (!lotElement) {
                 lotElement = document.createElement('span');
@@ -158,7 +166,7 @@
             }
             lotElement.textContent = lot;
 
-            // Comentarios en la derecha
+            // Configuración de comentarios y su visualización
             let commentElement = header.querySelector('.chemical-comment');
             if (!commentElement) {
                 commentElement = document.createElement('span');
@@ -188,6 +196,7 @@
                 acc[index + 1].nextElementSibling.style.display = "block";
             }
 
+            // Creación del objeto de detalles del formulario y su envío
             const formDetails = {
                 partNumber: partNumber,
                 lot: lot,
@@ -215,6 +224,7 @@
         });
     });
 
+    // Envío de todos los datos de los químicos en un solo envío al presionar "submitAllButton"
     submitAllButton.addEventListener('click', function () {
         const almacen = document.getElementById('area').value;
         if (!almacen) {
