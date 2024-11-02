@@ -66,7 +66,6 @@ namespace AuditoriaQuimicos.Controllers
                     }
                     quimico.Expiration = expirationDate;
 
-                    // Genera comentarios en función del estado de cada propiedad
                     string commentsText = "";
                     bool hasRejectableFeature = false;
 
@@ -96,31 +95,30 @@ namespace AuditoriaQuimicos.Controllers
                         commentsText += "Limpieza del químico en mal estado.\n";
                     }
 
-                    // Verificación de caducidad y proximidad de vencimiento
                     if (quimico.Expiration < DateTime.Now)
                     {
                         hasRejectableFeature = true;
                         var daysExpired = (DateTime.Now - quimico.Expiration.Value).Days;
                         commentsText += $"Químico caducado hace: {daysExpired} días.\n";
                     }
-                    else if (quimico.Expiration.Value.Month == DateTime.Now.Month && quimico.Expiration > DateTime.Now)
+                    else
                     {
                         var daysToExpire = (quimico.Expiration.Value - DateTime.Now).Days;
-                        commentsText += $"Químico próximo a vencer en {daysToExpire} días.\n";
+
+                        if (daysToExpire <= 30)
+                        {
+                            commentsText += $"Químico próximo a vencer en {daysToExpire} días.\n";
+                            quimico.Result = "Próximo a vencer";
+                        }
+                        else
+                        {
+                            quimico.Result = "Aceptado";
+                        }
                     }
 
-                    // Asignación de estado final basado en las propiedades
                     if (hasRejectableFeature)
                     {
                         quimico.Result = "Rechazado";
-                    }
-                    else if (quimico.Expiration.Value.Month == DateTime.Now.Month && quimico.Expiration > DateTime.Now)
-                    {
-                        quimico.Result = "Próximo a vencer";
-                    }
-                    else
-                    {
-                        quimico.Result = "Aceptado";
                     }
 
                     quimico.Comments = commentsText;
@@ -129,7 +127,6 @@ namespace AuditoriaQuimicos.Controllers
                 _context.Quimicos.AddRange(quimicos);
                 _context.SaveChanges();
 
-                // Envía correo al supervisor de Incoming cuando la auditoría es completada
                 _emailService.SendEmailToIncomingSupervisor();
 
                 return Ok(new { message = "Químicos guardados exitosamente" });
@@ -141,7 +138,6 @@ namespace AuditoriaQuimicos.Controllers
             }
         }
 
-        // Método para que el supervisor de Incoming apruebe y se envíe correo al supervisor de Storage
         [HttpPost]
         public IActionResult ApproveIncoming(int quimicoId)
         {
@@ -161,13 +157,11 @@ namespace AuditoriaQuimicos.Controllers
                     return NotFound();
                 }
 
-                // Aprobar por el supervisor de Incoming
                 aprobacion.ApprovedByIncoming = User.Identity.Name;
                 aprobacion.ApprovedDateIncoming = DateTime.Now;
 
                 _context.SaveChanges();
 
-                // Enviar notificación al supervisor de Storage
                 _emailService.SendEmailToStorageSupervisor();
 
                 _logger.LogInformation("Auditoría aprobada por Incoming, correo enviado a Storage.");

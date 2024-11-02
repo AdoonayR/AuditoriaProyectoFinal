@@ -1,5 +1,4 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
-    // Obtiene la fecha actual y la formatea en MM/DD/YYYY
     const currentDate = new Date();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
@@ -7,12 +6,10 @@
     const formattedDate = `${month}/${day}/${year}`;
     document.getElementById('currentDate').textContent = formattedDate;
 
-    // Inicializa el calendario Flatpickr con el formato MM/DD/YYYY
     flatpickr(".flatpickr", {
-        dateFormat: "m/d/Y" // Formato de visualización MM/DD/YYYY
+        dateFormat: "m/d/Y"
     });
 
-    // Obtiene el nombre del auditor y lo coloca en el campo correspondiente
     fetch('/api/api/getAuditorName')
         .then(response => response.json())
         .then(data => {
@@ -21,7 +18,6 @@
             }
         });
 
-    // Configura el comportamiento del acordeón para mostrar y ocultar paneles
     const acc = document.querySelectorAll(".accordion h2");
     acc.forEach((h2, index) => {
         h2.addEventListener("click", function () {
@@ -34,20 +30,20 @@
     const submitAllButton = document.getElementById('submitAll');
     const forms = document.querySelectorAll('.audit-form');
 
-    // Configura el comportamiento de envío para cada formulario de auditoría
     forms.forEach((form, index) => {
         form.addEventListener('submit', function (event) {
-            event.preventDefault(); // Previene el envío del formulario
+            event.preventDefault();
             const formData = new FormData(this);
             const sectionStatus = this.closest('.section-status');
             const header = sectionStatus.querySelector('h2');
+            const partNumber = formData.get('partNumber' + this.id.replace('auditForm', ''));
+            const lot = formData.get('lot' + this.id.replace('auditForm', ''));
             const packaging = formData.get('packaging' + this.id.replace('auditForm', ''));
             const expiration = formData.get('expiration' + this.id.replace('auditForm', ''));
             const fifo = formData.get('fifo' + this.id.replace('auditForm', ''));
             const mixed = formData.get('mixed' + this.id.replace('auditForm', ''));
             const qcSeal = formData.get('qcSeal' + this.id.replace('auditForm', ''));
             const clean = formData.get('clean' + this.id.replace('auditForm', ''));
-            const partNumber = formData.get('partNumber' + this.id.replace('auditForm', ''));
             const almacen = document.getElementById('area').value;
             const commentsTextarea = this.querySelector('.comments textarea');
 
@@ -55,29 +51,29 @@
             let commentsText = '';
             const currentDate = new Date();
             const expirationDate = new Date(expiration);
-            let resultValue = ''; // Variable para almacenar el resultado a enviar a la base de datos
+            let resultValue = '';
 
-            // Verifica y agrega comentarios según los problemas encontrados
-            if (packaging !== 'OK') {
-                isValid = false;
-                commentsText += 'Empaque en mal estado.\n';
-            }
+            // Validar fecha de vencimiento
             if (expirationDate < currentDate) {
-                // El químico está caducado, debe ser "Rechazado"
                 isValid = false;
                 const daysExpired = Math.floor((currentDate - expirationDate) / (1000 * 60 * 60 * 24));
                 commentsText += `Químico caducado hace: ${daysExpired} días.\n`;
-                resultValue = 'Rechazado';  // Se asegura que el valor en la base de datos será "Rechazado"
+                resultValue = 'Rechazado';
             } else {
-                const isExpiringSoon = expirationDate.getMonth() === currentDate.getMonth() && expirationDate >= currentDate;
-                if (isExpiringSoon) {
-                    // El químico está próximo a vencer
-                    const daysUntilExpiration = Math.floor((expirationDate - currentDate) / (1000 * 60 * 60 * 24));
-                    commentsText += `Químico próximo a vencer en ${daysUntilExpiration} días.\n`;
-                    resultValue = 'Próximo a vencer';  // Se asegura que el valor en la base de datos será "Próximo a vencer"
+                const daysUntilExpiration = Math.floor((expirationDate - currentDate) / (1000 * 60 * 60 * 24));
+                if (daysUntilExpiration > 30) {
+                    // Si faltan más de 30 días, clasificar como "Aceptado"
+                    resultValue = 'Aceptado';
                 } else {
-                    resultValue = 'Aceptado';  // Se asegura que el valor en la base de datos será "Aceptado"
+                    // Si faltan 30 días o menos, clasificar como "Próximo a vencer"
+                    commentsText += `Químico próximo a vencer en ${daysUntilExpiration} días.\n`;
+                    resultValue = 'Próximo a vencer';
                 }
+            }
+
+            if (packaging !== 'OK') {
+                isValid = false;
+                commentsText += 'Empaque en mal estado.\n';
             }
             if (fifo !== 'Sí') {
                 isValid = false;
@@ -98,7 +94,6 @@
 
             const result = this.querySelector('.result');
 
-            // Actualiza el estado y el estilo del formulario según los resultados de la auditoría
             if (isValid) {
                 if (resultValue === 'Próximo a vencer') {
                     result.textContent = 'Próximo a vencer';
@@ -132,22 +127,57 @@
                 }
             }
 
-            header.querySelector('.chemical-title').textContent = partNumber;
-            header.querySelector('.chemical-comment').innerHTML = commentsText ? commentsText.replace(/\n/g, '<br>') : '';
-            header.querySelector('.chemical-comment').style.display = commentsText ? 'block' : 'none';
-            header.querySelector('.chemical-comment').style.marginLeft = '20px';
+            // Contenedor para nombre y lote del químico
+            let titleContainer = header.querySelector('.info-container');
+            if (!titleContainer) {
+                titleContainer = document.createElement('div');
+                titleContainer.classList.add('info-container');
+                header.innerHTML = ''; // Limpiar el contenido del encabezado
+                header.appendChild(titleContainer);
+            }
 
-            // Guardar comentario en la base de datos
+            // Nombre del químico
+            let partNumberElement = titleContainer.querySelector('.chemical-title');
+            if (!partNumberElement) {
+                partNumberElement = document.createElement('span');
+                partNumberElement.classList.add('chemical-title');
+                partNumberElement.style.color = '#fff';
+                titleContainer.appendChild(partNumberElement);
+            }
+            partNumberElement.textContent = partNumber;
+
+            // Lote del químico
+            let lotElement = titleContainer.querySelector('.chemical-lot');
+            if (!lotElement) {
+                lotElement = document.createElement('span');
+                lotElement.classList.add('chemical-lot');
+                lotElement.style.display = 'block';
+                lotElement.style.fontSize = '0.9em';
+                lotElement.style.color = '#fff';
+                titleContainer.appendChild(lotElement);
+            }
+            lotElement.textContent = lot;
+
+            // Comentarios en la derecha
+            let commentElement = header.querySelector('.chemical-comment');
+            if (!commentElement) {
+                commentElement = document.createElement('span');
+                commentElement.classList.add('chemical-comment');
+                commentElement.style.color = '#fff';
+                commentElement.style.marginLeft = 'auto';
+                header.appendChild(commentElement);
+            }
+            commentElement.innerHTML = commentsText ? commentsText.replace(/\n/g, '<br>') : '';
+            commentElement.style.display = commentsText ? 'block' : 'none';
+
             if (commentsTextarea) {
                 commentsTextarea.value = commentsText;
             }
 
-            // Verifica si todos los formularios han sido completados para mostrar el botón de enviar todos
             if (Array.from(forms).every(f => f.querySelector('.result').textContent !== '')) {
                 submitAllButton.style.display = 'block';
             }
 
-            // Oculta el panel actual y muestra el siguiente
             const panel = header.nextElementSibling;
             if (panel) {
                 panel.style.display = "none";
@@ -158,14 +188,13 @@
                 acc[index + 1].nextElementSibling.style.display = "block";
             }
 
-            // Guardar el valor resultante en la base de datos al enviar el formulario
             const formDetails = {
-                partNumber: formData.get('partNumber' + this.id.replace('auditForm', '')),
-                expirationString: formData.get('expiration' + this.id.replace('auditForm', '')), // Enviar la fecha en formato string
-                result: resultValue,  // Se envía el valor correcto ("Rechazado", "Próximo a vencer", "Aceptado")
+                partNumber: partNumber,
+                lot: lot,
+                expirationString: expiration,
+                result: resultValue,
             };
 
-            // Enviar a la base de datos
             fetch('/api/quimicos', {
                 method: 'POST',
                 headers: {
@@ -177,7 +206,7 @@
                 .then(data => {
                     if (data.message === 'Químicos guardados exitosamente') {
                         alert('Químicos guardados exitosamente');
-                        location.reload(); // Recargar la página
+                        location.reload();
                     }
                 })
                 .catch(error => {
@@ -186,7 +215,6 @@
         });
     });
 
-    // Configura el botón de enviar todos para guardar todos los formularios en la base de datos
     submitAllButton.addEventListener('click', function () {
         const almacen = document.getElementById('area').value;
         if (!almacen) {
@@ -200,7 +228,7 @@
             return {
                 partNumber: formData.get('partNumber' + form.id.replace('auditForm', '')),
                 packaging: formData.get('packaging' + form.id.replace('auditForm', '')),
-                expirationString: formData.get('expiration' + form.id.replace('auditForm', '')), // Enviar la fecha en formato string
+                expirationString: formData.get('expiration' + form.id.replace('auditForm', '')),
                 lot: formData.get('lot' + form.id.replace('auditForm', '')),
                 fifo: formData.get('fifo' + form.id.replace('auditForm', '')),
                 mixed: formData.get('mixed' + form.id.replace('auditForm', '')),
