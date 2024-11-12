@@ -6,6 +6,7 @@ using AuditoriaQuimicos.Data;
 using AuditoriaQuimicos.Models;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace AuditoriaQuimicos.Controllers
 {
@@ -27,12 +28,13 @@ namespace AuditoriaQuimicos.Controllers
                 .Include(q => q.Aprobaciones)
                 .Where(q => q.AuditDate.HasValue)
                 .GroupBy(q => q.AuditDate.Value.Date)
-                .Select(g => new
+                .Select(g => new QuimicoAgrupadoViewModel
                 {
                     AuditDate = g.Key,
                     Estado = g.All(q => q.Aprobaciones.Any(a => a.ApprovedByIncoming != null)) ? "Aprobado" : "Pendiente",
                     Quimicos = g.ToList()
                 })
+                .OrderBy(g => g.AuditDate) // Ordenamos por la fecha de auditoría
                 .ToList();
 
             return View(quimicosAgrupados);
@@ -46,17 +48,17 @@ namespace AuditoriaQuimicos.Controllers
                 .Include(q => q.Aprobaciones)
                 .Where(q => q.AuditDate.HasValue)
                 .GroupBy(q => q.AuditDate.Value.Date)
-                .Select(g => new
+                .Select(g => new QuimicoAgrupadoViewModel
                 {
                     AuditDate = g.Key,
                     Estado = g.All(q => q.Aprobaciones.Any(a => a.ApprovedByStorage != null && a.ApprovedByIncoming != null)) ? "Aprobado" : "Pendiente",
                     Quimicos = g.ToList()
                 })
+                .OrderBy(g => g.AuditDate) // Ordenamos por la fecha de auditoría
                 .ToList();
 
             return View(quimicosAgrupados);
         }
-
 
         // Método para aprobar químicos de Incoming o Storage
         [HttpPost]
@@ -121,6 +123,5 @@ namespace AuditoriaQuimicos.Controllers
             _context.SaveChanges();
             return Json(new { message = $"Químicos aprobados exitosamente por {role}" });
         }
-
     }
 }

@@ -15,6 +15,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Registro de EmailService
 builder.Services.AddScoped<IEmailService, EmailService>();
 
+// Configuración de CORS para permitir peticiones desde cualquier origen (para propósitos de desarrollo)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 // Configuración de autenticación y cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -22,6 +33,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Account/Login";
         options.LogoutPath = "/Account/Logout";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+
+        // Configuración para SameSite y Secure en cookies (requerido para HTTPS y contextos de sitio cruzado)
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Solo HTTPS
+        options.Cookie.SameSite = SameSiteMode.None; // Permitir el uso en diferentes contextos
     });
 
 // Configuración de sesión
@@ -31,6 +46,10 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+
+    // Configuración de SameSite y Secure para HTTPS en cookies de sesión
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.None;
 });
 
 // Configuración de políticas de autorización
@@ -52,6 +71,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// Habilitar CORS para solicitudes de diferentes orígenes
+app.UseCors("AllowAllOrigins");
 
 // Deshabilitar caché para páginas protegidas
 app.Use(async (context, next) =>

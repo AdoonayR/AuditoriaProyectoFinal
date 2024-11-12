@@ -25,5 +25,7 @@ namespace AuditoriaQuimicos.Models
         public string ExpirationString { get; set; }
 
         public ICollection<Aprobacion> Aprobaciones { get; set; }
+
+        public ICollection<Disposicion> Disposiciones { get; set; }
     }
 }

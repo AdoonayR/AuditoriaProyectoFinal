@@ -1,0 +1,87 @@
+﻿@model IEnumerable<AuditoriaQuimicos.Models.Disposicion>
+@using AuditoriaQuimicos.Models
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Titulo</title>
+
+    <!-- Estilos de DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
+
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="~/css/disposicion.css">
+    <link rel="stylesheet" href="~/css/background.css">
+</head>
+<body>
+
+    <div class="area">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <header>
+        <h1>Quimicos retirados del almacen</h1>
+    </header>
+
+    <main>
+        <table id="disposicionTable" class="table">
+            <thead>
+                <tr>
+                    <th>Químico</th>
+                    <th>Lote</th>
+                    <th>Razón de Rechazo</th>
+                    <th>Estado</th>
+                    <th>Fecha en la que se retiro del almacen</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var disposicion in Model)
+                {
+                    <tr>
+                        <td>@disposicion.Quimico.PartNumber</td>
+                        <td>@disposicion.Quimico.Lot</td>
+                        <td>@disposicion.Comentarios</td>
+                        <td>@disposicion.Estado</td>
+                        <td>@disposicion.FechaActualizacion?.ToString("dd/MM/yyyy")</td> <!-- Mostrar la fecha de salida -->
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#disposicionTable').DataTable({
+                "language": {
+                    "zeroRecords": "No se encontraron resultados",
+                    "info": "_PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

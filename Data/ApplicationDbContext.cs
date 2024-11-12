@@ -13,7 +13,7 @@ namespace AuditoriaQuimicos.Data
         public DbSet<Quimico> Quimicos { get; set; }
         public DbSet<Aprobacion> Aprobaciones { get; set; }
         public DbSet<Auditor> Auditors { get; set; }
-
+        public DbSet<Disposicion> Disposiciones { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -55,7 +55,7 @@ namespace AuditoriaQuimicos.Controllers
 
                 foreach (var quimico in quimicos)
                 {
-                    quimico.AuditDate = DateTime.Now;
+                    quimico.AuditDate = quimico.AuditDate ?? DateTime.Now; // Asignar `AuditDate` si es null
                     quimico.Auditor = auditor;
                     quimico.Comments = quimico.Comments ?? "";
 
@@ -66,70 +66,34 @@ namespace AuditoriaQuimicos.Controllers
                     }
                     quimico.Expiration = expirationDate;
 
-                    string commentsText = "";
-                    bool hasRejectableFeature = false;
-
-                    if (quimico.Packaging != "OK")
-                    {
-                        hasRejectableFeature = true;
-                        commentsText += "Empaque en mal estado.\n";
-                    }
-                    if (quimico.Fifo != "Sí")
-                    {
-                        hasRejectableFeature = true;
-                        commentsText += "No se está cumpliendo FIFO.\n";
-                    }
-                    if (quimico.Mixed != "No")
-                    {
-                        hasRejectableFeature = true;
-                        commentsText += "Químicos mezclados.\n";
-                    }
-                    if (quimico.QcSeal != "Sí")
-                    {
-                        hasRejectableFeature = true;
-                        commentsText += "No cuenta con sello de calidad.\n";
-                    }
-                    if (quimico.Clean != "Limpio")
-                    {
-                        hasRejectableFeature = true;
-                        commentsText += "Limpieza del químico en mal estado.\n";
-                    }
-
-                    // Cálculo de días para caducidad y próximos a vencer
-                    if (quimico.Expiration < DateTime.Now)
-                    {
-                        hasRejectableFeature = true;
-                        var daysExpired = (int)Math.Ceiling((DateTime.Now - quimico.Expiration.Value).TotalDays);
-                        commentsText += $"Químico caducado hace: {daysExpired} días.\n";
-                        quimico.Result = "Rechazado";
-                    }
-                    else
-                    {
-                        var daysToExpire = (int)Math.Ceiling((quimico.Expiration.Value - DateTime.Now).TotalDays);
-
-                        if (daysToExpire <= 30)
-                        {
-                            commentsText += $"Químico próximo a vencer en {daysToExpire} días.\n";
-                            quimico.Result = "Próximo a vencer";
-                        }
-                        else
-                        {
-                            quimico.Result = "Aceptado";
-                        }
-                    }
-
-                    if (hasRejectableFeature)
-                    {
-                        quimico.Result = "Rechazado";
-                    }
+                    bool isRejected = false;
+                    string commentsText = ValidarQuimico(quimico, ref isRejected);
 
                     quimico.Comments = commentsText;
+                    _context.Quimicos.Add(quimico);
                 }
 
-                _context.Quimicos.AddRange(quimicos);
+                // Guardamos los cambios para obtener los IDs generados para cada químico
                 _context.SaveChanges();
 
-                // Envía correo al supervisor de Incoming cuando la auditoría es completada
+                // Crear disposiciones solo para los químicos rechazados
+                foreach (var quimico in quimicos.Where(q => q.Result == "Rechazado"))
+                {
+                    var nuevaDisposicion = new Disposicion
+                    {
+                        QuimicoId = quimico.Id,
+                        Estado = EstadoDisposicion.Pendiente,
+                        FechaActualizacion = DateTime.Now,
+                        Comentarios = quimico.Comments,
+                        AuditDate = quimico.AuditDate ?? DateTime.Now // Asigna la fecha actual si es `null`
+                    };
+                    _context.Disposiciones.Add(nuevaDisposicion);
+                }
+
+                // Guardar las disposiciones en la base de datos
+                _context.SaveChanges();
+
+                // Enviar notificación al supervisor si es necesario
                 _emailService.SendEmailToIncomingSupervisor();
 
                 return Ok(new { message = "Químicos guardados exitosamente" });
@@ -139,6 +103,59 @@ namespace AuditoriaQuimicos.Controllers
                 _logger.LogError($"Error al guardar los químicos: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Ocurrió un error al guardar los químicos." });
             }
+        }
+
+        private string ValidarQuimico(Quimico quimico, ref bool isRejected)
+        {
+            string commentsText = "";
+
+            if (quimico.Packaging != "OK")
+            {
+                isRejected = true;
+                commentsText += "Empaque en mal estado.\n";
+            }
+            if (quimico.Fifo != "Sí")
+            {
+                isRejected = true;
+                commentsText += "No se está cumpliendo FIFO.\n";
+            }
+            if (quimico.Mixed != "No")
+            {
+                isRejected = true;
+                commentsText += "Químicos mezclados.\n";
+            }
+            if (quimico.QcSeal != "Sí")
+            {
+                isRejected = true;
+                commentsText += "No cuenta con sello de calidad.\n";
+            }
+            if (quimico.Clean != "Limpio")
+            {
+                isRejected = true;
+                commentsText += "Limpieza del químico en mal estado.\n";
+            }
+
+            if (quimico.Expiration < DateTime.Now)
+            {
+                isRejected = true;
+                int daysExpired = (int)Math.Ceiling((DateTime.Now - quimico.Expiration.Value).TotalDays);
+                commentsText += $"Químico caducado hace: {daysExpired} días.\n";
+            }
+
+            // Marcar como rechazado si algún criterio no se cumple
+            quimico.Result = isRejected ? "Rechazado" : "Aceptado";
+
+            if (!isRejected && quimico.Expiration.HasValue)
+            {
+                int daysToExpire = (int)Math.Ceiling((quimico.Expiration.Value - DateTime.Now).TotalDays);
+                if (daysToExpire <= 30)
+                {
+                    commentsText += $"Químico próximo a vencer en {daysToExpire} días.\n";
+                    quimico.Result = "Próximo a vencer";
+                }
+            }
+
+            return commentsText;
         }
 
         // Método para que el supervisor de Incoming apruebe y se envíe correo al supervisor de Storage
@@ -154,20 +171,18 @@ namespace AuditoriaQuimicos.Controllers
                     return NotFound();
                 }
 
-                var aprobacion = _context.Aprobaciones.SingleOrDefault(a => a.QuimicoId == quimicoId);
+                var aprobacion = _context.Aprobaciones.SingleOrDefault(a => a.Quimico.Id == quimicoId);
                 if (aprobacion == null)
                 {
                     _logger.LogWarning($"No se encontró la aprobación para el químico con ID {quimicoId}.");
                     return NotFound();
                 }
 
-                // Aprobar por el supervisor de Incoming
                 aprobacion.ApprovedByIncoming = User.Identity.Name;
                 aprobacion.ApprovedDateIncoming = DateTime.Now;
 
                 _context.SaveChanges();
 
-                // Enviar notificación al supervisor de Storage
                 _emailService.SendEmailToStorageSupervisor();
 
                 _logger.LogInformation("Auditoría aprobada por Incoming, correo enviado a Storage.");

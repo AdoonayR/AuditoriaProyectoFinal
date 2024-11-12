@@ -36,3 +36,20 @@
         });
     });
 });
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("search-date"); // Asegúrate de que el ID coincida
+
+    searchInput.addEventListener("input", function () {
+        const filter = searchInput.value.toUpperCase(); // Convertir a mayúsculas para comparación
+        const rows = document.querySelectorAll(".audit-row"); // Seleccionar todas las filas de auditoría
+
+        rows.forEach(row => {
+            const dateCell = row.querySelector(".audit-date").textContent; // Obtener el texto de la fecha en cada fila
+            if (dateCell.toUpperCase().includes(filter)) {
+                row.style.display = ""; // Mostrar fila si coincide
+            } else {
+                row.style.display = "none"; // Ocultar fila si no coincide
+            }
+        });
+    });
+});

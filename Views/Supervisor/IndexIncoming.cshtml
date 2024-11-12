@@ -27,17 +27,23 @@
         <div class="header-container">
             <div class="logout-section">
                 <button id="logoutButton" class="logout-button">
-                    <img src="~/images/log-out.png" alt="Cerrar Sesión" class="logout-icon"/> 
+                    <img src="~/images/log-out.png" alt="Cerrar Sesión" class="logout-icon" />
                 </button>
             </div>
             <div class="title-wrapper">
                 <h1 class="header-title">Auditoría Mensual de Químicos - Aprobación Incoming</h1>
             </div>
         </div>
+
+    
+        <div class="container">
+            <input type="text" id="search-date"> 
+            <div class="search"></div>
+        </div>
     </header>
 
     <main>
-        <table class="audit-table">
+        <table class="audit-table" id="auditTable">
             <thead>
                 <tr>
                     <th>Fecha de Auditoría</th>
@@ -50,30 +56,31 @@
                 {
                     var isApprovedIncoming = group.Estado == "Aprobado";
 
-                        <tr>
-                            <td>@DateTime.Parse(group.AuditDate.ToString()).ToString("MM-dd-yyyy")</td>
-                            <td>
+                    <tr class="audit-row">
+                        <!-- Agregado 'audit-row' -->
+                        <td class="audit-date">@DateTime.Parse(group.AuditDate.ToString()).ToString("MM-dd-yyyy")</td> <!-- Agregado 'audit-date' -->
+                        <td>
                             @if (isApprovedIncoming)
                             {
-                                        <span class="approved-incoming">Aprobado</span>
+                                <span class="approved-incoming">Aprobado</span>
                             }
                             else
                             {
-                                        <span class="not-approved">Pendiente</span>
+                                <span class="not-approved">Pendiente</span>
                             }
-                            </td>
-                            <td class="action-cell">
-                                <a href="@Url.Action("Details", "Details", new { date = DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd") })" class="details-btn">Ver Detalles</a>
+                        </td>
+                        <td class="action-cell">
+                            <a href="@Url.Action("Details", "Details", new { date = DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd") })" class="details-btn">Ver Detalles</a>
                             @if (!isApprovedIncoming)
                             {
-                                        <button class="approve-btn" data-date="@DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd")" data-role="Incoming">Aprobar</button>
+                                <button class="approve-btn" data-date="@DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd")" data-role="Incoming">Aprobar</button>
                             }
                             else
                             {
-                                        <button class="approve-btn" disabled>Aprobado</button>
+                                <button class="approve-btn" disabled>Aprobado</button>
                             }
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -82,5 +89,6 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="~/js/supervisor.js"></script>
     <script src="~/js/sesionkiller.js"></script>
+   
 </body>
 </html>

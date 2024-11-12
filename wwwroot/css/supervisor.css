@@ -17,23 +17,10 @@ body {
 .header-title {
     text-align: center;
     flex-grow: 1;
-}
-
-header h1 {
-    margin: 0;
-    color: #292828;
+    margin-top: 40px;
     font-size: 2.5rem;
-    letter-spacing: 2px;
+    color: #292828;
     font-weight: 600;
-}
-
-
-.sub-title {
-    font-size: 1.6rem;
-    font-weight: 500;
-    color: #444;
-    margin-top: 5px;
-    text-align: center;
 }
 
 .logout-button {
@@ -54,12 +41,12 @@ header h1 {
     height: 40px;
 }
 
-
+/* Tabla de auditoría */
 .audit-table {
     width: 90%;
     border-collapse: collapse;
     margin: 20px auto;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
     .audit-table th, .audit-table td {
@@ -85,7 +72,6 @@ header h1 {
     .audit-table tr:hover {
         background-color: #e0e0e0;
     }
-
 
 .details-btn, .approve-btn {
     padding: 8px 12px;
@@ -122,33 +108,191 @@ header h1 {
         transform: translateY(-3px);
     }
 
+/* Barra de navegación centrada con dos botones */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+    background-color: rgb(27, 133, 219);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px, rgba(27, 133, 219, 0.5) 5px 10px 15px;
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.button {
+    outline: 0 !important;
+    border: 0 !important;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: all ease-in-out 0.3s;
+    cursor: pointer;
+}
+
+    .button:hover {
+        transform: translateY(-3px);
+    }
+
+.icon {
+    width: 24px;
+    height: 24px;
+    font-size: 20px;
+}
+
+/* Estilos para el buscador animado */
+.container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 180px;
+    height: 60px;
+    z-index: 100;
+}
+
+    .container .search {
+        position: absolute;
+        margin: auto;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, #007BFF, #0056b3);
+        border-radius: 50%;
+        transition: all 0.5s;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+    }
+
+        .container .search::before {
+            content: "";
+            position: absolute;
+            margin: auto;
+            top: 13px;
+            right: 0;
+            bottom: 0;
+            left: 13px;
+            width: 8px;
+            height: 2px;
+            background: white;
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .container .search::after {
+            content: "";
+            position: absolute;
+            margin: auto;
+            top: -3px;
+            right: 0;
+            bottom: 0;
+            left: -3px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid white;
+            transition: all 0.5s;
+        }
+
+    .container input {
+        font-family: 'Inconsolata', monospace;
+        position: absolute;
+        margin: auto;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 45px;
+        height: 45px;
+        outline: none;
+        border: none;
+        background: #007BFF;
+        color: white;
+        padding: 0 55px 0 15px;
+        border-radius: 20px;
+        box-shadow: none;
+        transition: all 0.5s;
+        opacity: 0;
+        z-index: 5;
+        font-weight: bolder;
+        letter-spacing: 0.1em;
+    }
+
+        .container input:hover {
+            cursor: pointer;
+        }
+
+        .container input:focus {
+            width: 180px;
+            opacity: 1;
+            cursor: text;
+        }
+
+            .container input:focus ~ .search {
+                right: -140px;
+                background: #151515;
+                z-index: 6;
+            }
+
+                .container input:focus ~ .search::before {
+                    top: 0;
+                    left: 0;
+                    width: 18px;
+                }
+
+                .container input:focus ~ .search::after {
+                    top: 0;
+                    left: 0;
+                    width: 18px;
+                    height: 2px;
+                    border: none;
+                    background: white;
+                    border-radius: 0%;
+                    transform: rotate(-45deg);
+                }
+
+        .container input::placeholder {
+            color: white;
+            opacity: 0.5;
+            font-weight: bolder;
+        }
+
 /* Estilos responsivos */
-@media (max-width: 600px) {
-    .main-header {
-        flex-direction: column;
-        align-items: center;
+@media (max-width: 768px) {
+    .header-title {
+        font-size: 1.8rem;
     }
 
-    .logout-button {
-        margin-bottom: 10px;
-    }
-
-    .logout-icon {
-        width: 25px;
-        height: 25px;
-    }
-
-    .audit-table th, .audit-table td {
-        font-size: 0.9rem;
+    .button-container {
+        max-width: 200px;
+        gap: 10px;
         padding: 8px;
     }
 
-    .details-btn, .approve-btn {
-        width: 100%;
+    .button {
+        width: 35px;
+        height: 35px;
     }
 
-    .action-cell {
-        flex-direction: column;
-        gap: 5px;
+    .icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .container {
+        width: 150px;
+        height: 50px;
+        top: 5px;
+        right: 10px;
     }
 }

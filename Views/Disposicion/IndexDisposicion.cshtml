@@ -1,0 +1,88 @@
+﻿@model IEnumerable<AuditoriaQuimicos.Models.Disposicion>
+@using AuditoriaQuimicos.Models
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Titulo</title>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/css/disposicion.css">
+    <link rel="stylesheet" href="~/css/background.css">
+</head>
+<body>
+    <div class="area">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <header>
+        <h1>@ViewBag.Titulo</h1>
+    </header>
+
+    <main>
+        <table id="disposicionTable" class="table">
+            <thead>
+                <tr>
+                    <th>Químico</th>
+                    <th>Lote</th>
+                    <th>Razón de Rechazo</th>
+                    <th>Estado</th>
+                    @if (ViewBag.EsFueraDelAlmacen)
+                    {
+                        <th>Fecha de Actualización</th>
+                    }
+                    else
+                    {
+                        <th>Acciones</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var disposicion in Model)
+                {
+                    <tr>
+                        <td>@disposicion.Quimico.PartNumber</td>
+                        <td>@disposicion.Quimico.Lot</td>
+                        <td>@disposicion.Comentarios</td>
+                        <td>@disposicion.Estado</td>
+                        @if (ViewBag.EsFueraDelAlmacen)
+                        {
+                            <td>@(disposicion.FechaActualizacion.HasValue ? disposicion.FechaActualizacion.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+
+                        }
+                        else
+                        {
+                            <td>
+                                <form style="display: inline;">
+                                    <input type="hidden" name="id" value="@disposicion.Id" />
+                                    <select name="estado" class="form-control estado-select" data-id="@disposicion.Id">
+                                        <option value="Pendiente" @(disposicion.Estado == EstadoDisposicion.Pendiente ? "selected" : "")>Pendiente</option>
+                                        <option value="EnRevision" @(disposicion.Estado == EstadoDisposicion.EnRevision ? "selected" : "")>En Revisión</option>
+                                        <option value="FueraDelAlmacen" @(disposicion.Estado == EstadoDisposicion.FueraDelAlmacen ? "selected" : "")>Fuera del Almacén</option>
+                                    </select>
+                                </form>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/disposicion.js"></script>
+</body>
+</html>
