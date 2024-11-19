@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\css\animation.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\prioridades.css" />
   </ItemGroup>
 
   <ItemGroup>

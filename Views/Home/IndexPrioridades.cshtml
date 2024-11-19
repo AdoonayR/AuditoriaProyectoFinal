@@ -1,0 +1,62 @@
+﻿@model IEnumerable<AuditoriaQuimicos.Models.Disposicion>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Químicos Próximos a Vencer</title>
+    <link rel="stylesheet" href="~/css/prioridades.css">
+</head>
+<body>
+    <header>
+        <a href="javascript:history.back()" class="back-button">
+            <img src="~/images/previous.png" alt="Regresar" />
+        </a>
+        <h1>Químicos Próximos a Vencer</h1>
+    </header>
+
+    <main>
+        <table id="prioridadesTable" class="table">
+            <thead>
+                <tr>
+                    <th>Químico</th>
+                    <th>Lote</th>
+                    <th>Fecha de Vencimiento</th>
+                    <th>Días Restantes</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var disposicion in Model)
+                {
+                    <tr>
+                        <td>@disposicion.Quimico.PartNumber</td>
+                        <td>@disposicion.Quimico.Lot</td>
+                        <td>@(disposicion.Quimico.Expiration.HasValue ? disposicion.Quimico.Expiration.Value.ToString("MM/dd/yyyy") : "N/A")</td>
+                        <td>@(disposicion.Quimico.Expiration.HasValue ? (disposicion.Quimico.Expiration.Value - DateTime.Now).Days : "N/A") días</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#prioridadesTable').DataTable({
+                language: {
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    paginate: {
+                        first: "Primero",
+                        last: "Último",
+                        next: "Siguiente",
+                        previous: "Anterior"
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

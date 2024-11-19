@@ -28,6 +28,9 @@
         </ul>
     </div>
     <header>
+        <a href="javascript:history.back()" class="back-button">
+            <img src="~/images/previous.png" alt="Regresar" /> 
+        </a>
         <h1>@ViewBag.Titulo</h1>
     </header>
 
@@ -36,6 +39,7 @@
             <thead>
                 <tr>
                     <th>Químico</th>
+                    <th>Fecha del rechazo</th>
                     <th>Lote</th>
                     <th>Razón de Rechazo</th>
                     <th>Estado</th>
@@ -54,12 +58,13 @@
                 {
                     <tr>
                         <td>@disposicion.Quimico.PartNumber</td>
+                        <td>@disposicion.Quimico.AuditDate?.ToString("MM-dd-yyyy")</td>
                         <td>@disposicion.Quimico.Lot</td>
                         <td>@disposicion.Comentarios</td>
                         <td>@disposicion.Estado</td>
                         @if (ViewBag.EsFueraDelAlmacen)
                         {
-                            <td>@(disposicion.FechaActualizacion.HasValue ? disposicion.FechaActualizacion.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                            <td>@(disposicion.FechaActualizacion.HasValue ? disposicion.FechaActualizacion.Value.ToString("mm/dd/yyyy") : "N/A")</td>
 
                         }
                         else

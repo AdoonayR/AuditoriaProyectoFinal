@@ -382,3 +382,80 @@ button[type="submit"] {
     margin-right: 10px;
     align-self: center;
 }
+/* Estilo general del form-row */
+.form-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+/* Contenedor del área */
+.area-container,
+.auditor-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+    /* Estilo para el selector de área y el campo de auditor */
+    .area-container select,
+    .auditor-container input {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #333;
+        outline: none;
+    }
+
+    .auditor-container input {
+        text-align: center;
+        cursor: not-allowed;
+    }
+
+/* Etiquetas */
+label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Contenedor para el ícono de Químicos por vencer */
+.icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    cursor: pointer; /* Cursor para indicar interactividad */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    /* Animación al pasar el cursor */
+    .icon-container:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+/* Imagen dentro del ícono */
+.icon-image {
+    width: 40px;
+    height: 40px;
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .icon-container {
+        align-self: center;
+    }
+}

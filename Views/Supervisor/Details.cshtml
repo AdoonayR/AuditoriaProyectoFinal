@@ -11,17 +11,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/details.css">
-
-    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
     <header>
         <a href="javascript:history.back()" class="back-button">
-            <img src="~/images/previous.png" alt="Regresar" /> <!-- Ícono de regresar -->
+            <img src="~/images/previous.png" alt="Regresar" /> 
         </a>
         <h1>Detalles de Auditoría - @(Model.FirstOrDefault()?.AuditDate?.ToString("MM dd yyyy") ?? "Sin Fecha")</h1>
     </header>

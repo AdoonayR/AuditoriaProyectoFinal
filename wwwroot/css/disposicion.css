@@ -72,3 +72,23 @@ header {
     .btn-primary:hover {
         background-color: #0056b3;
     }
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #333;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+    .back-button img {
+        width: 100%;
+        height: auto;
+    }

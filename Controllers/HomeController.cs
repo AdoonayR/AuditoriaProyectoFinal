@@ -9,6 +9,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuditoriaQuimicos.Controllers
 {
@@ -31,6 +32,33 @@ namespace AuditoriaQuimicos.Controllers
             var quimicos = _context.Quimicos.ToList();
             return View(quimicos);
         }
+
+        [HttpGet]
+        public IActionResult IndexPrioridades()
+        {
+            try
+            {
+                // Obtenemos los químicos próximos a vencer que no estén rechazados
+                var quimicosProximos = _context.Disposiciones
+                    .Include(d => d.Quimico) // Incluir la relación con Quimico
+                    .AsEnumerable() // Cambiar a evaluación en memoria
+                    .Where(d => d.Quimico != null &&
+                                d.Quimico.Expiration.HasValue &&
+                                (d.Quimico.Expiration.Value - DateTime.Now).Days <= 30 && // Próximos a vencer
+                                d.Estado == EstadoDisposicion.EnRevision) // Filtramos solo en revisión (no rechazados)
+                    .ToList();
+
+                // Retornamos la vista con el modelo
+                return View(quimicosProximos);
+            }
+            catch (Exception ex)
+            {
+                // Logueamos el error y mostramos una página de error personalizada
+                _logger.LogError($"Error en IndexPrioridades: {ex.Message}");
+                return View("Error", new ErrorViewModel { Message = "Hubo un problema al cargar los químicos próximos a vencer." });
+            }
+        }
+
 
         [HttpPost]
         [Route("api/quimicos")]
@@ -55,7 +83,7 @@ namespace AuditoriaQuimicos.Controllers
 
                 foreach (var quimico in quimicos)
                 {
-                    quimico.AuditDate = quimico.AuditDate ?? DateTime.Now; // Asignar `AuditDate` si es null
+                    quimico.AuditDate = quimico.AuditDate ?? DateTime.Now;
                     quimico.Auditor = auditor;
                     quimico.Comments = quimico.Comments ?? "";
 
@@ -76,18 +104,21 @@ namespace AuditoriaQuimicos.Controllers
                 // Guardamos los cambios para obtener los IDs generados para cada químico
                 _context.SaveChanges();
 
-                // Crear disposiciones solo para los químicos rechazados
-                foreach (var quimico in quimicos.Where(q => q.Result == "Rechazado"))
+                // Crear disposiciones solo para los químicos rechazados o próximos a vencer
+                foreach (var quimico in quimicos)
                 {
-                    var nuevaDisposicion = new Disposicion
+                    if (quimico.Result == "Rechazado" || quimico.Result == "Próximo a vencer")
                     {
-                        QuimicoId = quimico.Id,
-                        Estado = EstadoDisposicion.Pendiente,
-                        FechaActualizacion = DateTime.Now,
-                        Comentarios = quimico.Comments,
-                        AuditDate = quimico.AuditDate ?? DateTime.Now // Asigna la fecha actual si es `null`
-                    };
-                    _context.Disposiciones.Add(nuevaDisposicion);
+                        var nuevaDisposicion = new Disposicion
+                        {
+                            QuimicoId = quimico.Id,
+                            Estado = quimico.Result == "Rechazado" ? EstadoDisposicion.Pendiente : EstadoDisposicion.EnRevision,
+                            FechaActualizacion = DateTime.Now,
+                            Comentarios = quimico.Comments,
+                            AuditDate = quimico.AuditDate ?? DateTime.Now
+                        };
+                        _context.Disposiciones.Add(nuevaDisposicion);
+                    }
                 }
 
                 // Guardar las disposiciones en la base de datos
@@ -156,43 +187,6 @@ namespace AuditoriaQuimicos.Controllers
             }
 
             return commentsText;
-        }
-
-        // Método para que el supervisor de Incoming apruebe y se envíe correo al supervisor de Storage
-        [HttpPost]
-        public IActionResult ApproveIncoming(int quimicoId)
-        {
-            try
-            {
-                var quimico = _context.Quimicos.Find(quimicoId);
-                if (quimico == null)
-                {
-                    _logger.LogWarning($"No se encontró el químico con ID {quimicoId}.");
-                    return NotFound();
-                }
-
-                var aprobacion = _context.Aprobaciones.SingleOrDefault(a => a.Quimico.Id == quimicoId);
-                if (aprobacion == null)
-                {
-                    _logger.LogWarning($"No se encontró la aprobación para el químico con ID {quimicoId}.");
-                    return NotFound();
-                }
-
-                aprobacion.ApprovedByIncoming = User.Identity.Name;
-                aprobacion.ApprovedDateIncoming = DateTime.Now;
-
-                _context.SaveChanges();
-
-                _emailService.SendEmailToStorageSupervisor();
-
-                _logger.LogInformation("Auditoría aprobada por Incoming, correo enviado a Storage.");
-                return Ok(new { message = "Auditoría aprobada por Incoming, correo enviado a Storage." });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error aprobando la auditoría en Incoming: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Error aprobando la auditoría en Incoming." });
-            }
         }
     }
 }

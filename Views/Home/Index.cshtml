@@ -40,15 +40,32 @@
         </div>
         <span id="currentDate" class="current-date"></span>
         <div class="form-row">
-            <label for="area">Área:</label>
-            <select id="area" name="area" required>
-                <option value="">Seleccione una opción</option>
-                <option value="Almacen Telaire">Almacen Telaire</option>
-                <option value="Almacen Temperatura">Almacen Temperatura</option>
-            </select>
-            <label for="auditor">Auditor:</label>
-            <input type="text" id="auditor" name="auditor" readonly>
+            <!-- Contenedor del selector de área -->
+            <div class="area-container">
+                <label for="area">Área:</label>
+                <select id="area" name="area" required>
+                    <option value="">Seleccione una opción</option>
+                    <option value="Almacen Telaire">Almacen Telaire</option>
+                    <option value="Almacen Temperatura">Almacen Temperatura</option>
+                </select>
+            </div>
+
+            <!-- Contenedor del ícono de Químicos por vencer -->
+            <div class="icon-container">
+                <a href="/Home/IndexPrioridades" class="icon-link">
+                    <img src="~/images/alarm.png" alt="Químicos por vencer" class="icon-image" />
+                </a>
+
+            </div>
+
+
+            <!-- Contenedor del campo de auditor -->
+            <div class="auditor-container">
+                <label for="auditor">Auditor:</label>
+                <input type="text" id="auditor" name="auditor" value="Nombre del Auditor" readonly>
+            </div>
         </div>
+
     </header>
 
     <div class="accordion">

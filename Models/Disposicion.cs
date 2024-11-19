@@ -20,6 +20,8 @@ namespace AuditoriaQuimicos.Models
 
         // Nueva propiedad para almacenar la fecha de auditoría desde Quimico
         public DateTime AuditDate { get; set; }
+
+        public DateTime? FechaVencimiento { get; set; }
     }
 
     public enum EstadoDisposicion
