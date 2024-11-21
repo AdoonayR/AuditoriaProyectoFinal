@@ -50,15 +50,37 @@
                     <td>@quimico.Mixed</td>
                     <td>@quimico.QcSeal</td>
                     <td>@quimico.Clean</td>
-                    <td>@quimico.Comments</td>
+                    <td>
+                        @if (quimico.Comments.Contains("caducado", StringComparison.OrdinalIgnoreCase) && quimico.Expiration.HasValue)
+                        {
+                            <text>
+                                @quimico.Comments
+                                hace @((DateTime.Now.Date - quimico.Expiration.Value.Date).Days) días.
+                            </text>
+                        }
+                        else if (quimico.Comments.Contains("próximo a vencer", StringComparison.OrdinalIgnoreCase) && quimico.Expiration.HasValue)
+                        {
+                            <text>
+                                @quimico.Comments
+                                en @((quimico.Expiration.Value.Date - DateTime.Now.Date).Days) días.
+                            </text>
+                        }
+                        else
+                        {
+                            @quimico.Comments
+                        }
+                    </td>
+
                     <td>@quimico.Result</td>
                     <td>@quimico.Almacen</td>
                 </tr>
             }
         </tbody>
+
+
     </table>
 
-    <!-- Inicializa DataTables -->
+   
     <script>
         $(document).ready(function () {
             $('.table-details').DataTable({

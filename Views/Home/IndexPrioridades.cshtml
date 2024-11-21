@@ -1,11 +1,10 @@
-﻿@model IEnumerable<AuditoriaQuimicos.Models.Disposicion>
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Químicos Próximos a Vencer</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="~/css/prioridades.css">
 </head>
 <body>
@@ -32,22 +31,24 @@
                     <tr>
                         <td>@disposicion.Quimico.PartNumber</td>
                         <td>@disposicion.Quimico.Lot</td>
-                        <td>@(disposicion.Quimico.Expiration.HasValue ? disposicion.Quimico.Expiration.Value.ToString("MM/dd/yyyy") : "N/A")</td>
-                        <td>@(disposicion.Quimico.Expiration.HasValue ? (disposicion.Quimico.Expiration.Value - DateTime.Now).Days : "N/A") días</td>
+                        <td>@disposicion.Quimico.Expiration.ToString("MM/dd/yyyy")</td>
+                        <td>
+                            @((disposicion.Quimico.Expiration.Date - DateTime.Now.Date).Days) días
+                        </td>
                     </tr>
                 }
             </tbody>
+
         </table>
     </main>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#prioridadesTable').DataTable({
                 language: {
                     search: "Buscar:",
-                    lengthMenu: "Mostrar _MENU_ registros",
-                    info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
                     paginate: {
                         first: "Primero",
                         last: "Último",

@@ -60,7 +60,25 @@
                         <td>@disposicion.Quimico.PartNumber</td>
                         <td>@disposicion.Quimico.AuditDate?.ToString("MM-dd-yyyy")</td>
                         <td>@disposicion.Quimico.Lot</td>
-                        <td>@disposicion.Comentarios</td>
+                        <td>
+                            @disposicion.Comentarios
+                            @if (disposicion.Quimico.Expiration.HasValue &&
+                           (disposicion.Comentarios.Contains("caducado", StringComparison.OrdinalIgnoreCase) ||
+                           disposicion.Comentarios.Contains("próximo a vencer", StringComparison.OrdinalIgnoreCase)))
+                            {
+                                var daysDifference = (disposicion.Quimico.Expiration.Value.Date - DateTime.Now.Date).Days;
+
+                                if (daysDifference < 0)
+                                {
+                                    <text> hace @Math.Abs(daysDifference) días</text>
+                                }
+                                else
+                                {
+                                    <text> en @daysDifference días.</text>
+                                }
+                            }
+                        </td>
+
                         <td>@disposicion.Estado</td>
                         @if (ViewBag.EsFueraDelAlmacen)
                         {

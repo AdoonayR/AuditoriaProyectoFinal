@@ -169,11 +169,9 @@ namespace AuditoriaQuimicos.Controllers
             if (quimico.Expiration < DateTime.Now)
             {
                 isRejected = true;
-                int daysExpired = (int)Math.Ceiling((DateTime.Now - quimico.Expiration.Value).TotalDays);
-                commentsText += $"Químico caducado hace: {daysExpired} días.\n";
+                commentsText += "Químico caducado\n"; 
             }
 
-            // Marcar como rechazado si algún criterio no se cumple
             quimico.Result = isRejected ? "Rechazado" : "Aceptado";
 
             if (!isRejected && quimico.Expiration.HasValue)
@@ -181,12 +179,13 @@ namespace AuditoriaQuimicos.Controllers
                 int daysToExpire = (int)Math.Ceiling((quimico.Expiration.Value - DateTime.Now).TotalDays);
                 if (daysToExpire <= 30)
                 {
-                    commentsText += $"Químico próximo a vencer en {daysToExpire} días.\n";
+                    commentsText += "Químico próximo a vencer\n"; 
                     quimico.Result = "Próximo a vencer";
                 }
             }
 
             return commentsText;
         }
+
     }
 }
