@@ -7,6 +7,7 @@ using AuditoriaQuimicos.Models;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace AuditoriaQuimicos.Controllers
 {
@@ -14,11 +15,18 @@ namespace AuditoriaQuimicos.Controllers
     public class SupervisorController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailService _emailService;
+        private readonly ILogger<SupervisorController> _logger;
 
-        public SupervisorController(ApplicationDbContext context)
+
+        public SupervisorController(ApplicationDbContext context, IEmailService emailService, ILogger<SupervisorController> logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
+
+
 
         // Acción para la vista del Incoming Supervisor
         [Authorize(Roles = "IncomingSupervisor")]
@@ -63,7 +71,7 @@ namespace AuditoriaQuimicos.Controllers
         // Método para aprobar químicos de Incoming o Storage
         [HttpPost]
         [Authorize(Roles = "IncomingSupervisor, StorageSupervisor")]
-        public IActionResult Approve([FromBody] ApprovalRequest data, string role)
+        public async Task<IActionResult> Approve([FromBody] ApprovalRequest data, string role)
         {
             if (data == null || string.IsNullOrEmpty(data.Date))
             {
@@ -85,43 +93,45 @@ namespace AuditoriaQuimicos.Controllers
                 return BadRequest("No se encontraron químicos para la fecha proporcionada.");
             }
 
+            var aprobacionesPendientes = new List<Aprobacion>();
+
             foreach (var quimico in quimicos)
             {
-                var aprobacion = quimico.Aprobaciones.FirstOrDefault(a => a.QuimicoId == quimico.Id);
-                if (aprobacion == null)
-                {
-                    aprobacion = new Aprobacion
-                    {
-                        QuimicoId = quimico.Id,
-                        ApprovedByIncoming = null,
-                        ApprovedByStorage = null,
-                        ApprovedDateIncoming = null,
-                        ApprovedDateStorage = null
-                    };
-                    _context.Aprobaciones.Add(aprobacion);
-                }
+                var aprobacion = quimico.Aprobaciones.FirstOrDefault(a => a.QuimicoId == quimico.Id)
+                                 ?? new Aprobacion { QuimicoId = quimico.Id };
 
-                // Dependiendo del rol, se realiza la aprobación
                 if (role == "Incoming")
                 {
                     aprobacion.ApprovedByIncoming = User.Identity.Name;
                     aprobacion.ApprovedDateIncoming = DateTime.Now;
                 }
-                else if (role == "Storage")
+                else if (role == "Storage" && aprobacion.ApprovedByIncoming != null)
                 {
-                    // Verificar si Incoming ya ha aprobado
-                    if (aprobacion.ApprovedByIncoming == null)
-                    {
-                        return BadRequest("La aprobación por Incoming es requerida antes de aprobar en Storage.");
-                    }
-
                     aprobacion.ApprovedByStorage = User.Identity.Name;
                     aprobacion.ApprovedDateStorage = DateTime.Now;
                 }
+
+                aprobacionesPendientes.Add(aprobacion);
             }
 
-            _context.SaveChanges();
-            return Json(new { message = $"Químicos aprobados exitosamente por {role}" });
+            _context.Aprobaciones.UpdateRange(aprobacionesPendientes);
+            await _context.SaveChangesAsync();
+
+            if (role == "Incoming")
+            {
+                try
+                {
+                    await _emailService.SendEmailToStorageSupervisorAsync();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error al enviar correo al Storage Supervisor: {ex.Message}");
+                }
+            }
+
+            return Json(new { message = $"Auditoria revisada correctamente por {role}" });
         }
+
+
     }
 }

@@ -43,7 +43,7 @@
     </header>
 
     <main style="display: flex; align-items: flex-start; gap: 20px; justify-content: center;">
-        <!-- Tabla de auditorías -->
+   
         <div style="flex: 1;">
             <table class="audit-table">
                 <thead>
@@ -67,7 +67,7 @@
 
                                 @if (isApprovedIncoming && !isApprovedStorage)
                                 {
-                                    <button class="approve-btn" data-date="@group.AuditDate.ToString("yyyy-MM-dd")" data-role="Storage">Aprobar</button>
+                                    <button class="approve-btn" data-date="@group.AuditDate.ToString("yyyy-MM-dd")" data-role="Storage">Revisar</button>
                                 }
                                 else if (!isApprovedIncoming)
                                 {
@@ -75,7 +75,7 @@
                                 }
                                 else
                                 {
-                                    <button class="approve-btn" disabled>Aprobado</button>
+                                    <button class="approve-btn" disabled>Revisado</button>
                                 }
                             </td>
                         </tr>

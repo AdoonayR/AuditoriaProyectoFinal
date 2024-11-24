@@ -1,5 +1,5 @@
-﻿using System.Net.Mail;
-using System.Net;
+﻿using MailKit.Net.Smtp;
+using MimeKit;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 
@@ -16,69 +16,61 @@ namespace AuditoriaQuimicos.Services
             _logger = logger;
         }
 
-        public void SendEmailToIncomingSupervisor()
+        public async Task SendEmailToIncomingSupervisorAsync()
         {
             try
             {
-                var smtpClient = new SmtpClient(_configuration["EmailSettings:SMTPServer"])
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Sistema de Auditoría", _configuration["EmailSettings:SenderEmail"]));
+                message.To.Add(new MailboxAddress("Supervisor Incoming", _configuration["EmailSettings:IncomingSupervisorEmail"]));
+                message.Subject = "Auditoría pendiente de revisión (Incoming)";
+                message.Body = new TextPart("plain")
                 {
-                    Port = int.Parse(_configuration["EmailSettings:Port"]),
-                    Credentials = new NetworkCredential(_configuration["EmailSettings:Username"], _configuration["EmailSettings:Password"]),
-                    EnableSsl = bool.Parse(_configuration["EmailSettings:EnableSSL"]),
+                    Text = "Hay una auditoría pendiente de revisión para el supervisor de Incoming. Por favor, revise los detalles en el sistema."
                 };
 
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(_configuration["EmailSettings:SenderEmail"]),
-                    Subject = "Auditoría pendiente de revisión (Incoming)",
-                    Body = "Hay una auditoría pendiente de revisión para el supervisor de Incoming. Por favor, revise los detalles.",
-                    IsBodyHtml = true,
-                };
+                using var smtpClient = new MailKit.Net.Smtp.SmtpClient();
+                await smtpClient.ConnectAsync(_configuration["EmailSettings:SMTPServer"], int.Parse(_configuration["EmailSettings:Port"]), MailKit.Security.SecureSocketOptions.StartTls);
+                await smtpClient.AuthenticateAsync(_configuration["EmailSettings:Username"], _configuration["EmailSettings:Password"]);
+                await smtpClient.SendAsync(message);
+                await smtpClient.DisconnectAsync(true);
 
-                mailMessage.To.Add(_configuration["EmailSettings:IncomingSupervisorEmail"]);
-                smtpClient.Send(mailMessage);
-
-                _logger.LogInformation("Correo enviado al supervisor de Incoming.");
-            }
-            catch (SmtpException smtpEx)
-            {
-                _logger.LogError($"Error SMTP enviando el correo al supervisor de Incoming: {smtpEx.Message}");
+                _logger.LogInformation("Correo enviado exitosamente al supervisor de Incoming.");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error general enviando el correo al supervisor de Incoming: {ex.Message}");
+                _logger.LogError($"Error enviando correo al supervisor de Incoming: {ex.Message}");
+                throw;
             }
         }
 
-
-        public void SendEmailToStorageSupervisor()
+        public async Task SendEmailToStorageSupervisorAsync()
         {
             try
             {
-                var smtpClient = new SmtpClient(_configuration["EmailSettings:SMTPServer"])
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Sistema de Auditoría", _configuration["EmailSettings:SenderEmail"]));
+                message.To.Add(new MailboxAddress("Supervisor Storage", _configuration["EmailSettings:StorageSupervisorEmail"]));
+                message.Subject = "Auditoría pendiente de revisión (Storage)";
+                message.Body = new TextPart("plain")
                 {
-                    Port = int.Parse(_configuration["EmailSettings:Port"]),
-                    Credentials = new NetworkCredential(_configuration["EmailSettings:Username"], _configuration["EmailSettings:Password"]),
-                    EnableSsl = bool.Parse(_configuration["EmailSettings:EnableSSL"]),
+                    Text = "Hay una auditoría pendiente de revisión para el supervisor de Storage. Por favor, revise los detalles en el sistema."
                 };
 
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(_configuration["EmailSettings:SenderEmail"]),
-                    Subject = "Auditoría pendiente de revisión (Storage)",
-                    Body = "Hay una auditoría pendiente de revisión para el supervisor de Storage. Por favor, revise los detalles.",
-                    IsBodyHtml = true,
-                };
+                using var smtpClient = new MailKit.Net.Smtp.SmtpClient();
+                await smtpClient.ConnectAsync(_configuration["EmailSettings:SMTPServer"], int.Parse(_configuration["EmailSettings:Port"]), MailKit.Security.SecureSocketOptions.StartTls);
+                await smtpClient.AuthenticateAsync(_configuration["EmailSettings:Username"], _configuration["EmailSettings:Password"]);
+                await smtpClient.SendAsync(message);
+                await smtpClient.DisconnectAsync(true);
 
-                mailMessage.To.Add(_configuration["EmailSettings:StorageSupervisorEmail"]);
-                smtpClient.Send(mailMessage);
-
-                _logger.LogInformation("Correo enviado al supervisor de Storage.");
+                _logger.LogInformation("Correo enviado exitosamente al supervisor de Storage.");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error enviando el correo al supervisor de Storage: {ex.Message}");
+                _logger.LogError($"Error enviando correo al supervisor de Storage: {ex.Message}");
+                throw;
             }
         }
     }
+
 }

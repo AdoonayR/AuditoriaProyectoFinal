@@ -50,8 +50,5 @@
         }
     });
 
-    // Guardar el estado original del select para poder revertir si se cancela
-    $('.estado-select').each(function () {
-        $(this).data('original', $(this).val());
-    });
+   
 });

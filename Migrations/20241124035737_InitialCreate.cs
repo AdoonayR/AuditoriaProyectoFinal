@@ -58,8 +58,8 @@ namespace AuditoriaQuimicos.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QuimicoId = table.Column<int>(type: "int", nullable: false),
-                    ApprovedByIncoming = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApprovedByStorage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApprovedByIncoming = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ApprovedByStorage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApprovedDateIncoming = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ApprovedDateStorage = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -74,9 +74,38 @@ namespace AuditoriaQuimicos.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Disposiciones",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    QuimicoId = table.Column<int>(type: "int", nullable: false),
+                    Estado = table.Column<int>(type: "int", nullable: false),
+                    FechaActualizacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Comentarios = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AuditDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NoDmr = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Disposiciones", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Disposiciones_Quimicos_QuimicoId",
+                        column: x => x.QuimicoId,
+                        principalTable: "Quimicos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Aprobaciones_QuimicoId",
                 table: "Aprobaciones",
+                column: "QuimicoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Disposiciones_QuimicoId",
+                table: "Disposiciones",
                 column: "QuimicoId");
         }
 
@@ -88,6 +117,9 @@ namespace AuditoriaQuimicos.Migrations
 
             migrationBuilder.DropTable(
                 name: "Auditors");
+
+            migrationBuilder.DropTable(
+                name: "Disposiciones");
 
             migrationBuilder.DropTable(
                 name: "Quimicos");

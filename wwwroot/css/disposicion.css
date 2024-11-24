@@ -50,7 +50,6 @@ header {
         background-color: #e0e0e0;
     }
 
-    /* Estilo para los químicos rechazados */
     .table tr.rejected {
         background-color: #f8d7da;
     }
@@ -91,4 +90,31 @@ header {
     .back-button img {
         width: 100%;
         height: auto;
+    }
+.dmr-submit {
+    background-color: #00aaff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+    .dmr-submit:hover {
+        background-color: #0088cc;
+        transform: scale(1.05);
+    }
+
+    .dmr-submit:active {
+        background-color: #005f99;
+        transform: scale(0.95);
+    }
+
+    .dmr-submit:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
     }

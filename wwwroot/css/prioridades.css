@@ -1,14 +1,11 @@
-﻿/* Prioridades.css */
-
-/* Estilo general */
+﻿
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f9;
     color: #333;
     margin: 0;
     padding: 20px;
-    position: relative; /* Importante para posicionar elementos dentro del body */
-}
+    position: relative; 
 
 header {
     text-align: center;
@@ -21,9 +18,9 @@ header {
         margin: 0;
     }
 
-/* Estilos del botón de regresar */
+
 .back-button {
-    position: fixed; /* Cambiado a 'fixed' para que no dependa del flujo de la página */
+    position: fixed; 
     top: 10px;
     left: 10px;
     width: 40px;
@@ -36,7 +33,7 @@ header {
     background: none;
     border: none;
     cursor: pointer;
-    z-index: 1000; /* Asegura que esté encima de otros elementos */
+    z-index: 1000; 
 }
 
     .back-button img {

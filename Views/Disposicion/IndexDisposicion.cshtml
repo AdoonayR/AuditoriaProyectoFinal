@@ -29,10 +29,14 @@
     </div>
     <header>
         <a href="javascript:history.back()" class="back-button">
-            <img src="~/images/previous.png" alt="Regresar" /> 
+            <img src="~/images/previous.png" alt="Regresar" />
         </a>
         <h1>@ViewBag.Titulo</h1>
     </header>
+
+    <div id="message-container" style="display: none; margin-bottom: 10px;">
+        <div id="message" class="alert"></div>
+    </div>
 
     <main>
         <table id="disposicionTable" class="table">
@@ -56,7 +60,7 @@
             <tbody>
                 @foreach (var disposicion in Model)
                 {
-                    <tr>
+                    <tr id="disposicion-row-@disposicion.Id">
                         <td>@disposicion.Quimico.PartNumber</td>
                         <td>@disposicion.Quimico.AuditDate?.ToString("MM-dd-yyyy")</td>
                         <td>@disposicion.Quimico.Lot</td>
@@ -80,24 +84,20 @@
                         </td>
 
                         <td>@disposicion.Estado</td>
-                        @if (ViewBag.EsFueraDelAlmacen)
-                        {
-                            <td>@(disposicion.FechaActualizacion.HasValue ? disposicion.FechaActualizacion.Value.ToString("mm/dd/yyyy") : "N/A")</td>
+                        <td>
+                            <select name="estado" class="form-control estado-select" data-id="@disposicion.Id">
+                                <option value="Pendiente" @(disposicion.Estado == EstadoDisposicion.Pendiente ? "selected" : "")>Pendiente</option>
+                                <option value="EnRevision" @(disposicion.Estado == EstadoDisposicion.EnRevision ? "selected" : "")>En Revisión</option>
+                                <option value="FueraDelAlmacen" @(disposicion.Estado == EstadoDisposicion.FueraDelAlmacen ? "selected" : "")>Fuera del Almacén</option>
+                            </select>
 
-                        }
-                        else
-                        {
-                            <td>
-                                <form style="display: inline;">
-                                    <input type="hidden" name="id" value="@disposicion.Id" />
-                                    <select name="estado" class="form-control estado-select" data-id="@disposicion.Id">
-                                        <option value="Pendiente" @(disposicion.Estado == EstadoDisposicion.Pendiente ? "selected" : "")>Pendiente</option>
-                                        <option value="EnRevision" @(disposicion.Estado == EstadoDisposicion.EnRevision ? "selected" : "")>En Revisión</option>
-                                        <option value="FueraDelAlmacen" @(disposicion.Estado == EstadoDisposicion.FueraDelAlmacen ? "selected" : "")>Fuera del Almacén</option>
-                                    </select>
-                                </form>
-                            </td>
-                        }
+                            <input type="text" class="form-control dmr-input" id="dmrNumber-@disposicion.Id" placeholder="Número de DMR"
+                                   data-id="@disposicion.Id" style="display:none; margin-top: 5px;" />
+
+                            <button type="button" class="btn btn-success btn-sm dmr-submit" data-id="@disposicion.Id" style="display:none; margin-top: 5px;">
+                                Guardar
+                            </button>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -106,6 +106,80 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-    <script src="~/js/disposicion.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#disposicionTable').DataTable({
+                "language": {
+                    "zeroRecords": "No se encontraron resultados",
+                    "info": "_PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+            // Guardar el estado original del select para poder revertir si se cancela
+            $('.estado-select').each(function () {
+                $(this).data('original', $(this).val());
+            });
+
+            $('.estado-select').on('change', function () {
+                const selectedEstado = $(this).val();
+                const disposicionId = $(this).data('id');
+                const dmrInput = $(`#dmrNumber-${disposicionId}`);
+                const dmrButton = $(`.dmr-submit[data-id="${disposicionId}"]`);
+
+                if (selectedEstado === "FueraDelAlmacen") {
+                    dmrInput.show().attr('required', true);
+                    dmrButton.show();
+                } else {
+                    dmrInput.hide().removeAttr('required');
+                    dmrButton.hide();
+                }
+            });
+
+            $('.dmr-submit').on('click', function () {
+                const disposicionId = $(this).data('id');
+                const dmrNumber = $(`#dmrNumber-${disposicionId}`).val();
+
+                if (!dmrNumber.trim()) {
+                    showMessage('Debe ingresar un número de DMR antes de guardar.', 'danger');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/Disposicion/CompletarDisposicion',
+                    method: 'POST',
+                    data: { id: disposicionId, dmrNumber: dmrNumber },
+                    success: function (response) {
+                        showMessage(response.message, 'success');
+                        $(`#dmrNumber-${disposicionId}`).prop('disabled', true);
+                        $(`.dmr-submit[data-id="${disposicionId}"]`).hide();
+                    },
+                    error: function (xhr) {
+                        const errorMessage = xhr.responseJSON?.message || 'Error al actualizar la disposición.';
+                        showMessage(errorMessage, 'danger');
+                    }
+                });
+            });
+
+            function showMessage(message, type) {
+                const messageContainer = $('#message-container');
+                const messageElement = $('#message');
+
+                messageElement.text(message).removeClass().addClass(`alert alert-${type}`);
+                messageContainer.show();
+
+                setTimeout(() => {
+                    messageContainer.fadeOut();
+                }, 5000);
+            }
+        });
+    </script>
 </body>
 </html>

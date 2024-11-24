@@ -214,12 +214,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(response => response.json())
                 .then(data => {
                     if (data.message === 'Químicos guardados exitosamente') {
-                        alert('Químicos guardados exitosamente');
+                        alert('Auditoria Guardada');
                         location.reload();
                     }
                 })
                 .catch(error => {
-                    console.error('Error al guardar los químicos:', error);
+                    console.error('Error al guardar la Auditoria', error);
                 });
         });
     });
@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.message === 'Químicos guardados exitosamente') {
-                    alert('Químicos guardados exitosamente');
+                    alert('Auditoria Guardada');
                     location.reload();
                 }
             })

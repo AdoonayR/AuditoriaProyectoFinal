@@ -8,10 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Titulo</title>
 
-    <!-- Estilos de DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
 
-    <!-- Estilos personalizados -->
+
     <link rel="stylesheet" href="~/css/disposicion.css">
     <link rel="stylesheet" href="~/css/background.css">
 </head>
@@ -47,7 +46,8 @@
                     <th>Lote</th>
                     <th>Razón de Rechazo</th>
                     <th>Estado</th>
-                    <th>Fecha en la que se retiro del almacen</th>
+                    <th>Número de DMR</th>
+                    <th>Fecha en la que se retiró del almacén</th>
                 </tr>
             </thead>
             <tbody>
@@ -75,17 +75,16 @@
                                 }
                             }
                         </td>
-
                         <td>@disposicion.Estado</td>
+                        <td>@(string.IsNullOrWhiteSpace(disposicion.NoDmr) ? "No Registrado" : disposicion.NoDmr)</td>
                         <td>@disposicion.FechaActualizacion?.ToString("MM/dd/yyyy")</td>
                     </tr>
                 }
             </tbody>
-
-
-
         </table>
     </main>
+
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>

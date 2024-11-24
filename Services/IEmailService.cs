@@ -1,8 +1,5 @@
-﻿namespace AuditoriaQuimicos.Services
+﻿public interface IEmailService
 {
-    public interface IEmailService
-    {
-        void SendEmailToIncomingSupervisor();
-        void SendEmailToStorageSupervisor();
-    }
+    Task SendEmailToIncomingSupervisorAsync();
+    Task SendEmailToStorageSupervisorAsync(); // Cambiar a Task
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuditoriaQuimicos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241111062815_UpdateDisposicionModel")]
-    partial class UpdateDisposicionModel
+    [Migration("20241124035737_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,6 +88,9 @@ namespace AuditoriaQuimicos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("AuditDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Comentarios")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -95,8 +98,12 @@ namespace AuditoriaQuimicos.Migrations
                     b.Property<int>("Estado")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("FechaActualizacion")
+                    b.Property<DateTime?>("FechaActualizacion")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("NoDmr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("QuimicoId")
                         .HasColumnType("int");

@@ -39,20 +39,37 @@ namespace AuditoriaQuimicos.Controllers
 
             return View("IndexDisposicion", resultado);
         }
-
         [HttpPost]
-        public async Task<IActionResult> CompletarDisposicion(int id)
+        public async Task<IActionResult> CompletarDisposicion(int id, string dmrNumber)
         {
+            if (string.IsNullOrWhiteSpace(dmrNumber))
+            {
+                return BadRequest(new { message = "Debe ingresar un número de DMR válido." });
+            }
+
             var disposicion = await _context.Disposiciones.FirstOrDefaultAsync(d => d.Id == id);
-            if (disposicion == null) return NotFound();
+            if (disposicion == null)
+            {
+                return NotFound(new { message = "Disposición no encontrada." });
+            }
 
-            disposicion.Estado = EstadoDisposicion.FueraDelAlmacen;
-            disposicion.FechaActualizacion = DateTime.Now;
-            _context.Update(disposicion);
-            await _context.SaveChangesAsync();
+            try
+            {
+                disposicion.Estado = EstadoDisposicion.FueraDelAlmacen;
+                disposicion.FechaActualizacion = DateTime.Now;
+                disposicion.NoDmr = dmrNumber;
+                _context.Update(disposicion);
+                await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(IndexDisposicion), new { estado = EstadoDisposicion.FueraDelAlmacen });
+                return Ok(new { message = "Disposición actualizada correctamente." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Error al actualizar la disposición: {ex.Message}" });
+            }
         }
+
+
 
         [HttpPost]
         [Route("Disposicion/UpdateEstado")]

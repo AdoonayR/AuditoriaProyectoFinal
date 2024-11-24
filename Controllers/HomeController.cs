@@ -125,7 +125,7 @@ namespace AuditoriaQuimicos.Controllers
                 _context.SaveChanges();
 
                 // Enviar notificación al supervisor si es necesario
-                _emailService.SendEmailToIncomingSupervisor();
+                _emailService.SendEmailToIncomingSupervisorAsync();
 
                 return Ok(new { message = "Químicos guardados exitosamente" });
             }

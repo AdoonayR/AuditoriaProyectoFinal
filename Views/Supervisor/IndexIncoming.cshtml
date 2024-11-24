@@ -40,6 +40,8 @@
             <input type="text" id="search-date"> 
             <div class="search"></div>
         </div>
+     
+
     </header>
 
     <main>
@@ -62,7 +64,7 @@
                         <td>
                             @if (isApprovedIncoming)
                             {
-                                <span class="approved-incoming">Aprobado</span>
+                                <span class="approved-incoming">Revisado</span>
                             }
                             else
                             {
@@ -73,11 +75,11 @@
                             <a href="@Url.Action("Details", "Details", new { date = DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd") })" class="details-btn">Ver Detalles</a>
                             @if (!isApprovedIncoming)
                             {
-                                <button class="approve-btn" data-date="@DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd")" data-role="Incoming">Aprobar</button>
+                                <button class="approve-btn" data-date="@DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd")" data-role="Incoming">Revisar</button>
                             }
                             else
                             {
-                                <button class="approve-btn" disabled>Aprobado</button>
+                                <button class="approve-btn" disabled>Revisado</button>
                             }
                         </td>
                     </tr>

@@ -382,7 +382,7 @@ button[type="submit"] {
     margin-right: 10px;
     align-self: center;
 }
-/* Estilo general del form-row */
+
 .form-row {
     display: flex;
     align-items: center;
@@ -391,7 +391,7 @@ button[type="submit"] {
     margin: 20px 0;
 }
 
-/* Contenedor del área */
+
 .area-container,
 .auditor-container {
     flex: 1;
@@ -400,7 +400,7 @@ button[type="submit"] {
     gap: 8px;
 }
 
-    /* Estilo para el selector de área y el campo de auditor */
+
     .area-container select,
     .auditor-container input {
         width: 100%;
@@ -418,37 +418,37 @@ button[type="submit"] {
         cursor: not-allowed;
     }
 
-/* Etiquetas */
+
 label {
     font-size: 0.9rem;
     font-weight: bold;
     color: #333;
 }
 
-/* Contenedor para el ícono de Químicos por vencer */
+
 .icon-container {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 60px;
     height: 60px;
-    cursor: pointer; /* Cursor para indicar interactividad */
+    cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-    /* Animación al pasar el cursor */
+  
     .icon-container:hover {
         transform: translateY(-3px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-/* Imagen dentro del ícono */
+
 .icon-image {
     width: 40px;
     height: 40px;
 }
 
-/* Adaptación para pantallas pequeñas */
+
 @media (max-width: 768px) {
     .form-row {
         flex-direction: column;

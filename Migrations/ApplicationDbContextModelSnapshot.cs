@@ -98,8 +98,9 @@ namespace AuditoriaQuimicos.Migrations
                     b.Property<DateTime?>("FechaActualizacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("FechaVencimiento")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("NoDmr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("QuimicoId")
                         .HasColumnType("int");
