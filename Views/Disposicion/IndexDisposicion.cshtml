@@ -108,7 +108,7 @@
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#disposicionTable').DataTable({
+            const table = $('#disposicionTable').DataTable({
                 "language": {
                     "zeroRecords": "No se encontraron resultados",
                     "info": "_PAGE_ de _PAGES_",
@@ -123,12 +123,9 @@
                     }
                 }
             });
-            // Guardar el estado original del select para poder revertir si se cancela
-            $('.estado-select').each(function () {
-                $(this).data('original', $(this).val());
-            });
 
-            $('.estado-select').on('change', function () {
+   
+            $('#disposicionTable').on('change', '.estado-select', function () {
                 const selectedEstado = $(this).val();
                 const disposicionId = $(this).data('id');
                 const dmrInput = $(`#dmrNumber-${disposicionId}`);
@@ -143,7 +140,8 @@
                 }
             });
 
-            $('.dmr-submit').on('click', function () {
+            
+            $('#disposicionTable').on('click', '.dmr-submit', function () {
                 const disposicionId = $(this).data('id');
                 const dmrNumber = $(`#dmrNumber-${disposicionId}`).val();
 
@@ -158,8 +156,11 @@
                     data: { id: disposicionId, dmrNumber: dmrNumber },
                     success: function (response) {
                         showMessage(response.message, 'success');
-                        $(`#dmrNumber-${disposicionId}`).prop('disabled', true);
-                        $(`.dmr-submit[data-id="${disposicionId}"]`).hide();
+
+                     
+                        setTimeout(() => {
+                            location.reload(); 
+                        }, 2000); 
                     },
                     error: function (xhr) {
                         const errorMessage = xhr.responseJSON?.message || 'Error al actualizar la disposición.';
@@ -168,6 +169,7 @@
                 });
             });
 
+         
             function showMessage(message, type) {
                 const messageContainer = $('#message-container');
                 const messageElement = $('#message');
@@ -180,6 +182,7 @@
                 }, 5000);
             }
         });
+
     </script>
 </body>
 </html>

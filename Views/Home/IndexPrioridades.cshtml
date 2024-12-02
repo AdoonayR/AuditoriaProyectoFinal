@@ -6,8 +6,23 @@
     <title>Químicos Próximos a Vencer</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="~/css/prioridades.css">
+    <link rel="stylesheet" href="~/css/background.css">
 </head>
 <body>
+    <div class="area">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
     <header>
         <a href="javascript:history.back()" class="back-button">
             <img src="~/images/previous.png" alt="Regresar" />
@@ -22,23 +37,30 @@
                     <th>Químico</th>
                     <th>Lote</th>
                     <th>Fecha de Vencimiento</th>
-                    <th>Días Restantes</th>
+                    <th>Estatus</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var disposicion in Model)
                 {
+                    var diasRestantes = (disposicion.Quimico.Expiration.Date - DateTime.Now.Date).Days;
                     <tr>
                         <td>@disposicion.Quimico.PartNumber</td>
                         <td>@disposicion.Quimico.Lot</td>
                         <td>@disposicion.Quimico.Expiration.ToString("MM/dd/yyyy")</td>
                         <td>
-                            @((disposicion.Quimico.Expiration.Date - DateTime.Now.Date).Days) días
+                            @if (diasRestantes < 0)
+                            {
+                                <span style="color: red; font-weight: bold;">¡Urgente sacar!</span>
+                            }
+                            else
+                            {
+                                <text>@diasRestantes días</text>
+                            }
                         </td>
                     </tr>
                 }
             </tbody>
-
         </table>
     </main>
 
