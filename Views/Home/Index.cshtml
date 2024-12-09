@@ -26,21 +26,17 @@
             <li></li>
             <li></li>
             <li></li>
-            <li></li>
         </ul>
     </div>
 
     <header>
-       
-           <button id="logoutButton" class="logout-button">
-            <img src="~/images/log-out.png" alt="Cerrar Sesión" class="logout-icon"/> 
+        <button id="logoutButton" class="logout-button">
+            <img src="~/images/log-out.png" alt="Cerrar Sesión" class="logout-icon" />
         </button>
         <h1>Auditoría a Almacén</h1>
         <img src="~/images/AmphenolLogo.png" alt="Logo" class="header-logo" />
-        </div>
         <span id="currentDate" class="current-date"></span>
         <div class="form-row">
-       
             <div class="area-container">
                 <label for="area">Área:</label>
                 <select id="area" name="area" required>
@@ -50,429 +46,165 @@
                 </select>
             </div>
 
-    
             <div class="icon-container">
                 <a href="/Home/IndexPrioridades" class="icon-link">
                     <img src="~/images/alarm.png" alt="Químicos por vencer" class="icon-image" />
                 </a>
-
             </div>
-
 
             <div class="auditor-container">
                 <label for="auditor">Auditor:</label>
                 <input type="text" id="auditor" name="auditor" value="Nombre del Auditor" readonly>
             </div>
         </div>
-
     </header>
 
-    <div class="accordion">
-        <!-- Químico 1 -->
+    <div class="accordion" id="chemicalsContainer">
+        <!-- Químico inicial (sin IDs ni names fijos) -->
         <div class="section-status">
             <h2 class="chemical-header">
-                <span class="chemical-title">Químico 1</span>
-                <span class="chemical-comment" id="comment1" style="display: none;"></span>
+                <span class="chemical-title">Químico X</span>
+                <span class="chemical-comment" style="display: none;"></span>
             </h2>
             <div class="panel">
-               
-                <form id="auditForm1" class="audit-form">
+                <form class="audit-form">
                     <div class="form-group">
-                        <label for="partNumber1">Número de Parte</label>
-                        <input type="text" id="partNumber1" name="partNumber1" required>
+                        <label>Número de Parte</label>
+                        <input type="text" required>
                     </div>
                     <div class="form-group">
-                        <label for="expiration1">Caducidad (MM/DD/YYYY)</label>
-                        <input type="text" id="expiration1" name="expiration1" required class="flatpickr">
+                        <label>Caducidad (MM/DD/YYYY)</label>
+                        <input type="text" required class="flatpickr">
                     </div>
                     <div class="form-group">
-                        <label for="fifo1">FIFO seguido</label>
-                        <select id="fifo1" name="fifo1" required>
+                        <label>FIFO seguido</label>
+                        <select required>
                             <option value="">Seleccione una opción</option>
                             <option value="Sí">Sí</option>
                             <option value="No">No</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="qcSeal1">Sello de QC</label>
-                        <select id="qcSeal1" name="qcSeal1" required>
+                        <label>Sello de QC</label>
+                        <select required>
                             <option value="">Seleccione una opción</option>
                             <option value="Sí">Sí</option>
                             <option value="No">No</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="packaging1">Empaque</label>
-                        <select id="packaging1" name="packaging1" required>
+                        <label>Empaque</label>
+                        <select required>
                             <option value="">Seleccione una opción</option>
                             <option value="OK">OK</option>
                             <option value="Rechazado">Rechazado</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="lot1">Lote</label>
-                        <input type="text" id="lot1" name="lot1" required>
+                        <label>Lote</label>
+                        <input type="text" required>
                     </div>
                     <div class="form-group">
-                        <label for="mixed1">Mezclado</label>
-                        <select id="mixed1" name="mixed1" required>
+                        <label>Mezclado</label>
+                        <select required>
                             <option value="">Seleccione una opción</option>
                             <option value="Sí">Sí</option>
                             <option value="No">No</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="clean1">Limpieza</label>
-                        <select id="clean1" name="clean1" required>
+                        <label>Limpieza</label>
+                        <select required>
                             <option value="">Seleccione una opción</option>
                             <option value="Limpio">Limpio</option>
                             <option value="Sucio">Sucio</option>
                         </select>
                     </div>
-                    <button type="submit">Listo</button>
-                    <p class="result"></p>
-                </form>
-            </div>
-        </div>
-
-        @*   <!-- Químico 2 -->
-        <div class="section-status">
-            <h2 class="chemical-header">
-                <span class="chemical-title">Químico 2</span>
-                <span class="chemical-comment" id="comment2" style="display: none;"></span>
-            </h2>
-            <div class="panel">
-             
-                <form id="auditForm2" class="audit-form">
-                    <div class="form-group">
-                        <label for="partNumber2">Número de Parte</label>
-                        <input type="text" id="partNumber2" name="partNumber2" required>
+                    <div class="comments" style="display:none;">
+                        <textarea rows="4" cols="50" readonly></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="expiration2">Caducidad (MM/DD/YYYY)</label>
-                        <input type="text" id="expiration2" name="expiration2" required class="flatpickr">
-                    </div>
-                    <div class="form-group">
-                        <label for="fifo2">FIFO seguido</label>
-                        <select id="fifo2" name="fifo2" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="qcSeal2">Sello de QC</label>
-                        <select id="qcSeal2" name="qcSeal2" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="packaging2">Empaque</label>
-                        <select id="packaging2" name="packaging2" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="OK">OK</option>
-                            <option value="Rechazado">Rechazado</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="lot2">Lote</label>
-                        <input type="text" id="lot2" name="lot2" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="mixed2">Mezclado</label>
-                        <select id="mixed2" name="mixed2" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="clean2">Limpieza</label>
-                        <select id="clean2" name="clean2" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Limpio">Limpio</option>
-                            <option value="Sucio">Sucio</option>
-                        </select>
-                    </div>
-                    <button type="submit">Listo</button>
-                    <p class="result"></p>
-                </form>
-            </div>
-        </div>
-
-        <!-- Químico 3 -->
-        <div class="section-status">
-            <h2 class="chemical-header">
-                <span class="chemical-title">Químico 3</span>
-                <span class="chemical-comment" id="comment3" style="display: none;"></span>
-            </h2>
-            <div class="panel">
-           
-                <form id="auditForm3" class="audit-form">
-                    <div class="form-group">
-                        <label for="partNumber3">Número de Parte</label>
-                        <input type="text" id="partNumber3" name="partNumber3" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="expiration3">Caducidad (MM/DD/YYYY)</label>
-                        <input type="text" id="expiration3" name="expiration3" required class="flatpickr">
-                    </div>
-                    <div class="form-group">
-                        <label for="fifo3">FIFO seguido</label>
-                        <select id="fifo3" name="fifo3" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="qcSeal3">Sello de QC</label>
-                        <select id="qcSeal3" name="qcSeal3" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="packaging3">Empaque</label>
-                        <select id="packaging3" name="packaging3" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="OK">OK</option>
-                            <option value="Rechazado">Rechazado</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="lot3">Lote</label>
-                        <input type="text" id="lot3" name="lot3" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="mixed3">Mezclado</label>
-                        <select id="mixed3" name="mixed3" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="clean3">Limpieza</label>
-                        <select id="clean3" name="clean3" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Limpio">Limpio</option>
-                            <option value="Sucio">Sucio</option>
-                        </select>
-                    </div>
-                    <button type="submit">Listo</button>
+                    <button type="button" class="listo-button fancy-button">Listo</button>
                     <p class="result"></p>
                 </form>
             </div>
         </div>
     </div>
-    <div class="accordion">
-        <!-- Químico 4 -->
+
+    <div id="optionsContainer" style="margin-top:20px; text-align:center;"></div>
+
+    <!-- Template para nuevos químicos -->
+    <template id="chemicalTemplate">
         <div class="section-status">
             <h2 class="chemical-header">
-                <span class="chemical-title">Químico 4</span>
-                <span class="chemical-comment" id="comment4" style="display: none;"></span>
+                <span class="chemical-title">Químico X</span>
+                <span class="chemical-comment" style="display: none;"></span>
             </h2>
             <div class="panel">
-                <form id="auditForm4" class="audit-form">
+                <form class="audit-form">
                     <div class="form-group">
-                        <label for="partNumber4">Número de Parte</label>
-                        <input type="text" id="partNumber4" name="partNumber4" required>
+                        <label>Número de Parte</label>
+                        <input type="text" required>
                     </div>
                     <div class="form-group">
-                        <label for="expiration4">Caducidad (MM/DD/YYYY)</label>
-                        <input type="text" id="expiration4" name="expiration4" required class="flatpickr">
+                        <label>Caducidad (MM/DD/YYYY)</label>
+                        <input type="text" required class="flatpickr">
                     </div>
                     <div class="form-group">
-                        <label for="fifo4">FIFO seguido</label>
-                        <select id="fifo4" name="fifo4" required>
+                        <label>FIFO seguido</label>
+                        <select required>
                             <option value="">Seleccione una opción</option>
                             <option value="Sí">Sí</option>
                             <option value="No">No</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="qcSeal4">Sello de QC</label>
-                        <select id="qcSeal4" name="qcSeal4" required>
+                        <label>Sello de QC</label>
+                        <select required>
                             <option value="">Seleccione una opción</option>
                             <option value="Sí">Sí</option>
                             <option value="No">No</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="packaging4">Empaque</label>
-                        <select id="packaging4" name="packaging4" required>
+                        <label>Empaque</label>
+                        <select required>
                             <option value="">Seleccione una opción</option>
                             <option value="OK">OK</option>
                             <option value="Rechazado">Rechazado</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="lot4">Lote</label>
-                        <input type="text" id="lot4" name="lot4" required>
+                        <label>Lote</label>
+                        <input type="text" required>
                     </div>
                     <div class="form-group">
-                        <label for="mixed4">Mezclado</label>
-                        <select id="mixed4" name="mixed4" required>
+                        <label>Mezclado</label>
+                        <select required>
                             <option value="">Seleccione una opción</option>
                             <option value="Sí">Sí</option>
                             <option value="No">No</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="clean4">Limpieza</label>
-                        <select id="clean4" name="clean4" required>
+                        <label>Limpieza</label>
+                        <select required>
                             <option value="">Seleccione una opción</option>
                             <option value="Limpio">Limpio</option>
                             <option value="Sucio">Sucio</option>
                         </select>
                     </div>
-                    <button type="submit">Listo</button>
+                    <div class="comments" style="display:none;">
+                        <textarea rows="4" cols="50" readonly></textarea>
+                    </div>
+                    <button type="button" class="listo-button fancy-button">Listo</button>
                     <p class="result"></p>
                 </form>
             </div>
         </div>
-
-        <!-- Químico 5 -->
-        <div class="section-status">
-            <h2 class="chemical-header">
-                <span class="chemical-title">Químico 5</span>
-                <span class="chemical-comment" id="comment5" style="display: none;"></span>
-            </h2>
-            <div class="panel">
-                <form id="auditForm5" class="audit-form">
-                    <div class="form-group">
-                        <label for="partNumber5">Número de Parte</label>
-                        <input type="text" id="partNumber5" name="partNumber5" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="expiration5">Caducidad (MM/DD/YYYY)</label>
-                        <input type="text" id="expiration5" name="expiration5" required class="flatpickr">
-                    </div>
-                    <div class="form-group">
-                        <label for="fifo5">FIFO seguido</label>
-                        <select id="fifo5" name="fifo5" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="qcSeal5">Sello de QC</label>
-                        <select id="qcSeal5" name="qcSeal5" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="packaging5">Empaque</label>
-                        <select id="packaging5" name="packaging5" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="OK">OK</option>
-                            <option value="Rechazado">Rechazado</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="lot5">Lote</label>
-                        <input type="text" id="lot5" name="lot5" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="mixed5">Mezclado</label>
-                        <select id="mixed5" name="mixed5" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="clean5">Limpieza</label>
-                        <select id="clean5" name="clean5" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Limpio">Limpio</option>
-                            <option value="Sucio">Sucio</option>
-                        </select>
-                    </div>
-                    <button type="submit">Listo</button>
-                    <p class="result"></p>
-                </form>
-            </div>
-        </div>
-
-        <!-- Químico 6 -->
-        <div class="section-status">
-            <h2 class="chemical-header">
-                <span class="chemical-title">Químico 6</span>
-                <span class="chemical-comment" id="comment6" style="display: none;"></span>
-            </h2>
-            <div class="panel">
-                <form id="auditForm6" class="audit-form">
-                    <div class="form-group">
-                        <label for="partNumber6">Número de Parte</label>
-                        <input type="text" id="partNumber6" name="partNumber6" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="expiration6">Caducidad (MM/DD/YYYY)</label>
-                        <input type="text" id="expiration6" name="expiration6" required class="flatpickr">
-                    </div>
-                    <div class="form-group">
-                        <label for="fifo6">FIFO seguido</label>
-                        <select id="fifo6" name="fifo6" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="qcSeal6">Sello de QC</label>
-                        <select id="qcSeal6" name="qcSeal6" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="packaging6">Empaque</label>
-                        <select id="packaging6" name="packaging6" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="OK">OK</option>
-                            <option value="Rechazado">Rechazado</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="lot6">Lote</label>
-                        <input type="text" id="lot6" name="lot6" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="mixed6">Mezclado</label>
-                        <select id="mixed6" name="mixed6" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Sí">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="clean6">Limpieza</label>
-                        <select id="clean6" name="clean6" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Limpio">Limpio</option>
-                            <option value="Sucio">Sucio</option>
-                        </select>
-                    </div>
-                    <button type="submit">Listo</button>
-                    <p class="result"></p>
-                </form>
-            </div>
-        </div> *@
-    <button id="submitAll" style="display:none;">Enviar Todos</button> <!-- Botón para enviar todos los formularios, inicialmente oculto -->
- 
+    </template>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="~/js/script.js"></script>
     <script src="~/js/sesionkiller.js"></script>
-   
+    <script src="~/js/script.js"></script>
 </body>
 </html>
