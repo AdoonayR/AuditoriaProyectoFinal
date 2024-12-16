@@ -32,15 +32,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const form = newSection.querySelector('form.audit-form');
         form.id = 'auditForm' + chemicalCount;
 
-        // Obtenemos todos los inputs de texto menos los flatpickr para poder identificar partNumber y lot
+        // Obtenemos todos los inputs de texto menos el flatpickr
         const allTextInputs = newSection.querySelectorAll('input[type="text"]');
         const flatpickrInput = newSection.querySelector('input.flatpickr');
-        // Filtrar el flatpickr de los textInputs
         let textArr = Array.from(allTextInputs).filter(el => el !== flatpickrInput);
 
         const selects = newSection.querySelectorAll('select');
 
-        // Orden esperado:
+        // Orden:
         // textArr[0] = partNumber
         // flatpickrInput = expiration
         // selects[0] = fifo
@@ -97,10 +96,68 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function bindBorrarButtons() {
+        const borrarButtons = document.querySelectorAll('.borrar-button');
+        borrarButtons.forEach(button => {
+            button.removeEventListener('click', borrarClickHandler);
+            button.addEventListener('click', borrarClickHandler);
+        });
+    }
+
     function listoClickHandler(e) {
         e.preventDefault();
         e.stopPropagation();
         handleListoClick(e.target);
+    }
+
+    function borrarClickHandler(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        handleBorrarClick(e.target);
+    }
+
+    function handleBorrarClick(button) {
+        const sectionStatus = button.closest('.section-status');
+        if (!sectionStatus) return;
+
+        const form = sectionStatus.querySelector('form.audit-form');
+        const formId = form.id;
+        const formNumber = formId.replace('auditForm', '');
+
+        // Evitar borrar el primer químico
+        if (formNumber === '1') {
+            alert('No se puede eliminar el primer químico.');
+            return;
+        }
+
+        sectionStatus.remove();
+
+        // Después de borrar, checar si hay químicos procesados.
+        restoreNextOrFinishIfPossible();
+    }
+
+    function restoreNextOrFinishIfPossible() {
+        const processedChemicals = document.querySelectorAll('.section-status.accepted, .section-status.rejected, .section-status.expiring-soon');
+        const optionsContainer = document.getElementById('optionsContainer');
+        optionsContainer.innerHTML = '';
+
+        if (processedChemicals.length > 0) {
+            // Mostrar nuevamente las opciones de Siguiente y Terminar Auditoría
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = 'Siguiente Químico';
+            nextBtn.style.marginRight = '10px';
+            nextBtn.addEventListener('click', addNewChemical);
+
+            const finishBtn = document.createElement('button');
+            finishBtn.textContent = 'Terminar Auditoría';
+            finishBtn.addEventListener('click', finishAuditoria);
+
+            optionsContainer.appendChild(nextBtn);
+            optionsContainer.appendChild(finishBtn);
+        } else {
+            // Si no hay ninguno procesado, no mostrar nada
+            // Esto es el estado inicial antes de procesar el primer químico
+        }
     }
 
     function handleListoClick(button) {
@@ -307,6 +364,7 @@ document.addEventListener('DOMContentLoaded', function () {
         optionsContainer.innerHTML = '';
 
         bindListoButtons();
+        bindBorrarButtons();
     }
 
     function finishAuditoria() {
@@ -365,6 +423,7 @@ document.addEventListener('DOMContentLoaded', function () {
     assignIDs(initialSection);
 
     bindListoButtons();
+    bindBorrarButtons();
 
     const initialHeader = initialSection.querySelector('h2.chemical-header');
     if (initialHeader) {

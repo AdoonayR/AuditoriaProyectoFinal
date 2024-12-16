@@ -1,11 +1,11 @@
-﻿
-body {
+﻿body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f9;
     color: #333;
     margin: 0;
     padding: 20px;
-    position: relative; 
+    position: relative;
+}
 
 header {
     text-align: center;
@@ -18,9 +18,8 @@ header {
         margin: 0;
     }
 
-
 .back-button {
-    position: fixed; 
+    position: fixed;
     top: 10px;
     left: 10px;
     width: 40px;
@@ -33,7 +32,7 @@ header {
     background: none;
     border: none;
     cursor: pointer;
-    z-index: 1000; 
+    z-index: 1000;
 }
 
     .back-button img {
@@ -44,8 +43,11 @@ header {
 .table {
     width: 90%;
     border-collapse: collapse;
-    margin: 0 auto;
+    margin: 0 auto 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
     .table th, .table td {
@@ -70,7 +72,20 @@ header {
     .table tr:hover {
         background-color: #e0e0e0;
     }
+
     .table td:last-child {
         font-weight: bold;
-        color: #e74c3c;
     }
+
+.row-expired {
+    background-color: #ffe6e6; /* Suave tono rojizo */
+}
+
+.expired-badge {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    display: inline-block;
+}

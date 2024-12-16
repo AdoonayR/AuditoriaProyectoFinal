@@ -44,27 +44,34 @@
                 @foreach (var disposicion in Model)
                 {
                     var diasRestantes = (disposicion.Quimico.Expiration.Date - DateTime.Now.Date).Days;
-                    <tr>
-                        <td>@disposicion.Quimico.PartNumber</td>
-                        <td>@disposicion.Quimico.Lot</td>
-                        <td>@disposicion.Quimico.Expiration.ToString("MM/dd/yyyy")</td>
-                        <td>
-                            @if (diasRestantes < 0)
-                            {
-                                <span style="color: red; font-weight: bold;">¡Urgente sacar!</span>
-                            }
-                            else
-                            {
-                                <text>@diasRestantes días</text>
-                            }
-                        </td>
-                    </tr>
+
+                    if (diasRestantes < 0)
+                    {
+                        <!-- Químico caducado -->
+                        <tr class="row-expired">
+                            <td>@disposicion.Quimico.PartNumber</td>
+                            <td>@disposicion.Quimico.Lot</td>
+                            <td>@disposicion.Quimico.Expiration.ToString("MM/dd/yyyy")</td>
+                            <td><span class="expired-badge">Caducado - Retirar de Inventario</span></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <!-- Químico próximo a vencer con días restantes -->
+                        <tr>
+                            <td>@disposicion.Quimico.PartNumber</td>
+                            <td>@disposicion.Quimico.Lot</td>
+                            <td>@disposicion.Quimico.Expiration.ToString("MM/dd/yyyy")</td>
+                            <td>@diasRestantes días Restantes</td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
