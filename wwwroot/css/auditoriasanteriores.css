@@ -98,9 +98,7 @@ main {
         background-color: #f9f9f9;
     }
 
-    .audit-table tr:hover {
-        background-color: #e0e0e0;
-    }
+    
 
 .details-btn {
     padding: 8px 12px;
