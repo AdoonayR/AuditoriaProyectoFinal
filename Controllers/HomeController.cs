@@ -34,6 +34,24 @@ namespace AuditoriaQuimicos.Controllers
         }
 
         [HttpGet]
+        public IActionResult AuditoriasAnteriores()
+        {
+            // Ejemplo: agrupar por la fecha de auditoría (suponiendo que Quimico.AuditDate no es nulo)
+            var queryAgrupada = _context.Quimicos
+                .Where(q => q.AuditDate.HasValue)
+                .GroupBy(q => q.AuditDate.Value.Date)
+                .Select(g => new QuimicoAgrupadoViewModel
+                {
+                    AuditDate = g.Key,
+                    Quimicos = g.ToList()
+                })
+                .ToList();
+
+            return View(queryAgrupada);
+            // queryAgrupada es List<QuimicoAgrupadoViewModel>
+        }
+
+        [HttpGet]
         public IActionResult IndexPrioridades()
         {
             try

@@ -1,0 +1,77 @@
+﻿@model IEnumerable<AuditoriaQuimicos.Models.QuimicoAgrupadoViewModel>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Auditorías Anteriores</title>
+
+    <!-- Hojas de estilo -->
+    <link rel="stylesheet" href="~/css/auditoriasanteriores.css">
+    <link rel="stylesheet" href="~/css/background.css">
+    <link rel="stylesheet" href="~/css/navbar.css">
+</head>
+<body>
+    <!-- Fondo decorativo de círculos -->
+    <div class="area">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <!-- Contenedor principal que centra el contenido -->
+    <div class="page-container">
+
+        <!-- Encabezado -->
+        <header class="main-header">
+            <a href="javascript:history.back()" class="back-button">
+                <img src="~/images/previous.png" alt="Regresar" />
+            </a>
+            <h1 class="header-title">Auditorías Anteriores</h1>
+        </header>
+
+        <!-- Sección principal con la tabla -->
+        <main>
+            <div class="table-container">
+                <table class="audit-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha de Auditoría</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var group in Model)
+                        {
+                            string auditDateString = group.AuditDate.ToString("MM-dd-yyyy");
+                            <tr>
+                                <td>@auditDateString</td>
+                                <td class="action-cell">
+                                    <a href="@Url.Action("Details", "Details", new { date = group.AuditDate.ToString("yyyy-MM-dd") })"
+                                       class="details-btn">
+                                        Ver Detalles
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+    </div> <!-- Cierre de .page-container -->
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="~/js/supervisor.js"></script>
+    <script src="~/js/sesionkiller.js"></script>
+</body>
+</html>

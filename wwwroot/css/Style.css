@@ -458,3 +458,34 @@ label {
 .borrar-button {
     background-color: #f44;
 }
+
+.blink {
+    animation: blink-border 1s infinite alternate;
+}
+
+@keyframes blink-border {
+    from {
+        border: 2px dashed #0052D4; /* Amarillo */
+    }
+
+    to {
+        border: 2px dashed #6FB1FC ; /* Rojo */
+    }
+}
+
+/* ===== Bloque de instrucciones iniciales ===== */
+.instrucciones-iniciales {
+    margin: 20px auto;
+    max-width: 600px;
+    background-color: #fffae6;
+    border: 2px solid #007bff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+    .instrucciones-iniciales p {
+        margin: 10px 0;
+        font-weight: bold;
+        color: #333;
+    }

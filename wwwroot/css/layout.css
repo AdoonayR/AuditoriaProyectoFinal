@@ -1,0 +1,35 @@
+﻿/* layout.css
+   Aquí colocas estilos específicos para tu Layout,
+   de forma que no afectes demasiado otras vistas.
+*/
+
+/* ===== Estilo general para la barra de navegación ===== */
+.custom-navbar {
+    background-color: #F5F5F5; /* Un gris claro */
+    /* Puedes agregar algún gradiente sutil:
+       background: linear-gradient(to right, #ffffff, #f0f0f0);
+    */
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+    /* Cambiar color y comportamiento de los enlaces dentro del navbar */
+    .custom-navbar .nav-link {
+        color: #333 !important;
+        font-weight: 600; /* un poco más grueso para destacar */
+    }
+
+        .custom-navbar .nav-link:hover {
+            color: #007bff !important; /* color de Bootstrap "primary" */
+            text-decoration: underline;
+        }
+
+/* ===== Ajuste de estilos en el footer ===== */
+.custom-footer {
+    background-color: #fafafa; /* gris muy clarito */
+    padding: 15px 0;
+}
+
+    .custom-footer div {
+        color: #666;
+        font-size: 0.9rem;
+    }

@@ -1,0 +1,144 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    position: relative;
+}
+
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    width: 100%;
+    position: relative;
+}
+
+.header-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #292828;
+    font-weight: 600;
+    margin: 0;
+}
+
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+    .back-button img {
+        width: 100%;
+        height: auto;
+    }
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.audit-table {
+    border-collapse: collapse;
+    margin: 0 auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 600px;
+}
+
+    .audit-table thead tr {
+        background-color: #292828;
+    }
+
+    .audit-table th,
+    .audit-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+        font-size: 1rem;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .audit-table th {
+        color: #fff;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .audit-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .audit-table tr:hover {
+        background-color: #e0e0e0;
+    }
+
+.details-btn {
+    padding: 8px 12px;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+    background-color: #333;
+}
+
+    .details-btn:hover {
+        background-color: #555;
+        transform: translateY(-3px);
+    }
+
+@media (max-width: 768px) {
+    .header-title {
+        font-size: 1.8rem;
+    }
+
+    .back-button {
+        left: 10px;
+        top: 10px;
+    }
+
+    .back-button-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .audit-table {
+        max-width: 95%;
+    }
+}

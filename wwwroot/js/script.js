@@ -3,12 +3,14 @@
 document.addEventListener('DOMContentLoaded', function () {
     let chemicalCount = 0;
 
+    // Mostrar la fecha actual en #currentDate
     const currentDate = new Date();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
     const year = currentDate.getFullYear();
     document.getElementById('currentDate').textContent = `${month}/${day}/${year}`;
 
+    // Obtener nombre del auditor (si tu API lo provee)
     fetch('/api/api/getAuditorName')
         .then(r => r.json())
         .then(data => {
@@ -17,29 +19,28 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+    // Inicializa flatpickr en todos los elementos que lo requieran
     function initializeFlatpickr(container) {
         const dateInputs = container.querySelectorAll('.flatpickr');
         dateInputs.forEach(input => {
             flatpickr(input, {
                 dateFormat: "m/d/Y",
-                allowInput: false // Deshabilita ingreso manual, solo seleccionar en calendario
+                allowInput: false // Deshabilita ingreso manual
             });
         });
     }
 
+    // Asigna IDs únicos a cada nuevo químico y ajusta nombres de campos
     function assignIDs(newSection) {
         chemicalCount++;
         const form = newSection.querySelector('form.audit-form');
         form.id = 'auditForm' + chemicalCount;
 
-        // Obtenemos todos los inputs de texto menos el flatpickr
         const allTextInputs = newSection.querySelectorAll('input[type="text"]');
         const flatpickrInput = newSection.querySelector('input.flatpickr');
         let textArr = Array.from(allTextInputs).filter(el => el !== flatpickrInput);
-
         const selects = newSection.querySelectorAll('select');
 
-        // Orden:
         // textArr[0] = partNumber
         // flatpickrInput = expiration
         // selects[0] = fifo
@@ -80,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
         commentSpan.id = 'comment' + chemicalCount;
     }
 
+    // Acordeón para expandir/colapsar cada químico
     function addAccordionBehavior(header) {
         header.addEventListener("click", function () {
             this.classList.toggle("active");
@@ -88,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Enlaza los botones Listo
     function bindListoButtons() {
         const listoButtons = document.querySelectorAll('.listo-button');
         listoButtons.forEach(button => {
@@ -96,6 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Enlaza los botones Borrar
     function bindBorrarButtons() {
         const borrarButtons = document.querySelectorAll('.borrar-button');
         borrarButtons.forEach(button => {
@@ -104,18 +108,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Controlador para el clic en "Listo"
     function listoClickHandler(e) {
         e.preventDefault();
         e.stopPropagation();
         handleListoClick(e.target);
     }
 
+    // Controlador para el clic en "Borrar"
     function borrarClickHandler(e) {
         e.preventDefault();
         e.stopPropagation();
         handleBorrarClick(e.target);
     }
 
+    // Manejo del botón "Borrar Químico"
     function handleBorrarClick(button) {
         const sectionStatus = button.closest('.section-status');
         if (!sectionStatus) return;
@@ -131,18 +138,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         sectionStatus.remove();
-
-        // Después de borrar, checar si hay químicos procesados.
         restoreNextOrFinishIfPossible();
     }
 
+    // Determina si se muestran los botones "Siguiente Químico" y "Terminar Auditoría"
     function restoreNextOrFinishIfPossible() {
         const processedChemicals = document.querySelectorAll('.section-status.accepted, .section-status.rejected, .section-status.expiring-soon');
         const optionsContainer = document.getElementById('optionsContainer');
         optionsContainer.innerHTML = '';
 
         if (processedChemicals.length > 0) {
-            // Mostrar nuevamente las opciones de Siguiente y Terminar Auditoría
+            // Ya hay algún químico procesado => mostrar opciones
             const nextBtn = document.createElement('button');
             nextBtn.textContent = 'Siguiente Químico';
             nextBtn.style.marginRight = '10px';
@@ -154,12 +160,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             optionsContainer.appendChild(nextBtn);
             optionsContainer.appendChild(finishBtn);
-        } else {
-            // Si no hay ninguno procesado, no mostrar nada
-            // Esto es el estado inicial antes de procesar el primer químico
         }
     }
 
+    // Procesa la información del formulario al dar "Listo"
     function handleListoClick(button) {
         const form = button.closest('form');
         if (!form.checkValidity()) {
@@ -186,6 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let commentsText = '';
         let resultValue = '';
 
+        // Validación de fechas
         const [monthStr, dayStr, yearStr] = expiration.split('/');
         const expMonth = parseInt(monthStr, 10);
         const expDay = parseInt(dayStr, 10);
@@ -199,6 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const daysUntilExpiration = Math.ceil(diffMs / msInOneDay);
 
         if (diffMs < 0) {
+            // Está caducado
             isValid = false;
             const daysExpired = Math.abs(Math.floor((now - expirationDate) / msInOneDay));
             commentsText += `Químico caducado hace: ${daysExpired} días.\n`;
@@ -212,6 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        // Otras validaciones
         if (packaging !== 'OK') {
             isValid = false;
             commentsText += 'Empaque en mal estado.\n';
@@ -233,9 +240,11 @@ document.addEventListener('DOMContentLoaded', function () {
             commentsText += 'Limpieza del químico en mal estado.\n';
         }
 
+        // Determina el resultado final
         resultValue = resultValue || (isValid ? 'Aceptado' : 'Rechazado');
         const result = form.querySelector('.result');
 
+        // Aplica clases y estilos según el resultado
         if (isValid) {
             if (resultValue === 'Próximo a vencer') {
                 result.textContent = 'Próximo a vencer';
@@ -263,12 +272,14 @@ document.addEventListener('DOMContentLoaded', function () {
             sectionStatus.classList.remove('accepted', 'expiring-soon');
             header.classList.add('rejected');
             header.classList.remove('accepted', 'expiring-soon');
+
             if (commentsTextarea) {
                 commentsTextarea.style.display = 'block';
                 commentsTextarea.value = commentsText;
             }
         }
 
+        // Ajuste para mostrar en el encabezado
         let titleContainer = header.querySelector('.info-container');
         if (!titleContainer) {
             titleContainer = document.createElement('div');
@@ -282,6 +293,7 @@ document.addEventListener('DOMContentLoaded', function () {
             infoRight.classList.add('info-right');
             titleContainer.appendChild(infoRight);
 
+            // Limpia el header para reubicar los elementos
             while (header.firstChild) {
                 header.removeChild(header.firstChild);
             }
@@ -292,6 +304,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const infoLeft = infoContainer.querySelector('.info-left');
         const infoRight = infoContainer.querySelector('.info-right');
 
+        // Nombre del químico (partNumber)
         let existingTitle = infoLeft.querySelector('.chemical-title');
         if (!existingTitle) {
             existingTitle = document.createElement('span');
@@ -301,6 +314,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         existingTitle.textContent = partNumber;
 
+        // Lote
         let existingLot = infoLeft.querySelector('.chemical-lot');
         if (!existingLot) {
             existingLot = document.createElement('span');
@@ -312,6 +326,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         existingLot.textContent = lot;
 
+        // Comentarios
         let commentElement = infoRight.querySelector('.chemical-comment');
         if (!commentElement) {
             commentElement = document.createElement('span');
@@ -322,15 +337,21 @@ document.addEventListener('DOMContentLoaded', function () {
         commentElement.innerHTML = commentsText ? commentsText.replace(/\n/g, '<br>') : '';
         commentElement.style.display = commentsText ? 'block' : 'none';
 
+        // Colapsa el panel
         const panel = header.nextElementSibling;
         if (panel) {
             panel.style.display = "none";
             header.classList.remove('active');
         }
 
+        // Quita el parpadeo después de procesar el primer químico
+        sectionStatus.classList.remove('blink');
+
+        // Muestra botones (Siguiente/Terminar)
         showNextOrFinishOptions();
     }
 
+    // Muestra botones "Siguiente Químico" y "Terminar Auditoría"
     function showNextOrFinishOptions() {
         const optionsContainer = document.getElementById('optionsContainer');
         optionsContainer.innerHTML = '';
@@ -348,6 +369,7 @@ document.addEventListener('DOMContentLoaded', function () {
         optionsContainer.appendChild(finishBtn);
     }
 
+    // Agrega un nuevo químico utilizando el template
     function addNewChemical() {
         const template = document.getElementById('chemicalTemplate');
         const clone = template.content.cloneNode(true);
@@ -367,6 +389,7 @@ document.addEventListener('DOMContentLoaded', function () {
         bindBorrarButtons();
     }
 
+    // Envía la auditoría (POST) y recarga la página
     function finishAuditoria() {
         const almacen = document.getElementById('area').value;
         if (!almacen) {
@@ -418,18 +441,24 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Asignar IDs al primer químico ya presente
+    // ===== Lógica de inicio =====
+    // Asigna IDs al primer químico (ya presente en la vista)
     const initialSection = document.querySelector('.section-status');
     assignIDs(initialSection);
 
+    // Aplica la clase blink para que parpadee el primer químico
+    initialSection.classList.add('blink');
+
+    // Enlaza botones en el primer formulario
     bindListoButtons();
     bindBorrarButtons();
 
+    // Acordeón en el primer químico
     const initialHeader = initialSection.querySelector('h2.chemical-header');
     if (initialHeader) {
         addAccordionBehavior(initialHeader);
     }
 
-    // Inicializar flatpickr en el químico inicial también
+    // Inicializa flatpickr en el primer químico
     initializeFlatpickr(document);
 });

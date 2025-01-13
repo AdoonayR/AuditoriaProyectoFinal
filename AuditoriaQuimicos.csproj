@@ -13,6 +13,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Home\DashboardIncoming.cshtml" />
     <_ContentIncludedByDefault Remove="wwwroot\css\animation.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\layout.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\prioridades.css" />
   </ItemGroup>
 

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Auditoría Mensual de Químicos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!DOCTYPE html>
@@ -10,11 +11,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
+    <!-- Estilos de Flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Tus archivos CSS -->
     <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/background.css">
 </head>
 <body>
+    <!-- Fondo decorativo (si lo usas) -->
     <div class="area">
         <ul class="circles">
             <li></li>
@@ -36,6 +41,7 @@
         <h1>Auditoría a Almacén</h1>
         <img src="~/images/AmphenolLogo.png" alt="Logo" class="header-logo" />
         <span id="currentDate" class="current-date"></span>
+
         <div class="form-row">
             <div class="area-container">
                 <label for="area">Área:</label>
@@ -46,11 +52,7 @@
                 </select>
             </div>
 
-            <div class="icon-container">
-                <a href="/Home/IndexPrioridades" class="icon-link">
-                    <img src="~/images/alarm.png" alt="Químicos por vencer" class="icon-image" />
-                </a>
-            </div>
+            <!-- Se ha quitado el icon-container que enlazaba a Prioridades -->
 
             <div class="auditor-container">
                 <label for="auditor">Auditor:</label>
@@ -58,6 +60,12 @@
             </div>
         </div>
     </header>
+
+    <!-- Mensaje de instrucciones iniciales -->
+    <div class="instrucciones-iniciales">
+        <p>Para comenzar, llena la información del <strong>primer químico</strong> y presiona el botón <strong>"Listo"</strong>.</p>
+        <p>Una vez finalices cada químico, podrás <strong>agregar otro</strong> o <strong>terminar la auditoría</strong>.</p>
+    </div>
 
     <div class="accordion" id="chemicalsContainer">
         <!-- Químico inicial -->
@@ -128,7 +136,6 @@
                         <button type="button" class="borrar-button fancy-button">Borrar Químico</button>
                     </div>
                     <p class="result"></p>
-
                 </form>
             </div>
         </div>
@@ -205,14 +212,18 @@
                         <button type="button" class="borrar-button fancy-button">Borrar Químico</button>
                     </div>
                     <p class="result"></p>
-
                 </form>
             </div>
         </div>
     </template>
 
+    <!-- Scripts de terceros -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <!-- Script de cierre de sesión (si lo requieres) -->
     <script src="~/js/sesionkiller.js"></script>
+
+    <!-- Tu script principal con la lógica de auditoría -->
     <script src="~/js/script.js"></script>
 </body>
 </html>
