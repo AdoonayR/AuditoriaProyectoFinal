@@ -31,7 +31,7 @@
                 </button>
             </div>
             <div class="title-wrapper">
-                <h1 class="header-title">Auditoría Mensual de Químicos - Aprobación Incoming</h1>
+                <h1 class="header-title">Auditoría Mensual de Químicos - Firma Electronica Incoming</h1>
             </div>
         </div>
 
@@ -49,7 +49,7 @@
             <thead>
                 <tr>
                     <th>Fecha de Auditoría</th>
-                    <th>Estado de Aprobación Incoming</th>
+                    <th>Estado de Firmas Electronicas Incoming</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -64,7 +64,7 @@
                         <td>
                             @if (isApprovedIncoming)
                             {
-                                <span class="approved-incoming">Revisado</span>
+                                <span class="approved-incoming">Firmado</span>
                             }
                             else
                             {
@@ -75,11 +75,11 @@
                             <a href="@Url.Action("Details", "Details", new { date = DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd") })" class="details-btn">Ver Detalles</a>
                             @if (!isApprovedIncoming)
                             {
-                                <button class="approve-btn" data-date="@DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd")" data-role="Incoming">Revisar</button>
+                                <button class="approve-btn" data-date="@DateTime.Parse(group.AuditDate.ToString()).ToString("yyyy-MM-dd")" data-role="Incoming">Firmar</button>
                             }
                             else
                             {
-                                <button class="approve-btn" disabled>Revisado</button>
+                                <button class="approve-btn" disabled>Firmado</button>
                             }
                         </td>
                     </tr>

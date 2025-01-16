@@ -16,7 +16,7 @@
             }
 
             // Mostrar un mensaje de confirmación al usuario antes de proceder
-            const userConfirmed = confirm(`¿Estas seguro de que quieres marcar como revisado la auditoria con fecha ${date}?`);
+            const userConfirmed = confirm(`Firmaras la auditoria realizada con fecha ${date} ¿Estas de acuerdo?`);
             if (!userConfirmed) {
                 return; // El usuario canceló, no hacemos nada
             }
