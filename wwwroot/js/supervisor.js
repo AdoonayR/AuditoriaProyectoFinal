@@ -15,12 +15,23 @@
                 return;
             }
 
-            // Mostrar un mensaje de confirmación al usuario antes de proceder
-            const userConfirmed = confirm(`¿Estas seguro de que quieres marcar como revisado la auditoria con fecha ${date}?`);
-            if (!userConfirmed) {
-                return; // El usuario canceló, no hacemos nada
-            }
+            // Obtén la fecha actual 
+            const currentDate = new Date();
 
+            // Extrae mes, día y año 
+            const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+            const day = String(currentDate.getDate()).padStart(2, '0');
+            const year = currentDate.getFullYear();
+
+            // Construye el string en formato mm-dd-yyyy
+            const formattedDate = `${month}-${day}-${year}`;
+
+            // Muestra confirm con la fecha formateada
+            const userConfirmed = confirm(`Firmarás la auditoría con fecha ${formattedDate}, ¿estás de acuerdo?`);
+
+            if (!userConfirmed) {
+                return; 
+            }
             // Realizar la solicitud de aprobación al servidor usando Axios
             axios.post("/Supervisor/Approve", { date: date }, { params: { role: role } })
                 .then(response => {

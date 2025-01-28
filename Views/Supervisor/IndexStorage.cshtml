@@ -30,7 +30,7 @@
         <button id="logoutButton" class="logout-button">
             <img src="~/images/log-out.png" alt="Cerrar Sesión" class="logout-icon" />
         </button>
-        <h1 class="header-title">Auditoría Mensual de Químicos - Aprobación Almacén</h1>
+        <h1 class="header-title">Auditoría Mensual de Químicos - Firma Electronica Almacén</h1>
 
         <nav class="button-container">
             <a href="@Url.Action("IndexDisposicion", "Disposicion")" class="button">
@@ -67,7 +67,7 @@
 
                                 @if (isApprovedIncoming && !isApprovedStorage)
                                 {
-                                    <button class="approve-btn" data-date="@group.AuditDate.ToString("yyyy-MM-dd")" data-role="Storage">Revisar</button>
+                                    <button class="approve-btn" data-date="@group.AuditDate.ToString("yyyy-MM-dd")" data-role="Storage">Firmar</button>
                                 }
                                 else if (!isApprovedIncoming)
                                 {
@@ -75,7 +75,7 @@
                                 }
                                 else
                                 {
-                                    <button class="approve-btn" disabled>Revisado</button>
+                                    <button class="approve-btn" disabled>Firmado</button>
                                 }
                             </td>
                         </tr>

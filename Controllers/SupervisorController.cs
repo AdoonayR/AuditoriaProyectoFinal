@@ -129,7 +129,7 @@ namespace AuditoriaQuimicos.Controllers
                 }
             }
 
-            return Json(new { message = $"Auditoria revisada correctamente por {role}" });
+            return Json(new { message = $"Auditoria firmada correctamente por {role}" });
         }
 
 

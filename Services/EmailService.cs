@@ -54,7 +54,7 @@ namespace AuditoriaQuimicos.Services
                 message.Subject = "Auditoría pendiente de revisión (Storage)";
                 message.Body = new TextPart("plain")
                 {
-                    Text = "Hay una auditoría pendiente de revisión para el supervisor de Storage. Por favor, revise los detalles en el sistema."
+                    Text = "Hay una auditoría pendiente de revisión para el supervisor de Almacen. Por favor, revise los detalles en el sistema."
                 };
 
                 using var smtpClient = new MailKit.Net.Smtp.SmtpClient();

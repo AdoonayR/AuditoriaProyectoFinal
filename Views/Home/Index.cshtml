@@ -11,15 +11,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
-    <!-- Estilos de Flatpickr -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
-    <!-- Tus archivos CSS -->
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
     <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/background.css">
 </head>
 <body>
-    <!-- Fondo decorativo (si lo usas) -->
+  
     <div class="area">
         <ul class="circles">
             <li></li>
@@ -35,9 +32,7 @@
     </div>
 
     <header>
-        <button id="logoutButton" class="logout-button">
-            <img src="~/images/log-out.png" alt="Cerrar Sesión" class="logout-icon" />
-        </button>
+     
         <h1>Auditoría a Almacén</h1>
         <img src="~/images/AmphenolLogo.png" alt="Logo" class="header-logo" />
         <span id="currentDate" class="current-date"></span>
@@ -52,7 +47,6 @@
                 </select>
             </div>
 
-            <!-- Se ha quitado el icon-container que enlazaba a Prioridades -->
 
             <div class="auditor-container">
                 <label for="auditor">Auditor:</label>
@@ -217,13 +211,13 @@
         </div>
     </template>
 
-    <!-- Scripts de terceros -->
+ 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    <!-- Script de cierre de sesión (si lo requieres) -->
+   
     <script src="~/js/sesionkiller.js"></script>
 
-    <!-- Tu script principal con la lógica de auditoría -->
+  
     <script src="~/js/script.js"></script>
 </body>
 </html>
