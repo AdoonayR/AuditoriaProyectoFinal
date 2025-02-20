@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+﻿$(function () {
     const table = $('#disposicionTable').DataTable({
         "language": {
             "zeroRecords": "No tienes ningún químico pendiente de disposición",

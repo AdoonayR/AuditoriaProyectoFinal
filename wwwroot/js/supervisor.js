@@ -3,7 +3,7 @@
     document.querySelectorAll(".approve-btn").forEach(button => {
         button.addEventListener("click", function () {
             // Obtener la fecha y el rol del botón presionado
-            const date = this.getAttribute("data-date");  // Ahora el valor ya está en formato yyyy-MM-dd
+            const date = this.getAttribute("data-date");  // Valor en formato yyyy-MM-dd
             const role = this.getAttribute("data-role");
 
             console.log(`Fecha seleccionada (enviada al servidor): ${date}`);
@@ -15,51 +15,52 @@
                 return;
             }
 
-            // Obtén la fecha actual 
+            // Obtener la fecha actual 
             const currentDate = new Date();
 
-            // Extrae mes, día y año 
+            // Extraer mes, día y año 
             const month = String(currentDate.getMonth() + 1).padStart(2, '0');
             const day = String(currentDate.getDate()).padStart(2, '0');
             const year = currentDate.getFullYear();
 
-            // Construye el string en formato mm-dd-yyyy
+            // Construir string en formato mm-dd-yyyy
             const formattedDate = `${month}-${day}-${year}`;
 
-            // Muestra confirm con la fecha formateada
+            // Confirmar con la fecha formateada
             const userConfirmed = confirm(`Firmarás la auditoría con fecha ${formattedDate}, ¿estás de acuerdo?`);
 
             if (!userConfirmed) {
                 return; 
             }
+
             // Realizar la solicitud de aprobación al servidor usando Axios
             axios.post("/Supervisor/Approve", { date: date }, { params: { role: role } })
                 .then(response => {
-                    console.log(response.data.message); // Mostrar el mensaje de éxito
-                    alert(response.data.message); // Mostrar el mensaje en una alerta
-                    location.reload(); // Recargar la página para reflejar los cambios
+                    console.log(response.data.message);
+                    alert(response.data.message);
+                    location.reload(); // Recargar para reflejar los cambios
                 })
                 .catch(error => {
-                    console.error("Error:", error.response?.data || error.message); // Manejar errores
-                    // Mostrar un mensaje de error amigable al usuario
+                    console.error("Error:", error.response?.data || error.message);
                     alert(`Error al aprobar químicos: ${error.response?.data || "Error desconocido"}`);
                 });
         });
     });
 });
+
 document.addEventListener("DOMContentLoaded", function () {
-    const searchInput = document.getElementById("search-date"); // Asegúrate de que el ID coincida
+    const searchInput = document.getElementById("search-date"); 
 
     searchInput.addEventListener("input", function () {
-        const filter = searchInput.value.toUpperCase(); // Convertir a mayúsculas para comparación
-        const rows = document.querySelectorAll(".audit-row"); // Seleccionar todas las filas de auditoría
+        const filter = searchInput.value.toUpperCase();
+        const rows = document.querySelectorAll(".audit-row");
 
         rows.forEach(row => {
-            const dateCell = row.querySelector(".audit-date").textContent; // Obtener el texto de la fecha en cada fila
+            const dateCell = row.querySelector(".audit-date").textContent;
             if (dateCell.toUpperCase().includes(filter)) {
-                row.style.display = ""; // Mostrar fila si coincide
+                row.style.display = "";
             } else {
-                row.style.display = "none"; // Ocultar fila si no coincide
+                row.style.display = "none";
             }
         });
     });

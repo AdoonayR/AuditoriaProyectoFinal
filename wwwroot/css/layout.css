@@ -1,31 +1,36 @@
-﻿/* layout.css
-   Aquí colocas estilos específicos para tu Layout,
-   de forma que no afectes demasiado otras vistas.
-*/
+﻿h1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+}
 
-/* ===== Estilo general para la barra de navegación ===== */
+.header-logo {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 200px;
+    height: auto;
+}
+
 .custom-navbar {
-    background-color: #F5F5F5; /* Un gris claro */
-    /* Puedes agregar algún gradiente sutil:
-       background: linear-gradient(to right, #ffffff, #f0f0f0);
-    */
+    background-color: #F5F5F5;
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
-    /* Cambiar color y comportamiento de los enlaces dentro del navbar */
     .custom-navbar .nav-link {
         color: #333 !important;
-        font-weight: 600; /* un poco más grueso para destacar */
+        font-weight: 600;
     }
 
         .custom-navbar .nav-link:hover {
-            color: #007bff !important; /* color de Bootstrap "primary" */
+            color: #007bff !important;
             text-decoration: underline;
         }
 
-/* ===== Ajuste de estilos en el footer ===== */
 .custom-footer {
-    background-color: #fafafa; /* gris muy clarito */
+    background-color: #fafafa;
     padding: 15px 0;
 }
 
@@ -33,6 +38,8 @@
         color: #666;
         font-size: 0.9rem;
     }
+
+
 .logout-button {
     background-color: transparent;
     border: none;
@@ -57,3 +64,44 @@
 .logout-button:hover {
     background-color: transparent;
 }
+
+
+/* ================ CARTAS MENÚ ================ */
+.cards-menu {
+    display: flex; /* Para alinear las cartas en fila */
+    gap: 5px; /* Espacio entre cartas */
+    margin: 5px 0; /* Separación vertical (arriba y abajo) */
+}
+
+    .cards-menu .card {
+        background-color: #007bff;
+        height: 60px;
+        flex: 1; /* Todas las cartas ocupan el mismo espacio inicialmente */
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center; /* Centra el contenido verticalmente */
+        justify-content: center; /* Centra el contenido horizontalmente */
+        border: 2px solid rgba(0, 123, 255, 0.5);
+    }
+
+        .cards-menu .card a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .cards-menu .card:hover {
+            flex: 2; /* Se expande al hacer hover */
+            background-color: #007bff; /* Azul principal */
+            color: #fff; /* Cambiamos el color del texto */
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.5); /* Sombra más notoria */
+            transform: translateY(-3px); /* Efecto “levitar” */
+        }
+
+            .cards-menu .card:hover a {
+                color: #fff; /* En hover, el link también se vuelve blanco */
+            }
+
+            

@@ -31,17 +31,20 @@
 }
 
 .back-button {
-    position: absolute;
+    position: fixed;
     top: 10px;
     left: 10px;
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    text-decoration: none;
+    color: #333;
     background: none;
     border: none;
     cursor: pointer;
+    z-index: 1000;
 }
 
     .back-button img {
@@ -132,8 +135,8 @@ main {
     }
 
     .back-button-icon {
-        width: 20px;
-        height: 20px;
+        width: 40px;
+        height: 40px;
     }
 
     .audit-table {

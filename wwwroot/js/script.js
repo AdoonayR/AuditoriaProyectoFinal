@@ -337,6 +337,13 @@ document.addEventListener('DOMContentLoaded', function () {
         commentElement.innerHTML = commentsText ? commentsText.replace(/\n/g, '<br>') : '';
         commentElement.style.display = commentsText ? 'block' : 'none';
 
+        if (formNumber === '1') {
+            const instruccionesElement = document.querySelector('.instrucciones-iniciales');
+            if (instruccionesElement) {
+                instruccionesElement.style.display = 'none';
+            }
+        }
+
         // Colapsa el panel
         const panel = header.nextElementSibling;
         if (panel) {
@@ -389,13 +396,20 @@ document.addEventListener('DOMContentLoaded', function () {
         bindBorrarButtons();
     }
 
-    // Envía la auditoría (POST) y recarga la página
     function finishAuditoria() {
+
+        
         const almacen = document.getElementById('area').value;
         if (!almacen) {
             alert('Por favor seleccione un área antes de enviar.');
             return;
         }
+       
+        const userConfirmed = confirm("¿Estás seguro de finalizar la auditoría?");
+        if (!userConfirmed) {
+            return; 
+        }
+
 
         const allForms = document.querySelectorAll('.audit-form');
         const quimicos = Array.from(allForms).map(form => {
