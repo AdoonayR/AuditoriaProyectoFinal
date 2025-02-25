@@ -20,6 +20,18 @@
         <a href="javascript:history.back()" class="back-button">
             <img src="~/images/previous.png" alt="Regresar" /> 
         </a>
+
+        <div class="my-div-container">
+
+            <a asp-controller="Supervisor"
+               asp-action="DescargarDetallesPdf"
+               asp-route-date="@Model.FirstOrDefault()?.AuditDate?.ToString("yyyy-MM-dd")"
+               class="btn btn-primary pdf-link"
+               target="_blank">
+                Descargar PDF
+            </a>
+        </div>
+
         <h1>Detalles de Auditoría - @(Model.FirstOrDefault()?.AuditDate?.ToString("MM dd yyyy") ?? "Sin Fecha")</h1>
     </header>
     <table class="table-details display">

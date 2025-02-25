@@ -1,0 +1,117 @@
+﻿@model IEnumerable<AuditoriaQuimicos.Models.Quimico>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles de Auditoría (PDF)</title>
+    <style>
+        /* ===== Estilos básicos para PDF ===== */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 5px;
+        }
+        th {
+            background-color: #eee;
+        }
+
+        /* Colores de fondo según el resultado */
+        .accepted {
+            background-color: #d4edda; /* verde claro */
+        }
+        .expiring-soon {
+            background-color: #fff3cd; /* amarillo claro */
+        }
+        .rejected {
+            background-color: #f8d7da; /* rojo claro */
+        }
+    </style>
+</head>
+<body>
+    <h1>Detalles de Auditoría - 
+        @(Model.FirstOrDefault()?.AuditDate?.ToString("MM dd yyyy") ?? "Sin Fecha")
+    </h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Número de Parte</th>
+                <th>Empaque</th>
+                <th>Caducidad</th>
+                <th>Lote</th>
+                <th>FIFO</th>
+                <th>Mezclado</th>
+                <th>Sello de QC</th>
+                <th>Limpieza</th>
+                <th>Comentarios</th>
+                <th>Resultado</th>
+                <th>Auditor</th>
+                <th>Almacén</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var quimico in Model)
+        {
+            var rowClass = quimico.Result == "Aceptado"
+                ? "accepted"
+                : quimico.Result == "Próximo a vencer"
+                    ? "expiring-soon"
+                    : "rejected";
+
+            <tr class="@rowClass">
+                <td>@quimico.PartNumber</td>
+                <td>@quimico.Packaging</td>
+                <td>@(quimico.Expiration?.ToString("MM-dd-yyyy") ?? "")</td>
+                <td>@quimico.Lot</td>
+                <td>@quimico.Fifo</td>
+                <td>@quimico.Mixed</td>
+                <td>@quimico.QcSeal</td>
+                <td>@quimico.Clean</td>
+                <td>
+                    @if (quimico.Comments.Contains("caducado", StringComparison.OrdinalIgnoreCase) && quimico.Expiration.HasValue)
+                    {
+                        <text>
+                            @quimico.Comments
+                            hace @((DateTime.Now.Date - quimico.Expiration.Value.Date).Days) días.
+                        </text>
+                    }
+                    else if (quimico.Comments.Contains("próximo a vencer", StringComparison.OrdinalIgnoreCase) && quimico.Expiration.HasValue)
+                    {
+                        <text>
+                            @quimico.Comments
+                            en @((quimico.Expiration.Value.Date - DateTime.Now.Date).Days) días.
+                        </text>
+                    }
+                    else
+                    {
+                        @quimico.Comments
+                    }
+                </td>
+
+                <td>@quimico.Result</td>
+                <td>@quimico.Auditor</td>
+                <td>@quimico.Almacen</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</body>
+</html>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}

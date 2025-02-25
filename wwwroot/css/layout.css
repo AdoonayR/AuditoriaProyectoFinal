@@ -66,42 +66,48 @@
 }
 
 
-/* ================ CARTAS MENÚ ================ */
+
 .cards-menu {
-    display: flex; /* Para alinear las cartas en fila */
-    gap: 5px; /* Espacio entre cartas */
-    margin: 5px 0; /* Separación vertical (arriba y abajo) */
+    display: flex;
+    gap: 5px;
+    margin: 5px 0; 
+    align-items: center; 
+    justify-content: center; 
 }
 
     .cards-menu .card {
         background-color: #007bff;
-        height: 60px;
-        flex: 1; /* Todas las cartas ocupan el mismo espacio inicialmente */
-        border-radius: 10px;
+        height: 50px;
+        flex: 1; 
+        border-radius: 15px;
         transition: all 0.3s ease;
         display: flex;
-        align-items: center; /* Centra el contenido verticalmente */
-        justify-content: center; /* Centra el contenido horizontalmente */
+        align-items: center;
+        justify-content: center;
         border: 2px solid rgba(0, 123, 255, 0.5);
     }
+
+        .cards-menu .card:nth-child(2) {
+            flex: 2;
+        }
 
         .cards-menu .card a {
             text-decoration: none;
             color: #fff;
             font-weight: bold;
             font-size: 1.1rem;
+            white-space: nowrap;
         }
-
         .cards-menu .card:hover {
-            flex: 2; /* Se expande al hacer hover */
-            background-color: #007bff; /* Azul principal */
-            color: #fff; /* Cambiamos el color del texto */
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.5); /* Sombra más notoria */
-            transform: translateY(-3px); /* Efecto “levitar” */
+            flex: 2; 
+            background-color: #007bff; 
+            color: #fff; 
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.5); 
+            transform: translateY(-3px); 
         }
 
             .cards-menu .card:hover a {
-                color: #fff; /* En hover, el link también se vuelve blanco */
+                color: #fff; 
             }
 
             

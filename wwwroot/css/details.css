@@ -90,3 +90,16 @@ header {
         width: 100%;
         height: auto;
     }
+/* Estilo genérico para anclas en tu página */
+a.pdf-link {
+    color: #333; /* texto en gris oscuro */
+    font-weight: bold; /* negrita */
+    text-decoration: underline; /* subrayado para indicar link */
+    cursor: pointer; /* mano al pasar el mouse */
+}
+
+    /* Puedes ajustar también el hover */
+    a.pdf-link:hover {
+        color: #111; /* un gris más oscuro */
+        text-decoration: underline;
+    }

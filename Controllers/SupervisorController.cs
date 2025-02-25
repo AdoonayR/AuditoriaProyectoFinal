@@ -8,6 +8,11 @@ using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
+using AuditoriaQuimicos.Services;
+using Microsoft.Extensions.Logging;
+// Agrega la referencia a Rotativa
+using Rotativa.AspNetCore;
 
 namespace AuditoriaQuimicos.Controllers
 {
@@ -18,7 +23,6 @@ namespace AuditoriaQuimicos.Controllers
         private readonly IEmailService _emailService;
         private readonly ILogger<SupervisorController> _logger;
 
-
         public SupervisorController(ApplicationDbContext context, IEmailService emailService, ILogger<SupervisorController> logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -28,7 +32,6 @@ namespace AuditoriaQuimicos.Controllers
 
 
 
-        // Acción para la vista del Incoming Supervisor
         [Authorize(Roles = "IncomingSupervisor")]
         public IActionResult IndexIncoming()
         {
@@ -42,13 +45,12 @@ namespace AuditoriaQuimicos.Controllers
                     Estado = g.All(q => q.Aprobaciones.Any(a => a.ApprovedByIncoming != null)) ? "Aprobado" : "Pendiente",
                     Quimicos = g.ToList()
                 })
-                .OrderBy(g => g.AuditDate) // Ordenamos por la fecha de auditoría
+                .OrderBy(g => g.AuditDate) // Ordenados por fecha
                 .ToList();
 
             return View(quimicosAgrupados);
         }
 
-        // Acción para la vista del Storage Supervisor
         [Authorize(Roles = "StorageSupervisor")]
         public IActionResult IndexStorage()
         {
@@ -62,13 +64,12 @@ namespace AuditoriaQuimicos.Controllers
                     Estado = g.All(q => q.Aprobaciones.Any(a => a.ApprovedByStorage != null && a.ApprovedByIncoming != null)) ? "Aprobado" : "Pendiente",
                     Quimicos = g.ToList()
                 })
-                .OrderBy(g => g.AuditDate) // Ordenamos por la fecha de auditoría
+                .OrderBy(g => g.AuditDate)
                 .ToList();
 
             return View(quimicosAgrupados);
         }
 
-        // Método para aprobar químicos de Incoming o Storage
         [HttpPost]
         [Authorize(Roles = "IncomingSupervisor, StorageSupervisor")]
         public async Task<IActionResult> Approve([FromBody] ApprovalRequest data, string role)
@@ -132,6 +133,36 @@ namespace AuditoriaQuimicos.Controllers
             return Json(new { message = $"Auditoria firmada correctamente por {role}" });
         }
 
+        [HttpGet]
+        public IActionResult DescargarDetallesPdf(string date)
+        {
+            if (string.IsNullOrEmpty(date))
+            {
+                return BadRequest("Se requiere una fecha/ID para generar el reporte PDF.");
+            }
+
+            if (!DateTime.TryParseExact(date, "yyyy-MM-dd", null, DateTimeStyles.None, out DateTime auditDate))
+            {
+                return BadRequest("Fecha inválida (formato esperado: yyyy-MM-dd).");
+            }
+
+            var quimicos = _context.Quimicos
+                .Where(q => q.AuditDate.HasValue && q.AuditDate.Value.Date == auditDate)
+                .Include(q => q.Aprobaciones)
+                .ToList();
+
+            if (!quimicos.Any())
+            {
+                return BadRequest("No se encontraron químicos para esa fecha.");
+            }
+
+            return new ViewAsPdf("DetallesAuditoriaPDF", quimicos)
+            {
+                FileName = $"Detalles_{auditDate:yyyyMMdd}.pdf",
+                PageSize = Rotativa.AspNetCore.Options.Size.A4,
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait
+            };
+        }
 
     }
 }

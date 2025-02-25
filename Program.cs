@@ -2,6 +2,7 @@ using AuditoriaQuimicos.Data;
 using AuditoriaQuimicos.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,13 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
+
+
+
+// Usando Path.Combine para armar la ruta física
+var rotativaPath = Path.Combine(builder.Environment.ContentRootPath, "wwwroot", "Rotativa");
+RotativaConfiguration.Setup(rotativaPath);
+
 
 // Configuración de autenticación y cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
