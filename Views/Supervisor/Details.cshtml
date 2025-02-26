@@ -32,7 +32,13 @@
             </a>
         </div>
 
-        <h1>Detalles de Auditoría - @(Model.FirstOrDefault()?.AuditDate?.ToString("MM dd yyyy") ?? "Sin Fecha")</h1>
+        <h1>
+            Detalles de Auditoría -
+            @(System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
+                Model.FirstOrDefault()?.AuditDate?.ToString("MMM dd yyyy", new System.Globalization.CultureInfo("es-ES")) ?? "Sin Fecha")
+                )
+        </h1>
+
     </header>
     <table class="table-details display">
         <thead>

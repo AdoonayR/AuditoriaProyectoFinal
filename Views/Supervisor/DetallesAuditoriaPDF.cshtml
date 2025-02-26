@@ -6,13 +6,14 @@
     <meta charset="UTF-8">
     <title>Detalles de Auditoría (PDF)</title>
     <style>
-        /* ===== Estilos básicos para PDF ===== */
+    
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
         h1 {
             margin-bottom: 10px;
+            text-align: center;
         }
 
         table {
@@ -24,11 +25,12 @@
             border: 1px solid #aaa;
             padding: 5px;
         }
+
         th {
-            background-color: #eee;
+            background-color: #000;
+            color: #fff;
         }
 
-        /* Colores de fondo según el resultado */
         .accepted {
             background-color: #d4edda; /* verde claro */
         }
@@ -41,9 +43,15 @@
     </style>
 </head>
 <body>
-    <h1>Detalles de Auditoría - 
-        @(Model.FirstOrDefault()?.AuditDate?.ToString("MM dd yyyy") ?? "Sin Fecha")
+
+    <h1>
+        Detalles de Auditoría -
+        @(System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
+            Model.FirstOrDefault()?.AuditDate?.ToString("MMM dd yyyy", new System.Globalization.CultureInfo("es-ES")) ?? "Sin Fecha")
+            )
     </h1>
+
+
 
     <table>
         <thead>
@@ -111,7 +119,7 @@
 </body>
 </html>
 @*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+     https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
