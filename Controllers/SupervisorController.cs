@@ -158,7 +158,7 @@ namespace AuditoriaQuimicos.Controllers
 
             return new ViewAsPdf("DetallesAuditoriaPDF", quimicos)
             {
-                FileName = $"Detalles_{auditDate:yyyyMMdd}.pdf",
+                FileName = $"Auditoria de quimicos{auditDate:MM-dd-yyyy}.pdf",
                 PageSize = Rotativa.AspNetCore.Options.Size.A4,
                 PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait
             };
