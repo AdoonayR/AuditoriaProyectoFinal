@@ -2,6 +2,7 @@
 using MimeKit;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using MailKit.Security;
 
 namespace AuditoriaQuimicos.Services
 {
@@ -71,6 +72,37 @@ namespace AuditoriaQuimicos.Services
                 throw;
             }
         }
+        public async Task SendDetailsPdfAsync(byte[] pdfBytes, string[] destinatarios, string subject)
+        {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Sistema de Auditoría", _configuration["EmailSettings:SenderEmail"]));
+
+            // Agregar varios destinatarios
+            foreach (var dest in destinatarios)
+            {
+                message.To.Add(new MailboxAddress(dest, dest));
+            }
+
+            message.Subject = subject;
+
+            // Construir Body con adjunto
+            var builder = new BodyBuilder
+            {
+                TextBody = "Se adjunta el reporte PDF de la auditoría mensual de quimicos"
+            };
+
+            // Agregar el PDF como adjunto
+            builder.Attachments.Add("DetallesAuditoria.pdf", pdfBytes, new ContentType("application", "pdf"));
+            message.Body = builder.ToMessageBody();
+
+            // Envío
+            using var smtpClient = new SmtpClient();
+            await smtpClient.ConnectAsync(_configuration["EmailSettings:SMTPServer"], int.Parse(_configuration["EmailSettings:Port"]), SecureSocketOptions.StartTls);
+            await smtpClient.AuthenticateAsync(_configuration["EmailSettings:Username"], _configuration["EmailSettings:Password"]);
+            await smtpClient.SendAsync(message);
+            await smtpClient.DisconnectAsync(true);
+        }
+
     }
 
 }

@@ -15,19 +15,11 @@
                 return;
             }
 
-            // Obtener la fecha actual 
-            const currentDate = new Date();
+            const parts = date.split("-");
+           
+            const reformatted = `${parts[1]}-${parts[2]}-${parts[0]}`;
 
-            // Extraer mes, día y año 
-            const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-            const day = String(currentDate.getDate()).padStart(2, '0');
-            const year = currentDate.getFullYear();
-
-            // Construir string en formato mm-dd-yyyy
-            const formattedDate = `${month}-${day}-${year}`;
-
-            // Confirmar con la fecha formateada
-            const userConfirmed = confirm(`Firmarás la auditoría con fecha ${formattedDate}, ¿estás de acuerdo?`);
+            const userConfirmed = confirm(`Firmarás la auditoría con fecha ${reformatted}, ¿estás de acuerdo?`);
 
             if (!userConfirmed) {
                 return; 
