@@ -1,0 +1,79 @@
+﻿/* ================== Estilos generales de la página ================== */
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* ================== Tabla (contenidos) ================== */
+.audit-table {
+    width: 90%;
+    border-collapse: collapse;
+    margin: 20px auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+    .audit-table th,
+    .audit-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+        font-size: 1rem;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .audit-table th {
+        background-color: #292828;
+        color: white;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .audit-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .audit-table tr:hover {
+        background-color: #e0e0e0;
+    }
+
+/* ================== Botones de la tabla: Detalles, Firmar ================== */
+.details-btn,
+.approve-btn {
+    padding: 8px 12px;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+/* Botón "Ver Detalles" */
+.details-btn {
+    background-color: #333;
+}
+
+    .details-btn:hover {
+        background-color: #555;
+        transform: translateY(-3px);
+    }
+
+/* Botón "Firmar" */
+.approve-btn {
+    background: linear-gradient(135deg, #007BFF, #0056b3);
+}
+
+    .approve-btn:hover {
+        background: linear-gradient(135deg, #0056b3, #003d99);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transform: translateY(-3px);
+    }
